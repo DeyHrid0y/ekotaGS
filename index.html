@@ -1442,6 +1442,8 @@ window.loadCollectionPage = async function() {
       const m = allMembers.find(mb=>mb.id===c.memberId);
       const badge = c.status==="paid" ? "badge-paid" : c.status==="due" ? "badge-due" : "badge-pending";
       const label = c.status==="paid" ? "✅ Paid" : c.status==="due" ? "❌ Due" : "⏳ Pending";
+      // Officer can only edit chanda they collected; admin can edit all
+      const canEdit = isAdmin || (c.collectedBy === currentUser.name);
       return `<tr>
         <td>${i+1}</td>
         <td>${m?.name||"অজানা"} <span style="font-size:11px;color:var(--text-muted)">[${m?.memberId||"—"}]</span></td>
@@ -1452,7 +1454,7 @@ window.loadCollectionPage = async function() {
         <td>${c.collectedBy||"-"}</td>
         <td>${c.entryDate || (c.createdAt?.toDate ? c.createdAt.toDate().toLocaleDateString("en-GB") : "-")}</td>
         <td>
-          <button class="btn-sm btn-edit" onclick="editChandaStatus('${c.id}','${c.status}')">✏️ Edit</button>
+          ${canEdit ? `<button class="btn-sm btn-edit" onclick="editChandaStatus('${c.id}','${c.status}')">✏️ Edit</button>` : `<span style="font-size:11px;color:var(--text-muted)">—</span>`}
           ${isAdmin ? `<button class="btn-sm btn-delete" onclick="deleteChanda('${c.id}')">🗑️ Delete</button>` : ""}
         </td>
       </tr>`;
