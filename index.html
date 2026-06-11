@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>সরস্বতী পূজা — মাসিক চাঁদা সংগ্রহ</title>
+  <title>একতা যুব সংঘ — মাসিক প্রণামী সংগ্রহ</title>
   <style>
 /* ─── CSS Variables ─── */
 :root {
@@ -68,16 +68,27 @@ body {
 
 .login-header { text-align: center; margin-bottom: 28px; }
 .logo-circle {
-  width: 64px; height: 64px;
+  width: 72px; height: 72px;
   background: linear-gradient(135deg, #7C3AED, #F59E0B);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 28px;
-  margin: 0 auto 12px;
-  box-shadow: 0 4px 12px rgba(124,58,237,0.4);
+  font-size: 32px;
+  margin: 0 auto 14px;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.45);
 }
-.login-title { font-size: 22px; font-weight: 700; color: var(--primary-dark); }
-.login-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.login-title {
+  font-size: 24px; font-weight: 800; color: var(--primary-dark);
+  letter-spacing: -0.3px;
+}
+.login-title-band {
+  display: inline-block;
+  background: linear-gradient(135deg, #7C3AED, #F59E0B);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 24px; font-weight: 800;
+}
+.login-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
 .login-sub2 { font-size: 11px; color: #9CA3AF; margin-top: 1px; }
 
 .login-tabs {
@@ -630,6 +641,33 @@ body {
   .role-badge { font-size: 10px; }
 }
 
+/* ─── Footer ─── */
+.site-footer {
+  text-align: center;
+  padding: 18px 24px;
+  margin-top: 32px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--surface);
+}
+.site-footer span {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* ─── Login Footer ─── */
+.login-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 11px;
+  color: #9CA3AF;
+}
+.login-footer span {
+  font-weight: 600;
+  color: var(--primary);
+}
+
 /* ─── Utilities ─── */
 .hidden { display: none !important; }
 .text-center { text-align: center; }
@@ -651,8 +689,8 @@ body {
     <div class="login-card">
       <div class="login-header">
         <div class="logo-circle">🪷</div>
-        <h1 class="login-title">সরস্বতী পূজা</h1>
-        <p class="login-subtitle">মাসিক চাঁদা সংগ্রহ ব্যবস্থাপনা</p>
+        <h1 class="login-title"><span class="login-title-band">একতা যুব সংঘ</span></h1>
+        <p class="login-subtitle">মাসিক প্রণামী সংগ্রহ ব্যবস্থাপনা</p>
         <p class="login-sub2">Monthly Subscription Management</p>
       </div>
 
@@ -683,6 +721,8 @@ body {
         </div>
         <div id="memberPublicResults"></div>
       </div>
+
+      <div class="login-footer">Developed by <span>HRIDOOY DEY</span></div>
     </div>
   </div>
 </div>
@@ -695,8 +735,8 @@ body {
     <div class="sidebar-logo">
       <span class="logo-icon">🪷</span>
       <div>
-        <div class="sidebar-title">সরস্বতী পূজা</div>
-        <div class="sidebar-subtitle">Chanda Manager</div>
+        <div class="sidebar-title">একতা যুব সংঘ</div>
+        <div class="sidebar-subtitle">প্রণামী Manager</div>
       </div>
     </div>
 
@@ -770,7 +810,7 @@ body {
                 <th>নাম / Name</th>
                 <th>ফোন / Phone</th>
                 <th>ঠিকানা / Address</th>
-                <th>মাসিক চাঁদা</th>
+                <th>মাসিক প্রণামী</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -782,7 +822,7 @@ body {
       <!-- Chanda Collection -->
       <section id="page-collection" class="page hidden">
         <div class="page-header-row">
-          <h3>চাঁদা সংগ্রহ / Chanda Collection</h3>
+          <h3>প্রণামী সংগ্রহ / Pronami Collection</h3>
           <div class="filter-row">
             <select id="filterYear" onchange="loadCollectionPage()">
               <option value="2025">২০২৫ / 2025</option>
@@ -807,7 +847,7 @@ body {
                 <th>সদস্য / Member</th>
                 <th>মাস / Month</th>
                 <th>বছর / Year</th>
-                <th>চাঁদার পরিমাণ</th>
+                <th>প্রণামীর পরিমাণ</th>
                 <th>Payment Status</th>
                 <th>সংগ্রহকারী / Collected By</th>
                 <th>তারিখ / Date</th>
@@ -822,7 +862,7 @@ body {
       <!-- Add Collection Entry -->
       <section id="page-add-collection" class="page hidden">
         <div class="card max-600">
-          <h3 class="card-title">নতুন চাঁদা এন্ট্রি / New Chanda Entry</h3>
+          <h3 class="card-title">নতুন প্রণামী এন্ট্রি / New Pronami Entry</h3>
           <div class="form-group">
             <label>সদস্য নির্বাচন / Select Member *</label>
             <select id="entryMember">
@@ -851,7 +891,7 @@ body {
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>চাঁদার পরিমাণ (৳) *</label>
+              <label>প্রণামীর পরিমাণ (৳) *</label>
               <input type="number" id="entryAmount" placeholder="পরিমাণ লিখুন" />
             </div>
             <div class="form-group">
@@ -944,6 +984,10 @@ body {
       </section>
 
     </div><!-- /page-content -->
+
+    <footer class="site-footer">
+      Developed by <span>HRIDOOY DEY</span>
+    </footer>
   </main>
 </div><!-- /appScreen -->
 
@@ -974,7 +1018,7 @@ body {
       <input type="text" id="mAddress" placeholder="ঠিকানা" />
     </div>
     <div class="form-group">
-      <label>মাসিক চাঁদার পরিমাণ (৳)</label>
+      <label>মাসিক প্রণামীর পরিমাণ (৳)</label>
       <input type="number" id="mAmount" placeholder="যেমন: 100" />
     </div>
     <div id="mError" class="error-msg hidden"></div>
@@ -1170,8 +1214,8 @@ function buildNav() {
     <div class="nav-section">প্রধান</div>
     <div class="nav-item" onclick="navigateTo('dashboard')"><span class="nav-icon">📊</span> Dashboard</div>
     <div class="nav-item" onclick="navigateTo('members')"><span class="nav-icon">👥</span> সদস্য তালিকা</div>
-    <div class="nav-item" onclick="navigateTo('collection')"><span class="nav-icon">💰</span> চাঁদা সংগ্রহ</div>
-    <div class="nav-item" onclick="navigateTo('add-collection')"><span class="nav-icon">➕</span> নতুন চাঁদা এন্ট্রি</div>
+    <div class="nav-item" onclick="navigateTo('collection')"><span class="nav-icon">💰</span> প্রণামী সংগ্রহ</div>
+    <div class="nav-item" onclick="navigateTo('add-collection')"><span class="nav-icon">➕</span> নতুন প্রণামী এন্ট্রি</div>
     <div class="nav-section">রিপোর্ট</div>
     <div class="nav-item" onclick="navigateTo('reports')"><span class="nav-icon">📋</span> রিপোর্ট</div>
     ${isAdmin ? `
@@ -1192,8 +1236,8 @@ window.navigateTo = function(page) {
   const el = $(`page-${page}`);
   if(el) { el.classList.remove("hidden"); el.classList.add("active"); }
   $("pageTitle").textContent = {
-    "dashboard":"Dashboard","members":"সদস্য তালিকা","collection":"চাঁদা সংগ্রহ",
-    "add-collection":"নতুন চাঁদা","officers":"অফিসার","password-requests":"পাসওয়ার্ড অনুরোধ",
+    "dashboard":"Dashboard","members":"সদস্য তালিকা","collection":"প্রণামী সংগ্রহ",
+    "add-collection":"নতুন প্রণামী","officers":"অফিসার","password-requests":"পাসওয়ার্ড অনুরোধ",
     "change-password":"পাসওয়ার্ড পরিবর্তন","reports":"রিপোর্ট"
   }[page] || page;
   document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
@@ -1393,7 +1437,7 @@ window.viewMemberDetail = async function(id) {
     <div class="member-detail-sub">🪪 Member ID: <strong>${m.memberId||"—"}</strong></div>
     <div class="member-detail-sub">📞 ${m.phone||"-"} | 📍 ${m.address||"-"}</div>
     <div class="member-detail-sub">Monthly: ৳${(m.monthlyAmount||0).toLocaleString()}</div></div>
-  </div><p style="color:var(--text-muted);font-size:13px">চাঁদার ইতিহাস লোড হচ্ছে...</p>`;
+  </div><p style="color:var(--text-muted);font-size:13px">প্রণামীর ইতিহাস লোড হচ্ছে...</p>`;
   showEl("memberDetailModal");
   // Load chanda history
   try {
@@ -1408,11 +1452,11 @@ window.viewMemberDetail = async function(id) {
       <div class="member-detail-sub">📞 ${m.phone||"-"} | 📍 ${m.address||"-"}</div>
       <div class="member-detail-sub">Monthly: ৳${(m.monthlyAmount||0).toLocaleString()}</div></div>
     </div>`;
-    if(!chandas.length) { html+='<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">কোনো চাঁদার রেকর্ড নেই</div></div>'; }
+    if(!chandas.length) { html+='<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">কোনো প্রণামীর রেকর্ড নেই</div></div>'; }
     else {
       years.forEach(yr => {
         const yc = chandas.filter(c=>c.year==yr);
-        html += `<h4 style="margin:16px 0 8px;font-size:14px">${yr} সালের চাঁদা</h4>`;
+        html += `<h4 style="margin:16px 0 8px;font-size:14px">${yr} সালের প্রণামী</h4>`;
         html += `<div class="table-wrap"><table class="data-table"><thead><tr><th>মাস</th><th>পরিমাণ</th><th>Status</th><th>মন্তব্য</th></tr></thead><tbody>`;
         yc.forEach(c => {
           const badge = c.status==="paid" ? "badge-paid" : c.status==="due" ? "badge-due" : "badge-pending";
@@ -1516,9 +1560,9 @@ window.submitChandaEntry = async function() {
   try {
     const dup = query(collection(db,"chanda"), where("memberId","==",memberId), where("month","==",month), where("year","==",year));
     const dupSnap = await getDocs(dup);
-    if(!dupSnap.empty) { setErr("entryError","এই সদস্যের এই মাসের এন্ট্রি আগে থেকেই আছে।"); return; }
+    if(!dupSnap.empty) { setErr("entryError","এই সদস্যের এই মাসের প্রণামী এন্ট্রি আগে থেকেই আছে।"); return; }
     await addDoc(collection(db,"chanda"), {memberId,month,year,amount,status,note,entryDate,collectedBy:currentUser.name,createdAt:serverTimestamp()});
-    showToast("চাঁদা এন্ট্রি সংরক্ষিত হয়েছে।");
+    showToast("প্রণামী এন্ট্রি সংরক্ষিত হয়েছে।");
     $("entryMember").value=""; $("entryAmount").value=""; $("entryNote").value=""; $("entryDate").value=""; setErr("entryError","");
     navigateTo("collection");
   } catch(e) { setErr("entryError","ত্রুটি: "+e.message); }
@@ -1698,9 +1742,9 @@ window.searchMemberPublic = async function() {
     res.innerHTML = members.length ? members.map(m=>`
       <div class="member-result-card" onclick="showPublicMemberDetail('${m.id}')">
         <div class="member-result-name">${m.name} <span style="font-size:12px;color:var(--primary);font-weight:600">[${m.memberId||"—"}]</span></div>
-        <div class="member-result-sub">📞 ${m.phone||"-"} | Monthly: ৳${(m.monthlyAmount||0).toLocaleString()}</div>
+        <div class="member-result-sub">📞 ${m.phone||"-"} | মাসিক প্রণামী: ৳${(m.monthlyAmount||0).toLocaleString()}</div>
       </div>
-    `).join("") : `<div class="empty-state" style="padding:16px"><div class="empty-state-text">No member found</div></div>`;
+    `).join("") : `<div class="empty-state" style="padding:16px"><div class="empty-state-text">কোনো সদস্য পাওয়া যায়নি</div></div>`;
   } catch(e) {}
 };
 
@@ -1718,18 +1762,19 @@ window.showPublicMemberDetail = async function(id) {
       <div><div class="member-detail-name">${m.name}</div>
       <div class="member-detail-sub">🪪 ID: ${m.memberId||"—"}</div>
       <div class="member-detail-sub">📞 ${m.phone||"-"}</div>
-      <div class="member-detail-sub">Monthly: ৳${(m.monthlyAmount||0).toLocaleString()}</div></div>
+      <div class="member-detail-sub">মাসিক প্রণামী: ৳${(m.monthlyAmount||0).toLocaleString()}</div></div>
     </div>`;
-    if(!chandas.length) html += `<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">কোনো চাঁদার রেকর্ড নেই</div></div>`;
+    if(!chandas.length) html += `<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">কোনো প্রণামীর রেকর্ড নেই</div></div>`;
     else {
       const years = [...new Set(chandas.map(c=>c.year))].sort((a,b)=>b-a);
       years.forEach(yr => {
         const yc = chandas.filter(c=>c.year==yr);
-        html += `<h4 style="margin:16px 0 8px;font-size:14px">${yr} সালের চাঁদা</h4><div class="table-wrap"><table class="data-table"><thead><tr><th>মাস</th><th>পরিমাণ</th><th>Status</th></tr></thead><tbody>`;
+        html += `<h4 style="margin:16px 0 8px;font-size:14px">${yr} সালের প্রণামী</h4><div class="table-wrap"><table class="data-table"><thead><tr><th>মাস</th><th>পরিমাণ</th><th>Status</th><th>সংগ্রহকারী</th><th>তারিখ</th></tr></thead><tbody>`;
         yc.forEach(c => {
           const badge = c.status==="paid" ? "badge-paid" : c.status==="due" ? "badge-due" : "badge-pending";
           const label = c.status==="paid" ? "✅ পরিশোধিত" : c.status==="due" ? "❌ বকেয়া" : "⏳ অপেক্ষমান";
-          html += `<tr><td>${MONTHS_BN[c.month]||c.month}</td><td>৳${(c.amount||0).toLocaleString()}</td><td><span class="badge ${badge}">${label}</span></td></tr>`;
+          const collDate = c.entryDate || (c.createdAt?.toDate ? c.createdAt.toDate().toLocaleDateString("bn-BD") : "-");
+          html += `<tr><td>${MONTHS_BN[c.month]||c.month}</td><td>৳${(c.amount||0).toLocaleString()}</td><td><span class="badge ${badge}">${label}</span></td><td>${c.collectedBy||"-"}</td><td>${collDate}</td></tr>`;
         });
         html += `</tbody></table></div>`;
       });
