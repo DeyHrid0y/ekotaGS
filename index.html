@@ -758,6 +758,24 @@ body {
   display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
 }
 
+/* ─── Puja Label Radio Buttons ─── */
+.label-radio-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 8px;
+  border: 1.5px solid var(--border);
+  cursor: pointer; font-size: 13px; font-weight: 500;
+  transition: all 0.2s; background: var(--surface);
+  user-select: none;
+}
+.label-radio-btn input[type="radio"] { display: none; }
+.label-radio-btn:has(input:checked) {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+.label-radio-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+
 /* ─── Utilities ─── */
 .hidden { display: none !important; }
 .text-center { text-align: center; }
@@ -937,13 +955,14 @@ body {
             <thead>
               <tr>
                 <th>#</th>
-                <th>সদস্য / Member</th>
+                <th>ধরন / Type</th>
+                <th>সদস্য / দাতা</th>
                 <th>মাস / Month</th>
                 <th>বছর / Year</th>
                 <th>প্রণামীর পরিমাণ</th>
                 <th>Payment Status</th>
-                <th>সংগ্রহকারী / Collected By</th>
-                <th>তারিখ / Date</th>
+                <th>সংগ্রহকারী</th>
+                <th>তারিখ</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -954,42 +973,100 @@ body {
 
       <!-- Add Collection Entry -->
       <section id="page-add-collection" class="page hidden">
-        <div class="card max-600">
+        <div class="card" style="max-width:640px">
           <h3 class="card-title">নতুন প্রণামী এন্ট্রি / New Pronami Entry</h3>
+
+          <!-- ── Entry Type Toggle ── -->
+          <div class="entry-type-toggle" style="display:flex;gap:0;margin-bottom:20px;border:1.5px solid var(--border);border-radius:10px;overflow:hidden">
+            <button id="typeBtnMonthly" class="entry-type-btn active" onclick="switchEntryType('monthly')"
+              style="flex:1;padding:10px;border:none;background:var(--primary);color:white;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s">
+              📅 মাসিক প্রণামী
+            </button>
+            <button id="typeBtnPuja" class="entry-type-btn" onclick="switchEntryType('puja')"
+              style="flex:1;padding:10px;border:none;background:#F3F4F6;color:var(--text-muted);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s">
+              🪷 পূজার প্রণামী
+            </button>
+          </div>
+
+          <!-- ── সংগ্রহকারী (Officer/Admin — read only) ── -->
           <div class="form-group">
-            <label>সদস্য নির্বাচন / Select Member *</label>
-            <select id="entryMember">
-              <option value="">-- সদস্য নির্বাচন করুন --</option>
-            </select>
+            <label>সংগ্রহকারী অফিসার / Collected By</label>
+            <input type="text" id="entryCollector" readonly
+              style="background:#F9FAFB;color:var(--primary);font-weight:600;cursor:not-allowed" />
           </div>
-          <div class="form-row">
+
+          <!-- ══ MONTHLY PRONAMI FIELDS ══ -->
+          <div id="monthlyFields">
             <div class="form-group">
-              <label>মাস / Month *</label>
-              <select id="entryMonth">
-                <option value="1">জানুয়ারি</option><option value="2">ফেব্রুয়ারি</option>
-                <option value="3">মার্চ</option><option value="4">এপ্রিল</option>
-                <option value="5">মে</option><option value="6">জুন</option>
-                <option value="7">জুলাই</option><option value="8">আগস্ট</option>
-                <option value="9">সেপ্টেম্বর</option><option value="10">অক্টোবর</option>
-                <option value="11">নভেম্বর</option><option value="12">ডিসেম্বর</option>
+              <label>সদস্য নির্বাচন / Select Member *</label>
+              <select id="entryMember">
+                <option value="">-- সদস্য নির্বাচন করুন --</option>
               </select>
             </div>
-            <div class="form-group">
-              <label>বছর / Year *</label>
-              <select id="entryYear">
-                <option value="2025">২০২৫</option>
-                <option value="2026" selected>২০২৬</option>
-                <option value="2027">২০২৭</option>
-                <option value="2028">২০২৮</option>
-                <option value="2029">২০২৯</option>
-                <option value="2030">২০৩০</option>
-              </select>
+            <div class="form-row">
+              <div class="form-group">
+                <label>মাস / Month *</label>
+                <select id="entryMonth">
+                  <option value="1">জানুয়ারি</option><option value="2">ফেব্রুয়ারি</option>
+                  <option value="3">মার্চ</option><option value="4">এপ্রিল</option>
+                  <option value="5">মে</option><option value="6">জুন</option>
+                  <option value="7">জুলাই</option><option value="8">আগস্ট</option>
+                  <option value="9">সেপ্টেম্বর</option><option value="10">অক্টোবর</option>
+                  <option value="11">নভেম্বর</option><option value="12">ডিসেম্বর</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>বছর / Year *</label>
+                <select id="entryYear">
+                  <option value="2025">২০২৫</option>
+                  <option value="2026" selected>২০২৬</option>
+                  <option value="2027">২০২৭</option>
+                  <option value="2028">২০২৮</option>
+                  <option value="2029">২০২৯</option>
+                  <option value="2030">২০৩০</option>
+                </select>
+              </div>
             </div>
           </div>
+
+          <!-- ══ PUJA PRONAMI FIELDS ══ -->
+          <div id="pujaFields" class="hidden">
+            <div class="form-group">
+              <label>লেবেল / Label *</label>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <label class="label-radio-btn" id="lbl-somossho">
+                  <input type="radio" name="pujaLabel" value="সদস্য" onchange="onPujaLabelChange()" />
+                  <span>👤 সদস্য</span>
+                </label>
+                <label class="label-radio-btn" id="lbl-gram">
+                  <input type="radio" name="pujaLabel" value="গ্রাম" onchange="onPujaLabelChange()" />
+                  <span>🏘️ গ্রাম</span>
+                </label>
+                <label class="label-radio-btn" id="lbl-others">
+                  <input type="radio" name="pujaLabel" value="অন্যান্য" onchange="onPujaLabelChange()" />
+                  <span>🔖 অন্যান্য</span>
+                </label>
+              </div>
+            </div>
+            <!-- সদস্য label → member dropdown -->
+            <div class="form-group hidden" id="pujaLabelMemberGroup">
+              <label>সদস্য নির্বাচন / Select Member *</label>
+              <select id="entryPujaMember">
+                <option value="">-- সদস্য নির্বাচন করুন --</option>
+              </select>
+            </div>
+            <!-- গ্রাম / অন্যান্য label → free text -->
+            <div class="form-group hidden" id="pujaLabelNameGroup">
+              <label id="pujaLabelNameLabel">দাতার নাম *</label>
+              <input type="text" id="entryPujaDonorName" placeholder="নাম লিখুন..." />
+            </div>
+          </div>
+
+          <!-- ══ COMMON FIELDS ══ -->
           <div class="form-row">
             <div class="form-group">
               <label>প্রণামীর পরিমাণ (৳) *</label>
-              <input type="number" id="entryAmount" placeholder="পরিমাণ লিখুন" />
+              <input type="number" id="entryAmount" placeholder="পরিমাণ লিখুন" min="1" />
             </div>
             <div class="form-group">
               <label>Payment Status *</label>
@@ -1002,16 +1079,19 @@ body {
           </div>
           <div class="form-group">
             <label>মন্তব্য / Notes</label>
-            <input type="text" id="entryNote" placeholder="ঐচ্ছিক মন্তব্য..." />
+            <textarea id="entryNote" rows="2"
+              style="resize:vertical;width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;outline:none;transition:border-color 0.2s"
+              placeholder="মন্তব্য লিখুন..."></textarea>
           </div>
           <div class="form-group">
             <label>Entry Date *</label>
             <input type="date" id="entryDate" />
           </div>
+
           <div id="entryError" class="error-msg hidden"></div>
           <div class="btn-row">
-            <button class="btn-secondary" onclick="navigateTo('collection')"> Cancel</button>
-            <button class="btn-primary" onclick="submitChandaEntry()">Save</button>
+            <button class="btn-secondary" onclick="navigateTo('collection')">বাতিল / Cancel</button>
+            <button class="btn-primary" onclick="submitChandaEntry()">💾 সংরক্ষণ করুন / Save</button>
           </div>
         </div>
       </section>
@@ -1613,10 +1693,22 @@ window.loadCollectionPage = async function() {
       const label = c.status==="paid" ? "✅ Paid" : c.status==="due" ? "❌ Due" : "⏳ Pending";
       // Officer can only edit chanda they collected; admin can edit all
       const canEdit = isAdmin || (c.collectedBy === currentUser.name);
+      // ── type badge ──
+      const isPuja = c.entryType === "puja";
+      const typeBadge = isPuja
+        ? `<span style="background:#FEF3C7;color:#92400E;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600">🪷 পূজার</span>${c.pujaLabel ? `<br><span style="font-size:10px;color:var(--text-muted)">${c.pujaLabel}</span>` : ""}`
+        : `<span style="background:#EDE9FE;color:#5B21B6;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600">📅 মাসিক</span>`;
+      // ── donor/member name ──
+      const displayName = isPuja
+        ? (c.donorName || m?.name || "—")
+        : `${m?.name||"অজানা"} <span style="font-size:11px;color:var(--text-muted)">[${m?.memberId||"—"}]</span>`;
+      // ── month col ──
+      const monthCol = isPuja ? `<span style="color:var(--text-muted);font-size:12px">—</span>` : (MONTHS_BN[c.month]||c.month);
       return `<tr>
         <td>${i+1}</td>
-        <td>${m?.name||"অজানা"} <span style="font-size:11px;color:var(--text-muted)">[${m?.memberId||"—"}]</span></td>
-        <td>${MONTHS_BN[c.month]||c.month}</td>
+        <td>${typeBadge}</td>
+        <td>${displayName}</td>
+        <td>${monthCol}</td>
         <td>${c.year}</td>
         <td>৳${(c.amount||0).toLocaleString()}</td>
         <td><span class="badge ${badge}">${label}</span></td>
@@ -1627,7 +1719,7 @@ window.loadCollectionPage = async function() {
           ${isAdmin ? `<button class="btn-sm btn-delete" onclick="deleteChanda('${c.id}')">🗑️ Delete</button>` : ""}
         </td>
       </tr>`;
-    }).join("") : `<tr><td colspan="9"><div class="empty-state"><div class="empty-state-icon">💰</div><div class="empty-state-text">কোনো এন্ট্রি নেই</div></div></td></tr>`;
+    }).join("") : `<tr><td colspan="10"><div class="empty-state"><div class="empty-state-icon">💰</div><div class="empty-state-text">কোনো এন্ট্রি নেই</div></div></td></tr>`;
   } catch(e) { console.error(e); }
 };
 
@@ -1653,42 +1745,130 @@ window.deleteChanda = async function(id) {
 };
 
 // ─── Add Collection Entry ───
+// ─── Entry Type Toggle ───
+let _currentEntryType = "monthly";
+
+window.switchEntryType = function(type) {
+  _currentEntryType = type;
+  if(type === "monthly") {
+    $("typeBtnMonthly").style.background = "var(--primary)";
+    $("typeBtnMonthly").style.color = "white";
+    $("typeBtnPuja").style.background = "#F3F4F6";
+    $("typeBtnPuja").style.color = "var(--text-muted)";
+    showEl("monthlyFields"); hideEl("pujaFields");
+  } else {
+    $("typeBtnPuja").style.background = "var(--primary)";
+    $("typeBtnPuja").style.color = "white";
+    $("typeBtnMonthly").style.background = "#F3F4F6";
+    $("typeBtnMonthly").style.color = "var(--text-muted)";
+    hideEl("monthlyFields"); showEl("pujaFields");
+    hideEl("pujaLabelMemberGroup"); hideEl("pujaLabelNameGroup");
+  }
+  setErr("entryError","");
+};
+
+window.onPujaLabelChange = function() {
+  const val = document.querySelector('input[name="pujaLabel"]:checked')?.value;
+  if(val === "সদস্য") {
+    showEl("pujaLabelMemberGroup"); hideEl("pujaLabelNameGroup");
+  } else {
+    hideEl("pujaLabelMemberGroup"); showEl("pujaLabelNameGroup");
+    if(val === "গ্রাম") {
+      $("pujaLabelNameLabel").textContent = "গ্রামের নাম *";
+      $("entryPujaDonorName").placeholder = "গ্রামের নাম লিখুন...";
+    } else {
+      $("pujaLabelNameLabel").textContent = "দাতার নাম / বিবরণ *";
+      $("entryPujaDonorName").placeholder = "নাম বা বিবরণ লিখুন...";
+    }
+  }
+};
+
 async function loadAddCollectionForm() {
   if(!allMembers.length) { const ms = await getDocs(collection(db,"members")); allMembers=ms.docs.map(d=>({id:d.id,...d.data()})); }
-  const sel = $("entryMember");
-  sel.innerHTML = `<option value="">-- সদস্য নির্বাচন করুন --</option>` + allMembers.map(m=>`<option value="${m.id}">${m.name}</option>`).join("");
+  // Populate both member dropdowns
+  const memberOpts = `<option value="">-- সদস্য নির্বাচন করুন --</option>` +
+    allMembers.map(m=>`<option value="${m.id}">${m.name} [${m.memberId||"—"}]</option>`).join("");
+  $("entryMember").innerHTML = memberOpts;
+  $("entryPujaMember").innerHTML = memberOpts;
   const now = new Date();
   $("entryMonth").value = now.getMonth()+1;
   $("entryYear").value = now.getFullYear();
   $("entryDate").value = now.toISOString().split("T")[0];
+  // Show collector name
+  $("entryCollector").value = currentUser.name + (currentUser.role==="admin" ? " (Admin)" : " (Officer)");
+  // Reset to monthly tab
+  switchEntryType("monthly");
+  // Reset puja label radios
+  document.querySelectorAll('input[name="pujaLabel"]').forEach(r => r.checked=false);
+  $("entryAmount").value=""; $("entryNote").value="";
   setErr("entryError","");
 }
 
-// Auto-fill amount when member selected
-$("entryMember") && $("entryMember").addEventListener("change", function() {
-  const m = allMembers.find(x=>x.id===this.value);
-  if(m && m.monthlyAmount) $("entryAmount").value = m.monthlyAmount;
+// Auto-fill amount when member selected (monthly)
+document.addEventListener("change", function(e) {
+  if(e.target.id === "entryMember") {
+    const m = allMembers.find(x=>x.id===e.target.value);
+    if(m && m.monthlyAmount) $("entryAmount").value = m.monthlyAmount;
+  }
 });
 
 window.submitChandaEntry = async function() {
-  const memberId = $("entryMember").value;
-  const month = parseInt($("entryMonth").value);
-  const year = parseInt($("entryYear").value);
   const amount = parseFloat($("entryAmount").value)||0;
   const status = $("entryStatus").value;
   const note = $("entryNote").value.trim();
   const entryDate = $("entryDate").value;
-  if(!memberId) { setErr("entryError","সদস্য নির্বাচন করুন।"); return; }
-  if(!amount) { setErr("entryError","পরিমাণ লিখুন।"); return; }
-  if(!entryDate) { setErr("entryError","Date দিন।"); return; }
-  // Check duplicate
+  if(!amount) { setErr("entryError","প্রণামীর পরিমাণ লিখুন।"); return; }
+  if(!entryDate) { setErr("entryError","তারিখ দিন।"); return; }
+
   try {
-    const dup = query(collection(db,"chanda"), where("memberId","==",memberId), where("month","==",month), where("year","==",year));
-    const dupSnap = await getDocs(dup);
-    if(!dupSnap.empty) { setErr("entryError","এই সদস্যের এই মাসের প্রণামী এন্ট্রি আগে থেকেই আছে।"); return; }
-    await addDoc(collection(db,"chanda"), {memberId,month,year,amount,status,note,entryDate,collectedBy:currentUser.name,createdAt:serverTimestamp()});
-    showToast("প্রণামী এন্ট্রি সংরক্ষিত হয়েছে।");
-    $("entryMember").value=""; $("entryAmount").value=""; $("entryNote").value=""; $("entryDate").value=""; setErr("entryError","");
+    if(_currentEntryType === "monthly") {
+      // ── Monthly pronami ──
+      const memberId = $("entryMember").value;
+      const month = parseInt($("entryMonth").value);
+      const year = parseInt($("entryYear").value);
+      if(!memberId) { setErr("entryError","সদস্য নির্বাচন করুন।"); return; }
+      const dup = query(collection(db,"chanda"), where("memberId","==",memberId), where("month","==",month), where("year","==",year));
+      const dupSnap = await getDocs(dup);
+      if(!dupSnap.empty) { setErr("entryError","এই সদস্যের এই মাসের প্রণামী এন্ট্রি আগে থেকেই আছে।"); return; }
+      const memberName = allMembers.find(m=>m.id===memberId)?.name || "";
+      await addDoc(collection(db,"chanda"), {
+        entryType:"monthly", memberId, memberName, month, year,
+        amount, status, note, entryDate,
+        collectedBy:currentUser.name, collectorId:currentUser.id,
+        createdAt:serverTimestamp()
+      });
+
+    } else {
+      // ── Puja pronami ──
+      const label = document.querySelector('input[name="pujaLabel"]:checked')?.value;
+      if(!label) { setErr("entryError","লেবেল নির্বাচন করুন (সদস্য / গ্রাম / অন্যান্য)।"); return; }
+      let donorName = "";
+      let memberId = "";
+      if(label === "সদস্য") {
+        memberId = $("entryPujaMember").value;
+        if(!memberId) { setErr("entryError","সদস্য নির্বাচন করুন।"); return; }
+        donorName = allMembers.find(m=>m.id===memberId)?.name || "";
+      } else {
+        donorName = $("entryPujaDonorName").value.trim();
+        if(!donorName) { setErr("entryError","নাম/বিবরণ লিখুন।"); return; }
+      }
+      const now = new Date();
+      await addDoc(collection(db,"chanda"), {
+        entryType:"puja", pujaLabel:label,
+        memberId, donorName,
+        month: now.getMonth()+1, year: now.getFullYear(),
+        amount, status, note, entryDate,
+        collectedBy:currentUser.name, collectorId:currentUser.id,
+        createdAt:serverTimestamp()
+      });
+    }
+
+    showToast("প্রণামী এন্ট্রি সংরক্ষিত হয়েছে। ✅");
+    $("entryAmount").value=""; $("entryNote").value=""; $("entryDate").value="";
+    $("entryMember").value=""; $("entryPujaMember").value=""; $("entryPujaDonorName").value="";
+    document.querySelectorAll('input[name="pujaLabel"]').forEach(r=>r.checked=false);
+    hideEl("pujaLabelMemberGroup"); hideEl("pujaLabelNameGroup");
+    setErr("entryError","");
     navigateTo("collection");
   } catch(e) { setErr("entryError","ত্রুটি: "+e.message); }
 };
@@ -2000,12 +2180,18 @@ window.loadMyCollections = async function() {
     const sorted = chandas.sort((a,b)=>b.year-a.year||b.month-a.month);
     $("myCollectionTable").innerHTML = sorted.length ? `
       <div class="table-wrap"><table class="data-table">
-        <thead><tr><th>#</th><th>সদস্য</th><th>মাস</th><th>পরিমাণ</th><th>Status</th><th>তারিখ</th></tr></thead>
+        <thead><tr><th>#</th><th>ধরন</th><th>সদস্য / দাতা</th><th>মাস</th><th>পরিমাণ</th><th>Status</th><th>মন্তব্য</th><th>তারিখ</th></tr></thead>
         <tbody>${sorted.map((c,i)=>{
           const m = members.find(mb=>mb.id===c.memberId);
           const badge = c.status==="paid"?"badge-paid":c.status==="due"?"badge-due":"badge-pending";
-          const label = c.status==="paid"?"✅ Paid":c.status==="due"?"❌ Due":"⏳ Pending";
-          return `<tr><td>${i+1}</td><td>${m?.name||"অজানা"} <span style="font-size:11px;color:var(--primary)">[${m?.memberId||"—"}]</span></td><td>${MONTHS_BN[c.month]||c.month}</td><td>৳${(c.amount||0).toLocaleString()}</td><td><span class="badge ${badge}">${label}</span></td><td>${c.entryDate||"-"}</td></tr>`;
+          const statusLabel = c.status==="paid"?"✅ Paid":c.status==="due"?"❌ Due":"⏳ Pending";
+          const isPuja = c.entryType==="puja";
+          const typeBadge = isPuja
+            ? `<span style="background:#FEF3C7;color:#92400E;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600">🪷 পূজার</span>${c.pujaLabel?`<br><span style="font-size:10px;color:var(--text-muted)">${c.pujaLabel}</span>`:""}`
+            : `<span style="background:#EDE9FE;color:#5B21B6;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600">📅 মাসিক</span>`;
+          const displayName = isPuja ? (c.donorName||m?.name||"—") : `${m?.name||"অজানা"} <span style="font-size:11px;color:var(--primary)">[${m?.memberId||"—"}]</span>`;
+          const monthCol = isPuja ? `<span style="color:var(--text-muted);font-size:12px">—</span>` : (MONTHS_BN[c.month]||c.month);
+          return `<tr><td>${i+1}</td><td>${typeBadge}</td><td>${displayName}</td><td>${monthCol}</td><td>৳${(c.amount||0).toLocaleString()}</td><td><span class="badge ${badge}">${statusLabel}</span></td><td style="color:var(--text-muted);font-size:12px">${c.note||"-"}</td><td>${c.entryDate||"-"}</td></tr>`;
         }).join("")}</tbody>
       </table></div>` : `<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">${year} সালে কোনো সংগ্রহ নেই</div></div>`;
   } catch(e) { console.error(e); }
