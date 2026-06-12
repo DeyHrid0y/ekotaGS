@@ -569,6 +569,44 @@ body {
 }
 .year-tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
+/* ─── Member Public Summary ─── */
+.member-year-summary {
+  background: linear-gradient(135deg, #1E1B4B 0%, #4C1D95 100%);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  color: white;
+}
+.member-year-summary-title {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: rgba(255,255,255,0.6); margin-bottom: 14px;
+}
+.summary-stats-row {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+}
+.summary-stat-box {
+  background: rgba(255,255,255,0.12);
+  border-radius: 10px; padding: 12px 14px;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.summary-stat-box.paid-box { background: rgba(16,185,129,0.18); border-color: rgba(16,185,129,0.3); }
+.summary-stat-box.due-box { background: rgba(239,68,68,0.18); border-color: rgba(239,68,68,0.3); }
+.summary-stat-box.neutral-box { background: rgba(245,158,11,0.18); border-color: rgba(245,158,11,0.3); }
+.summary-stat-label { font-size: 11px; color: rgba(255,255,255,0.65); margin-bottom: 5px; }
+.summary-stat-num { font-size: 20px; font-weight: 800; color: white; line-height: 1; }
+.summary-stat-sub { font-size: 11px; color: rgba(255,255,255,0.75); margin-top: 4px; font-weight: 500; }
+.month-pills {
+  display: flex; flex-wrap: wrap; gap: 5px; margin-top: 14px;
+}
+.month-pill {
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 600;
+}
+.month-pill.paid { background: rgba(16,185,129,0.25); color: #6EE7B7; border: 1px solid rgba(16,185,129,0.3); }
+.month-pill.due { background: rgba(239,68,68,0.25); color: #FCA5A5; border: 1px solid rgba(239,68,68,0.3); }
+.month-pill.pending { background: rgba(245,158,11,0.2); color: #FCD34D; border: 1px solid rgba(245,158,11,0.3); }
+.month-pill.missing { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.45); border: 1px solid rgba(255,255,255,0.12); }
+
 /* ─── Toast ─── */
 .toast {
   position: fixed; bottom: 24px; right: 24px;
@@ -668,6 +706,58 @@ body {
   color: var(--primary);
 }
 
+/* ─── Pujar Porani Level Badges ─── */
+.porani-level-badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 600;
+}
+.level-member { background: #EDE9FE; color: #5B21B6; }
+.level-village { background: #D1FAE5; color: #065F46; }
+.level-other { background: #FEF3C7; color: #92400E; }
+
+/* ─── Month Summary Box (member detail) ─── */
+.month-summary-box {
+  background: linear-gradient(135deg, #F0ECFF 0%, #FEF9E7 100%);
+  border-radius: 10px; padding: 14px 16px;
+  margin-bottom: 16px;
+  border: 1.5px solid #DDD6FE;
+}
+.month-summary-title {
+  font-size: 13px; font-weight: 700;
+  color: var(--primary-dark); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+.month-summary-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 8px;
+}
+.ms-stat {
+  background: white; border-radius: 8px;
+  padding: 10px 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+  text-align: center;
+}
+.ms-stat .ms-val { font-size: 17px; font-weight: 700; line-height: 1; }
+.ms-stat .ms-lbl { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+.ms-paid .ms-val { color: var(--green); }
+.ms-due .ms-val { color: var(--red); }
+.ms-pending .ms-val { color: var(--yellow); }
+.ms-total .ms-val { color: var(--primary); }
+
+/* ─── Month Detail Table (member view) ─── */
+.months-breakdown { margin-top: 12px; }
+.months-breakdown-title {
+  font-size: 12px; font-weight: 600;
+  color: var(--text-muted); margin-bottom: 8px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* ─── Pujar Porani Page ─── */
+.porani-stat-row {
+  display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
+}
+
 /* ─── Utilities ─── */
 .hidden { display: none !important; }
 .text-center { text-align: center; }
@@ -703,14 +793,14 @@ body {
       <div id="loginForm" class="tab-content active">
         <div class="form-group">
           <label>Username</label>
-          <input type="text" id="loginUsername" placeholder="email or username" />
+          <input type="text" id="loginUsername" placeholder="email অথবা username" />
         </div>
         <div class="form-group">
           <label>Password</label>
           <input type="password" id="loginPassword" placeholder="password" />
         </div>
         <div id="loginError" class="error-msg hidden"></div>
-        <button class="btn-primary full-width" onclick="doLogin()">লগইন করুন / Login</button>
+        <button class="btn-primary full-width" onclick="doLogin()">Login</button>
       </div>
 
       <!-- Member Search -->
@@ -797,7 +887,6 @@ body {
       <section id="page-members" class="page hidden">
         <div class="page-header-row">
           <h3>সদস্য তালিকা / Member List</h3>
-          <button class="btn-primary" id="addMemberBtn" onclick="openAddMemberModal()">+ নতুন সদস্য যোগ করুন</button>
         </div>
         <div class="search-bar-row">
           <input type="text" id="memberListSearch" placeholder="নাম বা ফোন দিয়ে খুঁজুন..." oninput="filterMemberList()" />
@@ -827,6 +916,10 @@ body {
             <select id="filterYear" onchange="loadCollectionPage()">
               <option value="2025">২০২৫ / 2025</option>
               <option value="2026" selected>২০২৬ / 2026</option>
+              <option value="2027">২০২৭ / 2027</option>
+              <option value="2028">২০২৮ / 2028</option>
+              <option value="2029">২০২৯ / 2029</option>
+              <option value="2030">২০৩০ / 2030</option>
             </select>
             <select id="filterMonth" onchange="loadCollectionPage()">
               <option value="">সব মাস / All Months</option>
@@ -886,6 +979,10 @@ body {
               <select id="entryYear">
                 <option value="2025">২০২৫</option>
                 <option value="2026" selected>২০২৬</option>
+                <option value="2027">২০২৭</option>
+                <option value="2028">২০২৮</option>
+                <option value="2029">২০২৯</option>
+                <option value="2030">২০৩০</option>
               </select>
             </div>
           </div>
@@ -913,8 +1010,8 @@ body {
           </div>
           <div id="entryError" class="error-msg hidden"></div>
           <div class="btn-row">
-            <button class="btn-secondary" onclick="navigateTo('collection')">বাতিল / Cancel</button>
-            <button class="btn-primary" onclick="submitChandaEntry()">সংরক্ষণ করুন / Save</button>
+            <button class="btn-secondary" onclick="navigateTo('collection')"> Cancel</button>
+            <button class="btn-primary" onclick="submitChandaEntry()">Save</button>
           </div>
         </div>
       </section>
@@ -922,8 +1019,8 @@ body {
       <!-- Officers (Admin only) -->
       <section id="page-officers" class="page hidden">
         <div class="page-header-row">
-          <h3>অফিসার তালিকা / Officers</h3>
-          <button class="btn-primary" onclick="openAddOfficerModal()">+ নতুন অফিসার যোগ করুন</button>
+          <h3> Officers</h3>
+          <button class="btn-primary" onclick="openAddOfficerModal()">+ Add New Officer </button>
         </div>
         <div class="table-wrap">
           <table class="data-table">
@@ -965,21 +1062,44 @@ body {
           </div>
           <div id="pwdReqError" class="error-msg hidden"></div>
           <div id="pwdReqSuccess" class="success-msg hidden"></div>
-          <button class="btn-primary" onclick="submitPasswordRequest()">অনুরোধ পাঠান / Send Request</button>
+          <button class="btn-primary" onclick="submitPasswordRequest()"> Send Request</button>
         </div>
       </section>
 
       <!-- Reports -->
       <section id="page-reports" class="page hidden">
         <div class="card">
-          <h3 class="card-title">রিপোর্ট / Reports</h3>
+          <h3 class="card-title">Reports</h3>
           <div class="report-filters">
             <select id="reportYear" onchange="generateReport()">
               <option value="2025">২০২৫</option>
               <option value="2026" selected>২০২৬</option>
+               <option value="2027">২০২৭</option>
+                <option value="2028">২০২৮</option>
+                <option value="2029">২০২৯</option>
+                <option value="2030">২০৩০</option>
             </select>
+            <button class="btn-primary" onclick="downloadReportPDF()" style="margin-left:auto">📄 PDF Download</button>
           </div>
           <div id="reportContent"></div>
+        </div>
+      </section>
+
+      <section id="page-my-collections" class="page hidden">
+        <div class="card">
+          <h3 class="card-title">আমার প্রণামী সংগ্রহ</h3>
+          <div class="report-filters">
+            <select id="myColYear" onchange="loadMyCollections()">
+              <option value="2025">২০২৫</option>
+              <option value="2026" selected>২০২৬</option>
+               <option value="2027">২০২৭</option>
+                <option value="2028">২০২৮</option>
+                <option value="2029">২০২৯</option>
+                <option value="2030">২০৩০</option>
+            </select>
+          </div>
+          <div id="myCollectionSummary" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px"></div>
+          <div id="myCollectionTable"></div>
         </div>
       </section>
 
@@ -998,11 +1118,11 @@ body {
 <div id="addMemberModal" class="modal-overlay hidden">
   <div class="modal-card">
     <div class="modal-header">
-      <h3 id="addMemberModalTitle">নতুন সদস্য যোগ করুন</h3>
+      <h3 id="addMemberModalTitle">Add New Member</h3>
       <button class="modal-close" onclick="closeModal('addMemberModal')">✕</button>
     </div>
     <div class="form-group">
-      <label>Member ID <span style="font-size:11px;color:var(--text-muted)">(Primary Key — unique)</span></label>
+      <label>Member ID <span style="font-size:11px;color:var(--text-muted)">()</span></label>
       <input type="text" id="mMemberId" placeholder="e.g. MEM-001" />
     </div>
     <div class="form-group">
@@ -1023,8 +1143,8 @@ body {
     </div>
     <div id="mError" class="error-msg hidden"></div>
     <div class="btn-row">
-      <button class="btn-secondary" onclick="closeModal('addMemberModal')">বাতিল</button>
-      <button class="btn-primary" onclick="saveMember()">সংরক্ষণ করুন</button>
+      <button class="btn-secondary" onclick="closeModal('addMemberModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveMember()">Save</button>
     </div>
   </div>
 </div>
@@ -1033,7 +1153,7 @@ body {
 <div id="addOfficerModal" class="modal-overlay hidden">
   <div class="modal-card">
     <div class="modal-header">
-      <h3>নতুন অফিসার যোগ করুন</h3>
+      <h3>Add New Officer</h3>
       <button class="modal-close" onclick="closeModal('addOfficerModal')">✕</button>
     </div>
     <div class="form-group">
@@ -1054,8 +1174,8 @@ body {
     </div>
     <div id="oError" class="error-msg hidden"></div>
     <div class="btn-row">
-      <button class="btn-secondary" onclick="closeModal('addOfficerModal')">বাতিল</button>
-      <button class="btn-primary" onclick="saveOfficer()">তৈরি করুন</button>
+      <button class="btn-secondary" onclick="closeModal('addOfficerModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveOfficer()">Create</button>
     </div>
   </div>
 </div>
@@ -1064,18 +1184,18 @@ body {
 <div id="updatePwdModal" class="modal-overlay hidden">
   <div class="modal-card">
     <div class="modal-header">
-      <h3>পাসওয়ার্ড পরিবর্তন করুন</h3>
+      <h3>Change Password</h3>
       <button class="modal-close" onclick="closeModal('updatePwdModal')">✕</button>
     </div>
     <input type="hidden" id="updatePwdOfficerId" />
     <div class="form-group">
-      <label>নতুন পাসওয়ার্ড / New Password *</label>
-      <input type="password" id="updatePwdNew" placeholder="নতুন পাসওয়ার্ড" />
+      <label>Add New Password *</label>
+      <input type="password" id="updatePwdNew" placeholder="New Password" />
     </div>
     <div id="updatePwdError" class="error-msg hidden"></div>
     <div class="btn-row">
-      <button class="btn-secondary" onclick="closeModal('updatePwdModal')">বাতিল</button>
-      <button class="btn-primary" onclick="confirmUpdatePassword()">পরিবর্তন করুন</button>
+      <button class="btn-secondary" onclick="closeModal('updatePwdModal')">Cancel</button>
+      <button class="btn-primary" onclick="confirmUpdatePassword()">Change</button>
     </div>
   </div>
 </div>
@@ -1215,16 +1335,18 @@ function buildNav() {
     <div class="nav-item" onclick="navigateTo('dashboard')"><span class="nav-icon">📊</span> Dashboard</div>
     <div class="nav-item" onclick="navigateTo('members')"><span class="nav-icon">👥</span> সদস্য তালিকা</div>
     <div class="nav-item" onclick="navigateTo('collection')"><span class="nav-icon">💰</span> প্রণামী সংগ্রহ</div>
-    <div class="nav-item" onclick="navigateTo('add-collection')"><span class="nav-icon">➕</span> নতুন প্রণামী এন্ট্রি</div>
-    <div class="nav-section">রিপোর্ট</div>
-    <div class="nav-item" onclick="navigateTo('reports')"><span class="nav-icon">📋</span> রিপোর্ট</div>
+    <div class="nav-item" onclick="navigateTo('add-collection')"><span class="nav-icon">➕</span> নতুন মাসিক প্রণামী এন্ট্রি</div>
+     <div class="nav-item" onclick="navigateTo(' add-collection')"><span class="nav-icon">➕</span>  প্রণামী এন্ট্রি</div>
+    <div class="nav-section">Report</div>
+    ${!isAdmin ? `<div class="nav-item" onclick="navigateTo('my-collections')"><span class="nav-icon">🧾</span> My Collection</div>` : ""}
+    <div class="nav-item" onclick="navigateTo('reports')"><span class="nav-icon">📋</span> Report</div>
     ${isAdmin ? `
     <div class="nav-section">Admin</div>
-    <div class="nav-item" onclick="navigateTo('officers')"><span class="nav-icon">🛡️</span> অফিসার</div>
-    <div class="nav-item" onclick="navigateTo('password-requests')"><span class="nav-icon">🔑</span> পাসওয়ার্ড অনুরোধ</div>
+    <div class="nav-item" onclick="navigateTo('officers')"><span class="nav-icon">🛡️</span> Officers</div>
+    <div class="nav-item" onclick="navigateTo('password-requests')"><span class="nav-icon">🔑</span> Password Change Request</div>
     ` : `
     <div class="nav-section">অ্যাকাউন্ট</div>
-    <div class="nav-item" onclick="navigateTo('change-password')"><span class="nav-icon">🔑</span> পাসওয়ার্ড পরিবর্তন</div>
+    <div class="nav-item" onclick="navigateTo('change-password')"><span class="nav-icon">🔑</span> Change Password</div>
     `}
   `;
 }
@@ -1238,7 +1360,7 @@ window.navigateTo = function(page) {
   $("pageTitle").textContent = {
     "dashboard":"Dashboard","members":"সদস্য তালিকা","collection":"প্রণামী সংগ্রহ",
     "add-collection":"নতুন প্রণামী","officers":"অফিসার","password-requests":"পাসওয়ার্ড অনুরোধ",
-    "change-password":"পাসওয়ার্ড পরিবর্তন","reports":"রিপোর্ট"
+    "change-password":"পাসওয়ার্ড পরিবর্তন","reports":"রিপোর্ট","my-collections":"আমার সংগ্রহ"
   }[page] || page;
   document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
   const active = [...document.querySelectorAll(".nav-item")].find(n => n.onclick && n.onclick.toString().includes(`'${page}'`));
@@ -1251,6 +1373,7 @@ window.navigateTo = function(page) {
   else if(page==="officers") loadOfficers();
   else if(page==="password-requests") loadPasswordRequests();
   else if(page==="reports") generateReport();
+  else if(page==="my-collections") loadMyCollections();
   // close sidebar on mobile
   $("sidebar").classList.remove("open");
 };
@@ -1371,6 +1494,7 @@ window.filterMemberList = function() {
 };
 
 window.openAddMemberModal = function() {
+  if(currentUser.role !== "admin") { showToast("শুধুমাত্র Admin নতুন সদস্য যোগ করতে পারবে।"); return; }
   editingMemberId = null;
   $("addMemberModalTitle").textContent = "নতুন সদস্য যোগ করুন";
   $("mMemberId").value=""; $("mName").value=""; $("mPhone").value=""; $("mAddress").value=""; $("mAmount").value="";
@@ -1389,6 +1513,7 @@ window.openEditMemberModal = function(id) {
 };
 
 window.saveMember = async function() {
+  if(currentUser.role !== "admin") { showToast("শুধুমাত্র Admin এই কাজ করতে পারবে।"); return; }
   const memberId = $("mMemberId").value.trim();
   const name = $("mName").value.trim();
   const phone = $("mPhone").value.trim();
@@ -1757,19 +1882,84 @@ window.showPublicMemberDetail = async function(id) {
     const snap = await getDocs(q);
     const chandas = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.year-a.year||b.month-a.month);
     $("memberDetailName").textContent = m.name;
+
+    // ── Current-year summary up to this month ──
+    const now = new Date();
+    const curYear = now.getFullYear();
+    const curMonth = now.getMonth() + 1; // 1-based
+
+    // Chandas of current year only, months 1..curMonth
+    const thisYearChandas = chandas.filter(c => c.year === curYear && c.month >= 1 && c.month <= curMonth);
+
+    const paidEntries   = thisYearChandas.filter(c => c.status === "paid");
+    const dueEntries    = thisYearChandas.filter(c => c.status === "due");
+    const pendingEntries= thisYearChandas.filter(c => c.status === "pending");
+    const recordedMonths= new Set(thisYearChandas.map(c => c.month));
+
+    const totalPaid   = paidEntries.reduce((s,c)=>s+(c.amount||0),0);
+    const totalDue    = dueEntries.reduce((s,c)=>s+(c.amount||0),0);
+    const totalPending= pendingEntries.reduce((s,c)=>s+(c.amount||0),0);
+    const paidCount   = paidEntries.length;
+    const dueCount    = dueEntries.length;
+    const missingCount= curMonth - recordedMonths.size; // months with no entry at all
+    const missingAmount   = missingCount * (m.monthlyAmount || 0);
+    const totalPendingAll = totalPending + missingAmount;
+    const pendingAllCount = pendingEntries.length + missingCount;
+
+    // Build month pill row — show each month 1..curMonth with its status
+    const monthPills = Array.from({length: curMonth}, (_,i) => {
+      const mn = i + 1;
+      const entry = thisYearChandas.find(c => c.month === mn);
+      if (!entry) return `<span class="month-pill missing" title="কোনো এন্ট্রি নেই">${MONTHS_BN[mn]}</span>`;
+      if (entry.status === "paid")    return `<span class="month-pill paid" title="পরিশোধিত">✅ ${MONTHS_BN[mn]}</span>`;
+      if (entry.status === "due")     return `<span class="month-pill due" title="বকেয়া">❌ ${MONTHS_BN[mn]}</span>`;
+      return `<span class="month-pill pending" title="অপেক্ষমান">⏳ ${MONTHS_BN[mn]}</span>`;
+    }).join("");
+
     let html = `<div class="member-detail-header">
-      <div class="member-avatar">${m.name.charAt(0)}</div>
-      <div><div class="member-detail-name">${m.name}</div>
-      <div class="member-detail-sub">🪪 ID: ${m.memberId||"—"}</div>
-      <div class="member-detail-sub">📞 ${m.phone||"-"}</div>
-      <div class="member-detail-sub">মাসিক প্রণামী: ৳${(m.monthlyAmount||0).toLocaleString()}</div></div>
+      <div class="member-avatar">${(m.name||"?").charAt(0)}</div>
+      <div>
+        <div class="member-detail-name">${m.name}</div>
+        <div class="member-detail-sub">🪪 ID: ${m.memberId||"—"}</div>
+        <div class="member-detail-sub">📞 ${m.phone||"-"}</div>
+        <div class="member-detail-sub">মাসিক প্রণামী: ৳${(m.monthlyAmount||0).toLocaleString()}</div>
+      </div>
+    </div>
+
+    <!-- ── Current-year summary card ── -->
+    <div class="member-year-summary">
+      <div class="member-year-summary-title">
+        📅 ${curYear} সালের সারসংক্ষেপ — জানুয়ারি থেকে ${MONTHS_BN[curMonth]} পর্যন্ত (${curMonth} মাস)
+      </div>
+      <div class="summary-stats-row">
+        <div class="summary-stat-box paid-box">
+          <div class="summary-stat-label">✅ পরিশোধিত</div>
+          <div class="summary-stat-num">${paidCount} মাস</div>
+          <div class="summary-stat-sub" style="font-size:14px;font-weight:700;color:#6EE7B7;margin-top:5px">৳${totalPaid.toLocaleString()}</div>
+        </div>
+        <div class="summary-stat-box due-box">
+          <div class="summary-stat-label">❌ বকেয়া</div>
+          <div class="summary-stat-num">${dueCount} মাস</div>
+          <div class="summary-stat-sub" style="font-size:14px;font-weight:700;color:#FCA5A5;margin-top:5px">৳${totalDue.toLocaleString()}</div>
+        </div>
+        <div class="summary-stat-box neutral-box">
+          <div class="summary-stat-label">⏳ অপেক্ষমান / নেই</div>
+          <div class="summary-stat-num">${pendingAllCount} মাস</div>
+          <div class="summary-stat-sub" style="font-size:14px;font-weight:700;color:#FCD34D;margin-top:5px">৳${totalPendingAll.toLocaleString()}</div>
+        </div>
+      </div>
+      <div class="month-pills">${monthPills}</div>
     </div>`;
-    if(!chandas.length) html += `<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">কোনো প্রণামীর রেকর্ড নেই</div></div>`;
-    else {
+
+    if(!chandas.length) {
+      html += `<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">কোনো প্রণামীর রেকর্ড নেই</div></div>`;
+    } else {
       const years = [...new Set(chandas.map(c=>c.year))].sort((a,b)=>b-a);
       years.forEach(yr => {
         const yc = chandas.filter(c=>c.year==yr);
-        html += `<h4 style="margin:16px 0 8px;font-size:14px">${yr} সালের প্রণামী</h4><div class="table-wrap"><table class="data-table"><thead><tr><th>মাস</th><th>পরিমাণ</th><th>Status</th><th>সংগ্রহকারী</th><th>তারিখ</th></tr></thead><tbody>`;
+        html += `<h4 style="margin:16px 0 8px;font-size:14px;font-weight:600">${yr} সালের সম্পূর্ণ বিবরণ</h4>
+        <div class="table-wrap"><table class="data-table">
+        <thead><tr><th>মাস</th><th>পরিমাণ</th><th>Status</th><th>সংগ্রহকারী</th><th>তারিখ</th></tr></thead><tbody>`;
         yc.forEach(c => {
           const badge = c.status==="paid" ? "badge-paid" : c.status==="due" ? "badge-due" : "badge-pending";
           const label = c.status==="paid" ? "✅ পরিশোধিত" : c.status==="due" ? "❌ বকেয়া" : "⏳ অপেক্ষমান";
@@ -1781,6 +1971,121 @@ window.showPublicMemberDetail = async function(id) {
     }
     $("memberDetailContent").innerHTML = html;
     showEl("memberDetailModal");
+  } catch(e) { console.error(e); }
+};
+
+// ─── My Collections (Officer) ───
+window.loadMyCollections = async function() {
+  const year = parseInt($("myColYear").value);
+  const officerName = currentUser.name;
+  try {
+    const [chandaSnap, memberSnap] = await Promise.all([
+      getDocs(query(collection(db,"chanda"), where("year","==",year), where("collectedBy","==",officerName))),
+      getDocs(collection(db,"members"))
+    ]);
+    const chandas = chandaSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const members = memberSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const totalEntries = chandas.length;
+    const totalAmount = chandas.reduce((s,c)=>s+(c.amount||0),0);
+    const paidAmount = chandas.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+    const dueAmount = chandas.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+
+    $("myCollectionSummary").innerHTML = `
+      <div class="stat-card" style="flex:1;min-width:140px"><div class="stat-icon">📋</div><div class="stat-value">${totalEntries}</div><div class="stat-label">মোট এন্ট্রি</div></div>
+      <div class="stat-card" style="flex:1;min-width:140px"><div class="stat-icon">💰</div><div class="stat-value">৳${totalAmount.toLocaleString()}</div><div class="stat-label">মোট সংগ্রহ</div></div>
+      <div class="stat-card" style="flex:1;min-width:140px"><div class="stat-icon">✅</div><div class="stat-value">৳${paidAmount.toLocaleString()}</div><div class="stat-label">পরিশোধিত</div></div>
+      <div class="stat-card" style="flex:1;min-width:140px"><div class="stat-icon">❌</div><div class="stat-value">৳${dueAmount.toLocaleString()}</div><div class="stat-label">বকেয়া</div></div>
+    `;
+
+    const sorted = chandas.sort((a,b)=>b.year-a.year||b.month-a.month);
+    $("myCollectionTable").innerHTML = sorted.length ? `
+      <div class="table-wrap"><table class="data-table">
+        <thead><tr><th>#</th><th>সদস্য</th><th>মাস</th><th>পরিমাণ</th><th>Status</th><th>তারিখ</th></tr></thead>
+        <tbody>${sorted.map((c,i)=>{
+          const m = members.find(mb=>mb.id===c.memberId);
+          const badge = c.status==="paid"?"badge-paid":c.status==="due"?"badge-due":"badge-pending";
+          const label = c.status==="paid"?"✅ Paid":c.status==="due"?"❌ Due":"⏳ Pending";
+          return `<tr><td>${i+1}</td><td>${m?.name||"অজানা"} <span style="font-size:11px;color:var(--primary)">[${m?.memberId||"—"}]</span></td><td>${MONTHS_BN[c.month]||c.month}</td><td>৳${(c.amount||0).toLocaleString()}</td><td><span class="badge ${badge}">${label}</span></td><td>${c.entryDate||"-"}</td></tr>`;
+        }).join("")}</tbody>
+      </table></div>` : `<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">${year} সালে কোনো সংগ্রহ নেই</div></div>`;
+  } catch(e) { console.error(e); }
+};
+
+// ─── PDF Report ───
+window.downloadReportPDF = async function() {
+  const year = parseInt($("reportYear").value);
+  try {
+    const [memberSnap, chandaSnap] = await Promise.all([
+      getDocs(collection(db,"members")),
+      getDocs(query(collection(db,"chanda"), where("year","==",year)))
+    ]);
+    const members = memberSnap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.memberId||"").localeCompare(b.memberId||""));
+    const chandas = chandaSnap.docs.map(d=>({id:d.id,...d.data()}));
+
+    let grandTotal = 0;
+    const rows = members.map(m => {
+      const mc = chandas.filter(c=>c.memberId===m.id);
+      const paidMonths = mc.filter(c=>c.status==="paid").length;
+      const totalPaid = mc.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+      const totalDue = mc.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+      const officers = [...new Set(mc.map(c=>c.collectedBy).filter(Boolean))].join(", ")||"-";
+      grandTotal += totalPaid;
+      return { id:m.memberId||"—", name:m.name, paidMonths, totalPaid, totalDue, officers };
+    });
+
+    const w = window.open("","_blank","width=900,height=700");
+    w.document.write(`<!DOCTYPE html><html><head>
+      <meta charset="UTF-8">
+      <title>একতা যুব সংঘ — প্রণামী রিপোর্ট ${year}</title>
+      <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+      <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Hind Siliguri',sans-serif; padding:30px; color:#111; font-size:13px; }
+        .header { text-align:center; margin-bottom:24px; border-bottom:2px solid #7C3AED; padding-bottom:16px; }
+        .header h1 { font-size:22px; color:#7C3AED; font-weight:700; }
+        .header h2 { font-size:15px; color:#374151; margin-top:4px; }
+        .header p { font-size:12px; color:#6B7280; margin-top:4px; }
+        table { width:100%; border-collapse:collapse; margin-top:16px; }
+        thead th { background:#7C3AED; color:white; padding:8px 10px; text-align:left; font-size:12px; }
+        tbody tr:nth-child(even) { background:#F5F3FF; }
+        tbody td { padding:7px 10px; border-bottom:1px solid #E5E7EB; font-size:12px; }
+        .tfoot td { background:#EDE9FE; font-weight:700; padding:8px 10px; font-size:13px; }
+        .badge-paid { color:#065F46; background:#D1FAE5; padding:2px 8px; border-radius:999px; font-size:11px; }
+        .badge-due { color:#991B1B; background:#FEE2E2; padding:2px 8px; border-radius:999px; font-size:11px; }
+        .footer { margin-top:24px; text-align:right; font-size:11px; color:#9CA3AF; }
+        @media print { body { padding:15px; } button { display:none; } }
+      </style>
+    </head><body>
+      <div class="header">
+        <h1>🪷 একতা যুব সংঘ</h1>
+        <h2>প্রণামী সংগ্রহ রিপোর্ট — ${year}</h2>
+        <p>তৈরির তারিখ: ${new Date().toLocaleDateString("en-GB")}</p>
+      </div>
+      <button onclick="window.print()" style="background:#7C3AED;color:white;border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;margin-bottom:12px">🖨️ Print / Save as PDF</button>
+      <table>
+        <thead><tr>
+          <th>#</th><th>Member ID</th><th>সদস্যের নাম</th>
+          <th>পরিশোধিত মাস</th><th>মোট পরিমাণ (৳)</th><th>বকেয়া (৳)</th><th>সংগ্রাহক</th>
+        </tr></thead>
+        <tbody>
+          ${rows.map((r,i)=>`<tr>
+            <td>${i+1}</td>
+            <td><strong>${r.id}</strong></td>
+            <td>${r.name}</td>
+            <td><span class="badge-paid">${r.paidMonths} মাস</span></td>
+            <td>৳${r.totalPaid.toLocaleString()}</td>
+            <td>${r.totalDue>0?`<span class="badge-due">৳${r.totalDue.toLocaleString()}</span>`:`-`}</td>
+            <td>${r.officers}</td>
+          </tr>`).join("")}
+        </tbody>
+        <tfoot><tr class="tfoot">
+          <td colspan="4" style="text-align:right">মোট সংগ্রহ:</td>
+          <td colspan="3">৳${grandTotal.toLocaleString()}</td>
+        </tr></tfoot>
+      </table>
+      <div class="footer">একতা যুব সংঘ | Developed by HRIDOOY DEY</div>
+    </body></html>`);
+    w.document.close();
   } catch(e) { console.error(e); }
 };
 
