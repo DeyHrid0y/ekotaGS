@@ -630,6 +630,87 @@ body {
 .empty-state-icon { font-size: 40px; margin-bottom: 10px; }
 .empty-state-text { font-size: 14px; }
 
+/* ─── Khoroc (Expense) ─── */
+.khoroc-row {
+  display: grid;
+  grid-template-columns: 1fr 120px 34px;
+  gap: 8px;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid #F3F4F6;
+}
+.khoroc-row:last-child { border-bottom: none; }
+.khoroc-rows-container { margin-bottom: 4px; }
+.add-row-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 9px 14px; border: 1.5px dashed var(--primary);
+  border-radius: 8px; background: var(--primary-light);
+  color: var(--primary); font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit; width: 100%;
+  justify-content: center; margin: 10px 0 16px;
+  transition: all 0.2s;
+}
+.add-row-btn:hover { background: #DDD6FE; }
+.khoroc-total-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--primary-light); padding: 12px 16px; border-radius: 8px;
+  margin-bottom: 16px;
+}
+.khoroc-total-label { font-size: 13px; color: var(--primary-dark); font-weight: 600; }
+.khoroc-total-value { font-size: 18px; font-weight: 800; color: var(--primary); }
+.remove-row-btn {
+  background: #FEE2E2; border: none; color: var(--red); font-size: 14px;
+  width: 32px; height: 32px; border-radius: 6px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: background 0.2s; font-weight: 700;
+}
+.remove-row-btn:hover { background: #FECACA; }
+.khoroc-submission {
+  border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 16px;
+  margin-bottom: 12px; background: var(--surface);
+  transition: box-shadow 0.2s;
+}
+.khoroc-submission:hover { box-shadow: var(--shadow-md); }
+.khoroc-submission-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #F3F4F6;
+  gap: 10px;
+}
+.khoroc-submission-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.khoroc-submission-total { font-size: 16px; font-weight: 700; color: var(--red); white-space: nowrap; }
+.khoroc-item-list { display: flex; flex-direction: column; gap: 2px; }
+.khoroc-item-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; padding: 4px 6px; border-radius: 4px;
+}
+.khoroc-item-row:nth-child(odd) { background: #F9FAFB; }
+.khoroc-item-khat { color: var(--text); }
+.khoroc-item-amount { font-weight: 600; color: var(--red); }
+.khoroc-col-header {
+  display: grid; grid-template-columns: 1fr 120px 34px;
+  gap: 8px; padding: 4px 0;
+  font-size: 11px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border); margin-bottom: 4px;
+}
+
+/* ─── Final Report ─── */
+.fin-source-card {
+  flex: 1; min-width: 150px; border-radius: 10px; padding: 14px;
+  border: 1.5px solid;
+}
+.fin-source-value { font-size: 20px; font-weight: 800; margin: 6px 0 3px; }
+.fin-source-label { font-size: 12px; font-weight: 600; }
+.fin-source-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.net-balance-card {
+  border-radius: 14px; padding: 20px 24px;
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 20px; box-shadow: var(--shadow-md);
+}
+.net-balance-icon { font-size: 36px; }
+.net-balance-label { font-size: 13px; font-weight: 600; opacity: 0.8; }
+.net-balance-value { font-size: 28px; font-weight: 900; }
+
 /* ─── Report Filters ─── */
 .report-filters { display: flex; gap: 10px; margin-bottom: 16px; }
 .report-filters select {
@@ -1032,6 +1113,18 @@ body {
           <!-- ══ PUJA PRONAMI FIELDS ══ -->
           <div id="pujaFields" class="hidden">
             <div class="form-group">
+              <label>বছর / Year *</label>
+              <select id="pujaYear">
+                <option value="2025">২০২৫ / 2025</option>
+                <option value="2026" selected>২০২৬ / 2026</option>
+                <option value="2027">২০২৭ / 2027</option>
+                <option value="2028">২০২৮ / 2028</option>
+                <option value="2029">২০২৯ / 2029</option>
+                <option value="2030">২০৩০ / 2030</option>
+                <option value="2031">২০৩১ / 2031</option>
+              </select>
+            </div>
+            <div class="form-group">
               <label>লেবেল / Label *</label>
               <div style="display:flex;gap:8px;flex-wrap:wrap">
                 <label class="label-radio-btn" id="lbl-somossho">
@@ -1183,7 +1276,119 @@ body {
         </div>
       </section>
 
-    </div><!-- /page-content -->
+      <!-- ══ KHOROC (EXPENSE) PAGE ══ -->
+      <section id="page-khoroc" class="page hidden">
+        <div class="page-header-row">
+          <h3>💸 খরচ / Expenses</h3>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <select id="khorocFilterYear" onchange="loadKhorocList()"
+              style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;cursor:pointer">
+              <option value="2025">২০২৫</option>
+              <option value="2026" selected>২০২৬</option>
+              <option value="2027">২০২৭</option>
+              <option value="2028">২০২৮</option>
+              <option value="2029">২০২৯</option>
+              <option value="2030">২০৩০</option>
+            </select>
+            <button id="khorocPdfBtn" class="btn-secondary" onclick="downloadKhorocPDF()"
+              style="display:none;gap:6px;align-items:center">📄 PDF Report</button>
+            <button class="btn-primary" onclick="showAddKhorocForm()">➕ নতুন খরচ যোগ করুন</button>
+          </div>
+        </div>
+
+        <!-- ── Add Expense Form (collapsible) ── -->
+        <div id="khorocAddForm" class="card max-600 hidden" style="margin-bottom:20px">
+          <h4 style="margin-bottom:16px;font-size:15px;font-weight:600;color:var(--primary)">💸 নতুন খরচ এন্ট্রি</h4>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>সংযোজনকারী / Added By</label>
+              <input type="text" id="khorocAddedBy" readonly
+                style="background:#F9FAFB;color:var(--primary);font-weight:600;cursor:not-allowed" />
+            </div>
+            <div class="form-group">
+              <label>তারিখ / Date *</label>
+              <input type="date" id="khorocDate" />
+            </div>
+          </div>
+
+          <!-- Expense Rows Header -->
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:8px;color:var(--text)">
+            খরচের তালিকা / Expense Items *
+          </label>
+          <div class="khoroc-col-header">
+            <div>খরচের খাত (Category)</div>
+            <div>পরিমাণ (৳)</div>
+            <div></div>
+          </div>
+
+          <!-- Dynamic Rows -->
+          <div id="khorocRowsContainer" class="khoroc-rows-container"></div>
+
+          <!-- Add Row Button -->
+          <button class="add-row-btn" onclick="addKhorocRow()">
+            ➕ আরো একটি আইটেম যোগ করুন
+          </button>
+
+          <!-- Running Total -->
+          <div class="khoroc-total-bar">
+            <span class="khoroc-total-label">মোট খরচ / Total:</span>
+            <span class="khoroc-total-value" id="khorocTotalDisplay">৳০</span>
+          </div>
+
+          <!-- Note -->
+          <div class="form-group">
+            <label>মন্তব্য / Notes (ঐচ্ছিক)</label>
+            <input type="text" id="khorocNote" placeholder="মন্তব্য লিখুন..." />
+          </div>
+
+          <div id="khorocError" class="error-msg hidden"></div>
+          <div class="btn-row">
+            <button class="btn-secondary" onclick="hideAddKhorocForm()">বাতিল / Cancel</button>
+            <button class="btn-primary" onclick="submitKhoroc()">💾 সংরক্ষণ করুন</button>
+          </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div id="khorocSummary" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px"></div>
+
+        <!-- Expense List -->
+        <div id="khorocList"></div>
+      </section>
+
+      <!-- ══ FINAL REPORT (ADMIN ONLY) ══ -->
+      <section id="page-final-report" class="page hidden">
+        <div class="page-header-row">
+          <h3>📊 চূড়ান্ত রিপোর্ট / Final Report</h3>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <select id="finalReportYear" onchange="loadFinalReport()"
+              style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;cursor:pointer">
+              <option value="2025">২০২৫</option>
+              <option value="2026" selected>২০২৬</option>
+              <option value="2027">২০২৭</option>
+              <option value="2028">২০২৮</option>
+              <option value="2029">২০২৯</option>
+              <option value="2030">২০৩০</option>
+            </select>
+            <button class="btn-primary" onclick="downloadFinalReportPDF()">📄 PDF Download</button>
+          </div>
+        </div>
+
+        <!-- Net Summary Cards -->
+        <div id="finalReportSummary" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px"></div>
+
+        <!-- Income Section -->
+        <div class="card" style="margin-bottom:16px">
+          <h3 class="card-title" style="color:var(--green)">💰 আয়ের বিবরণ / Income Details</h3>
+          <div id="finalIncomeSection"><div class="empty-state"><div class="empty-state-icon">⏳</div><div class="empty-state-text">লোড হচ্ছে...</div></div></div>
+        </div>
+
+        <!-- Expense Section -->
+        <div class="card">
+          <h3 class="card-title" style="color:var(--red)">💸 খরচের বিবরণ / Expense Details</h3>
+          <div id="finalExpenseSection"><div class="empty-state"><div class="empty-state-icon">⏳</div><div class="empty-state-text">লোড হচ্ছে...</div></div></div>
+        </div>
+      </section>
 
     <footer class="site-footer">
       Developed by <span>HRIDOOY DEY</span>
@@ -1288,6 +1493,54 @@ body {
       <button class="modal-close" onclick="closeModal('memberDetailModal')">✕</button>
     </div>
     <div id="memberDetailContent"></div>
+  </div>
+</div>
+
+<!-- Edit Khoroc Modal -->
+<div id="editKhorocModal" class="modal-overlay hidden">
+  <div class="modal-card wide">
+    <div class="modal-header">
+      <h3>✏️ খরচ সম্পাদনা / Edit Expense</h3>
+      <button class="modal-close" onclick="closeModal('editKhorocModal')">✕</button>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>সংযোজনকারী / Added By</label>
+        <input type="text" id="editKhorocAddedBy" readonly
+          style="background:#F9FAFB;color:var(--primary);font-weight:600;cursor:not-allowed" />
+      </div>
+      <div class="form-group">
+        <label>তারিখ / Date *</label>
+        <input type="date" id="editKhorocDate" />
+      </div>
+    </div>
+
+    <label style="font-size:13px;font-weight:600;display:block;margin-bottom:8px">খরচের তালিকা *</label>
+    <div class="khoroc-col-header">
+      <div>খরচের খাত (Category)</div>
+      <div>পরিমাণ (৳)</div>
+      <div></div>
+    </div>
+    <div id="editKhorocRowsContainer" class="khoroc-rows-container"></div>
+    <button class="add-row-btn" onclick="addEditKhorocRow()">➕ আরো একটি আইটেম যোগ করুন</button>
+
+    <div class="khoroc-total-bar">
+      <span class="khoroc-total-label">মোট খরচ / Total:</span>
+      <span class="khoroc-total-value" id="editKhorocTotalDisplay">৳০</span>
+    </div>
+
+    <div class="form-group">
+      <label>মন্তব্য / Notes (ঐচ্ছিক)</label>
+      <input type="text" id="editKhorocNote" placeholder="মন্তব্য লিখুন..." />
+    </div>
+
+    <input type="hidden" id="editKhorocId" />
+    <div id="editKhorocError" class="error-msg hidden"></div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="closeModal('editKhorocModal')">বাতিল</button>
+      <button class="btn-primary" onclick="saveEditKhoroc()">💾 আপডেট করুন</button>
+    </div>
   </div>
 </div>
 
@@ -1420,8 +1673,11 @@ function buildNav() {
     <div class="nav-section">Report</div>
     ${!isAdmin ? `<div class="nav-item" onclick="navigateTo('my-collections')"><span class="nav-icon">🧾</span> My Collection</div>` : ""}
     <div class="nav-item" onclick="navigateTo('reports')"><span class="nav-icon">📋</span> Report</div>
+    <div class="nav-section">খরচ</div>
+    <div class="nav-item" onclick="navigateTo('khoroc')"><span class="nav-icon">💸</span> খরচ এন্ট্রি</div>
     ${isAdmin ? `
     <div class="nav-section">Admin</div>
+    <div class="nav-item" onclick="navigateTo('final-report')"><span class="nav-icon">📊</span> চূড়ান্ত রিপোর্ট</div>
     <div class="nav-item" onclick="navigateTo('officers')"><span class="nav-icon">🛡️</span> Officers</div>
     <div class="nav-item" onclick="navigateTo('password-requests')"><span class="nav-icon">🔑</span> Password Change Request</div>
     ` : `
@@ -1440,7 +1696,8 @@ window.navigateTo = function(page) {
   $("pageTitle").textContent = {
     "dashboard":"Dashboard","members":"সদস্য তালিকা","collection":"প্রণামী সংগ্রহ",
     "add-collection":"নতুন প্রণামী","officers":"অফিসার","password-requests":"পাসওয়ার্ড অনুরোধ",
-    "change-password":"পাসওয়ার্ড পরিবর্তন","reports":"রিপোর্ট","my-collections":"আমার সংগ্রহ"
+    "change-password":"পাসওয়ার্ড পরিবর্তন","reports":"রিপোর্ট","my-collections":"আমার সংগ্রহ",
+    "khoroc":"💸 খরচ","final-report":"📊 চূড়ান্ত রিপোর্ট"
   }[page] || page;
   document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
   const active = [...document.querySelectorAll(".nav-item")].find(n => n.onclick && n.onclick.toString().includes(`'${page}'`));
@@ -1454,6 +1711,8 @@ window.navigateTo = function(page) {
   else if(page==="password-requests") loadPasswordRequests();
   else if(page==="reports") generateReport();
   else if(page==="my-collections") loadMyCollections();
+  else if(page==="khoroc") loadKhorocList();
+  else if(page==="final-report") loadFinalReport();
   // close sidebar on mobile
   $("sidebar").classList.remove("open");
 };
@@ -1853,10 +2112,11 @@ window.submitChandaEntry = async function() {
         if(!donorName) { setErr("entryError","নাম/বিবরণ লিখুন।"); return; }
       }
       const now = new Date();
+      const pujaYear = parseInt($("pujaYear").value) || now.getFullYear();
       await addDoc(collection(db,"chanda"), {
         entryType:"puja", pujaLabel:label,
         memberId, donorName,
-        month: now.getMonth()+1, year: now.getFullYear(),
+        month: now.getMonth()+1, year: pujaYear,
         amount, status, note, entryDate,
         collectedBy:currentUser.name, collectorId:currentUser.id,
         createdAt:serverTimestamp()
@@ -1866,6 +2126,7 @@ window.submitChandaEntry = async function() {
     showToast("প্রণামী এন্ট্রি সংরক্ষিত হয়েছে। ✅");
     $("entryAmount").value=""; $("entryNote").value=""; $("entryDate").value="";
     $("entryMember").value=""; $("entryPujaMember").value=""; $("entryPujaDonorName").value="";
+    $("pujaYear").value = new Date().getFullYear();
     document.querySelectorAll('input[name="pujaLabel"]').forEach(r=>r.checked=false);
     hideEl("pujaLabelMemberGroup"); hideEl("pujaLabelNameGroup");
     setErr("entryError","");
@@ -2275,7 +2536,687 @@ window.downloadReportPDF = async function() {
   } catch(e) { console.error(e); }
 };
 
-// ─── Modal Close ───
+// ─── Khoroc (Expense) ───
+let khorocRowCount = 0;
+let editKhorocRowCount = 0;
+
+window.showAddKhorocForm = function() {
+  $("khorocAddedBy").value = currentUser.name;
+  $("khorocDate").value = new Date().toISOString().split("T")[0];
+  $("khorocNote").value = "";
+  $("khorocRowsContainer").innerHTML = "";
+  khorocRowCount = 0;
+  addKhorocRow();
+  setErr("khorocError","");
+  showEl("khorocAddForm");
+  setTimeout(() => $("khorocAddForm").scrollIntoView({behavior:"smooth", block:"nearest"}), 100);
+};
+
+window.hideAddKhorocForm = function() {
+  hideEl("khorocAddForm");
+};
+
+window.addKhorocRow = function() {
+  khorocRowCount++;
+  const id = khorocRowCount;
+  const row = document.createElement("div");
+  row.className = "khoroc-row";
+  row.id = `khorocRow_${id}`;
+  row.innerHTML = `
+    <input type="text" id="khorocKhat_${id}"
+      placeholder="যেমন: ডেকোরেশন, মাইক ভাড়া..."
+      style="padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;width:100%;transition:border-color 0.2s"
+      onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'" />
+    <input type="number" id="khorocAmount_${id}"
+      placeholder="৳" min="0"
+      style="padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;width:100%;transition:border-color 0.2s"
+      onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'"
+      oninput="updateKhorocTotal()" />
+    <button class="remove-row-btn" onclick="removeKhorocRow(${id})" title="সরান">✕</button>
+  `;
+  $("khorocRowsContainer").appendChild(row);
+  document.getElementById(`khorocKhat_${id}`).focus();
+  updateKhorocTotal();
+};
+
+window.removeKhorocRow = function(id) {
+  const row = $(`khorocRow_${id}`);
+  if(row) row.remove();
+  updateKhorocTotal();
+  if($("khorocRowsContainer").children.length === 0) addKhorocRow();
+};
+
+window.updateKhorocTotal = function() {
+  let total = 0;
+  document.querySelectorAll("[id^='khorocAmount_']").forEach(inp => {
+    total += parseFloat(inp.value) || 0;
+  });
+  $("khorocTotalDisplay").textContent = "৳" + total.toLocaleString("en-IN");
+};
+
+window.submitKhoroc = async function() {
+  setErr("khorocError","");
+  const date = $("khorocDate").value;
+  const note = ($("khorocNote").value||"").trim();
+  if(!date) { setErr("khorocError","তারিখ দিন।"); return; }
+  const items = [];
+  let hasError = false;
+  document.querySelectorAll("[id^='khorocRow_']").forEach(row => {
+    const idNum = row.id.replace("khorocRow_","");
+    const khat = (document.getElementById(`khorocKhat_${idNum}`)?.value||"").trim();
+    const poriman = parseFloat(document.getElementById(`khorocAmount_${idNum}`)?.value) || 0;
+    if(!khat||!poriman) { hasError = true; return; }
+    items.push({ khat, poriman });
+  });
+  if(hasError || items.length === 0) { setErr("khorocError","সব খরচের খাত ও পরিমাণ পূরণ করুন।"); return; }
+  const totalAmount = items.reduce((s, i) => s + i.poriman, 0);
+  try {
+    await addDoc(collection(db,"khoroc"), {
+      items, totalAmount, date, note,
+      addedBy: currentUser.name,
+      officerId: currentUser.id,
+      createdAt: serverTimestamp()
+    });
+    showToast(`✅ খরচ সংরক্ষিত! মোট: ৳${totalAmount.toLocaleString()}`);
+    hideEl("khorocAddForm");
+    loadKhorocList();
+  } catch(e) { setErr("khorocError","ত্রুটি: "+e.message); }
+};
+
+// ── Edit Khoroc ──
+window.openEditKhorocModal = async function(id) {
+  try {
+    const d = await getDoc(doc(db,"khoroc",id));
+    if(!d.exists()) return;
+    const e = d.data();
+    $("editKhorocId").value = id;
+    $("editKhorocAddedBy").value = e.addedBy||"";
+    $("editKhorocDate").value = e.date||"";
+    $("editKhorocNote").value = e.note||"";
+    $("editKhorocRowsContainer").innerHTML = "";
+    editKhorocRowCount = 0;
+    setErr("editKhorocError","");
+    (e.items||[]).forEach(item => addEditKhorocRow(item.khat, item.poriman));
+    if(!(e.items||[]).length) addEditKhorocRow();
+    updateEditKhorocTotal();
+    showEl("editKhorocModal");
+  } catch(err) { console.error(err); }
+};
+
+window.addEditKhorocRow = function(khat="", poriman="") {
+  editKhorocRowCount++;
+  const id = editKhorocRowCount;
+  const row = document.createElement("div");
+  row.className = "khoroc-row";
+  row.id = `editKhorocRow_${id}`;
+  row.innerHTML = `
+    <input type="text" id="editKhorocKhat_${id}" value="${khat}"
+      placeholder="খরচের খাত..."
+      style="padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;width:100%;transition:border-color 0.2s"
+      onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'" />
+    <input type="number" id="editKhorocAmt_${id}" value="${poriman}"
+      placeholder="৳" min="0"
+      style="padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;width:100%;transition:border-color 0.2s"
+      onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'"
+      oninput="updateEditKhorocTotal()" />
+    <button class="remove-row-btn" onclick="removeEditKhorocRow(${id})">✕</button>
+  `;
+  $("editKhorocRowsContainer").appendChild(row);
+  updateEditKhorocTotal();
+};
+
+window.removeEditKhorocRow = function(id) {
+  const row = $(`editKhorocRow_${id}`);
+  if(row) row.remove();
+  updateEditKhorocTotal();
+  if($("editKhorocRowsContainer").children.length === 0) addEditKhorocRow();
+};
+
+window.updateEditKhorocTotal = function() {
+  let total = 0;
+  document.querySelectorAll("[id^='editKhorocAmt_']").forEach(inp => {
+    total += parseFloat(inp.value)||0;
+  });
+  $("editKhorocTotalDisplay").textContent = "৳" + total.toLocaleString();
+};
+
+window.saveEditKhoroc = async function() {
+  setErr("editKhorocError","");
+  const id = $("editKhorocId").value;
+  const date = $("editKhorocDate").value;
+  const note = ($("editKhorocNote").value||"").trim();
+  if(!date) { setErr("editKhorocError","তারিখ দিন।"); return; }
+  const items = [];
+  let hasError = false;
+  document.querySelectorAll("[id^='editKhorocRow_']").forEach(row => {
+    const num = row.id.replace("editKhorocRow_","");
+    const khat = (document.getElementById(`editKhorocKhat_${num}`)?.value||"").trim();
+    const poriman = parseFloat(document.getElementById(`editKhorocAmt_${num}`)?.value)||0;
+    if(!khat||!poriman) { hasError = true; return; }
+    items.push({khat, poriman});
+  });
+  if(hasError || items.length === 0) { setErr("editKhorocError","সব ঘর সঠিকভাবে পূরণ করুন।"); return; }
+  const totalAmount = items.reduce((s,i) => s+i.poriman, 0);
+  try {
+    await updateDoc(doc(db,"khoroc",id), {items, totalAmount, date, note});
+    showToast("✅ খরচ আপডেট হয়েছে।");
+    closeModal("editKhorocModal");
+    loadKhorocList();
+  } catch(e) { setErr("editKhorocError","ত্রুটি: "+e.message); }
+};
+
+// ── Load List ──
+window.loadKhorocList = async function() {
+  const yearSel = $("khorocFilterYear");
+  const year = parseInt(yearSel ? yearSel.value : new Date().getFullYear());
+  const isAdmin = currentUser.role === "admin";
+
+  // show PDF button only for admin
+  const pdfBtn = $("khorocPdfBtn");
+  if(pdfBtn) pdfBtn.style.display = isAdmin ? "inline-flex" : "none";
+
+  try {
+    const snap = await getDocs(collection(db,"khoroc"));
+    let entries = snap.docs.map(d => ({id:d.id,...d.data()}));
+    entries = entries.filter(e => e.date && new Date(e.date).getFullYear() === year);
+    if(!isAdmin) {
+      entries = entries.filter(e => e.officerId === currentUser.id || e.addedBy === currentUser.name);
+    }
+    entries.sort((a,b) => (b.date||"").localeCompare(a.date||""));
+
+    const totalAmount = entries.reduce((s,e) => s+(e.totalAmount||0), 0);
+    const totalEntries = entries.length;
+    const totalItems = entries.reduce((s,e) => s+(e.items?.length||0), 0);
+
+    $("khorocSummary").innerHTML = `
+      <div class="stat-card" style="flex:1;min-width:130px">
+        <div class="stat-icon" style="background:#FEE2E2">💸</div>
+        <div><div class="stat-value">৳${totalAmount.toLocaleString()}</div><div class="stat-label">মোট খরচ (${year})</div></div>
+      </div>
+      <div class="stat-card" style="flex:1;min-width:130px">
+        <div class="stat-icon" style="background:#EDE9FE">📋</div>
+        <div><div class="stat-value">${totalEntries}</div><div class="stat-label">মোট এন্ট্রি</div></div>
+      </div>
+      <div class="stat-card" style="flex:1;min-width:130px">
+        <div class="stat-icon" style="background:#D1FAE5">🗂️</div>
+        <div><div class="stat-value">${totalItems}</div><div class="stat-label">মোট আইটেম</div></div>
+      </div>
+    `;
+
+    if(!entries.length) {
+      $("khorocList").innerHTML = `<div class="empty-state"><div class="empty-state-icon">💸</div><div class="empty-state-text">${year} সালে কোনো খরচ নেই</div></div>`;
+      return;
+    }
+
+    $("khorocList").innerHTML = entries.map(e => {
+      const itemRows = (e.items||[]).map((item,i) => `
+        <div class="khoroc-item-row">
+          <span class="khoroc-item-khat">${i+1}. ${item.khat}</span>
+          <span class="khoroc-item-amount">৳${(item.poriman||0).toLocaleString()}</span>
+        </div>`).join("");
+      const canEdit = isAdmin || e.officerId === currentUser.id || e.addedBy === currentUser.name;
+      return `
+        <div class="khoroc-submission">
+          <div class="khoroc-submission-header">
+            <div>
+              <div style="font-weight:700;font-size:14px">📅 ${e.date||"—"}</div>
+              <div class="khoroc-submission-meta">
+                👤 ${e.addedBy||"—"}${e.note ? ` &nbsp;·&nbsp; 📝 ${e.note}` : ""}
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+              <span class="khoroc-submission-total">৳${(e.totalAmount||0).toLocaleString()}</span>
+              ${canEdit ? `<button class="btn-sm btn-edit" onclick="openEditKhorocModal('${e.id}')" title="সম্পাদনা">✏️</button>` : ""}
+              ${canEdit ? `<button class="btn-sm btn-delete" onclick="deleteKhoroc('${e.id}')" title="মুছুন">🗑️</button>` : ""}
+            </div>
+          </div>
+          <div class="khoroc-item-list">${itemRows}</div>
+        </div>`;
+    }).join("");
+  } catch(e) { console.error(e); }
+};
+
+window.deleteKhoroc = async function(id) {
+  if(!confirm("এই খরচ এন্ট্রি মুছে ফেলবেন?")) return;
+  try {
+    await deleteDoc(doc(db,"khoroc",id));
+    showToast("খরচ মুছে ফেলা হয়েছে।","error");
+    loadKhorocList();
+  } catch(e) { showToast("ত্রুটি: "+e.message,"error"); }
+};
+
+// ── PDF Report (Admin only) ──
+window.downloadKhorocPDF = async function() {
+  const year = parseInt($("khorocFilterYear")?.value || new Date().getFullYear());
+  try {
+    const snap = await getDocs(collection(db,"khoroc"));
+    let entries = snap.docs.map(d => ({id:d.id,...d.data()}))
+      .filter(e => e.date && new Date(e.date).getFullYear() === year)
+      .sort((a,b) => (a.addedBy||"").localeCompare(b.addedBy||"")||(a.date||"").localeCompare(b.date||""));
+
+    // Group by officer
+    const grouped = {};
+    entries.forEach(e => {
+      const k = e.addedBy||"Unknown";
+      if(!grouped[k]) grouped[k] = [];
+      grouped[k].push(e);
+    });
+
+    const grandTotal = entries.reduce((s,e) => s+(e.totalAmount||0), 0);
+    const officerCount = Object.keys(grouped).length;
+
+    let tableRows = "";
+    let serial = 1;
+    Object.keys(grouped).sort().forEach(officer => {
+      const list = grouped[officer];
+      const officerTotal = list.reduce((s,e) => s+(e.totalAmount||0), 0);
+      tableRows += `<tr><td colspan="5" style="background:#FEE2E2;font-weight:700;padding:9px 12px;font-size:13px;color:#991B1B">
+        👤 ${officer} &nbsp;—&nbsp; এন্ট্রি: ${list.length} &nbsp;|&nbsp; মোট: ৳${officerTotal.toLocaleString()}
+      </td></tr>`;
+      list.forEach(e => {
+        (e.items||[]).forEach((item,i) => {
+          tableRows += `<tr>
+            <td>${i===0 ? serial++ : ""}</td>
+            <td>${i===0 ? e.date : ""}</td>
+            <td>${item.khat}</td>
+            <td style="text-align:right;font-weight:600">৳${(item.poriman||0).toLocaleString()}</td>
+            <td>${i===0 && e.note ? e.note : ""}</td>
+          </tr>`;
+        });
+        tableRows += `<tr style="background:#FFF5F5">
+          <td colspan="3" style="text-align:right;font-size:11px;color:#9CA3AF">উপমোট:</td>
+          <td style="text-align:right;font-weight:700;color:#EF4444">৳${(e.totalAmount||0).toLocaleString()}</td>
+          <td></td>
+        </tr>`;
+      });
+    });
+
+    const w = window.open("","_blank","width=950,height=700");
+    w.document.write(`<!DOCTYPE html><html><head>
+      <meta charset="UTF-8">
+      <title>খরচ রিপোর্ট — ${year}</title>
+      <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+      <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Hind Siliguri',sans-serif;padding:30px;color:#111;font-size:13px}
+        .header{text-align:center;margin-bottom:20px;border-bottom:2px solid #EF4444;padding-bottom:14px}
+        .header h1{font-size:22px;color:#EF4444;font-weight:700}
+        .header h2{font-size:15px;color:#374151;margin-top:4px}
+        .header p{font-size:12px;color:#6B7280;margin-top:3px}
+        .summary{display:flex;gap:16px;margin-bottom:20px}
+        .sc{flex:1;border:1px solid #E5E7EB;border-radius:8px;padding:12px;text-align:center}
+        .sv{font-size:20px;font-weight:700;color:#EF4444}
+        .sl{font-size:11px;color:#6B7280;margin-top:2px}
+        table{width:100%;border-collapse:collapse}
+        thead th{background:#EF4444;color:white;padding:8px 10px;text-align:left;font-size:12px}
+        tbody td{padding:7px 10px;border-bottom:1px solid #F3F4F6;font-size:12px}
+        .tfoot-row td{background:#FEE2E2;font-weight:700;padding:9px 10px;font-size:13px}
+        .footer{margin-top:24px;text-align:right;font-size:11px;color:#9CA3AF}
+        @media print{body{padding:15px}.no-print{display:none}}
+      </style>
+    </head><body>
+      <div class="header">
+        <h1>💸 একতা যুব সংঘ — খরচ রিপোর্ট</h1>
+        <h2>বছর: ${year}</h2>
+        <p>তৈরির তারিখ: ${new Date().toLocaleDateString("en-GB")}</p>
+      </div>
+      <div class="summary">
+        <div class="sc"><div class="sv">৳${grandTotal.toLocaleString()}</div><div class="sl">সর্বমোট খরচ</div></div>
+        <div class="sc"><div class="sv">${entries.length}</div><div class="sl">মোট এন্ট্রি</div></div>
+        <div class="sc"><div class="sv">${officerCount}</div><div class="sl">অফিসার সংখ্যা</div></div>
+        <div class="sc"><div class="sv">${entries.reduce((s,e)=>s+(e.items?.length||0),0)}</div><div class="sl">মোট আইটেম</div></div>
+      </div>
+      <button onclick="window.print()" class="no-print"
+        style="background:#EF4444;color:white;border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;margin-bottom:14px">
+        🖨️ Print / Save as PDF
+      </button>
+      <table>
+        <thead><tr>
+          <th>#</th><th>তারিখ</th><th>খরচের খাত</th>
+          <th style="text-align:right">পরিমাণ (৳)</th><th>মন্তব্য</th>
+        </tr></thead>
+        <tbody>${tableRows}</tbody>
+        <tfoot><tr class="tfoot-row">
+          <td colspan="3" style="text-align:right">সর্বমোট খরচ:</td>
+          <td style="text-align:right">৳${grandTotal.toLocaleString()}</td>
+          <td></td>
+        </tr></tfoot>
+      </table>
+      <div class="footer">একতা যুব সংঘ | Developed by HRIDOOY DEY</div>
+    </body></html>`);
+    w.document.close();
+  } catch(e) { console.error(e); }
+};
+
+// ─── Final Report (Admin only) ───
+window.loadFinalReport = async function() {
+  if(currentUser.role !== "admin") return;
+  const year = parseInt($("finalReportYear").value);
+
+  $("finalReportSummary").innerHTML = `<div style="color:var(--text-muted);font-size:13px;padding:10px">ডেটা লোড হচ্ছে...</div>`;
+  $("finalIncomeSection").innerHTML  = "";
+  $("finalExpenseSection").innerHTML = "";
+
+  try {
+    const [chandaSnap, khorocSnap] = await Promise.all([
+      getDocs(query(collection(db,"chanda"), where("year","==",year))),
+      getDocs(collection(db,"khoroc"))
+    ]);
+
+    const chandas = chandaSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const khorocs = khorocSnap.docs.map(d=>({id:d.id,...d.data()}))
+      .filter(e => e.date && new Date(e.date).getFullYear() === year);
+
+    // ── Income breakdown ──
+    const monthly   = chandas.filter(c => c.entryType === "monthly");
+    const puja      = chandas.filter(c => c.entryType === "puja");
+
+    const mPaid    = monthly.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+    const mDue     = monthly.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+    const mPending = monthly.filter(c=>c.status==="pending").reduce((s,c)=>s+(c.amount||0),0);
+    const pPaid    = puja.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+    const pDue     = puja.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+    const pPending = puja.filter(c=>c.status==="pending").reduce((s,c)=>s+(c.amount||0),0);
+
+    const totalIncome  = mPaid + pPaid;
+    const totalDue     = mDue + pDue;
+    const totalPending = mPending + pPending;
+
+    // ── Expense breakdown ──
+    const totalExpense = khorocs.reduce((s,e)=>s+(e.totalAmount||0),0);
+    const netBalance   = totalIncome - totalExpense;
+    const surplus      = netBalance >= 0;
+
+    // ── Net Summary ──
+    $("finalReportSummary").innerHTML = `
+      <div class="net-balance-card" style="background:${surplus?"linear-gradient(135deg,#065F46,#10B981)":"linear-gradient(135deg,#7F1D1D,#EF4444)"};color:white;flex:2;min-width:260px">
+        <div class="net-balance-icon">${surplus?"📈":"📉"}</div>
+        <div>
+          <div class="net-balance-label">${surplus?"নিট উদ্বৃত্ত (Surplus)":"নিট ঘাটতি (Deficit)"} — ${year}</div>
+          <div class="net-balance-value">৳${Math.abs(netBalance).toLocaleString()}</div>
+          <div style="font-size:11px;opacity:0.8;margin-top:3px">আয় ৳${totalIncome.toLocaleString()} − খরচ ৳${totalExpense.toLocaleString()}</div>
+        </div>
+      </div>
+      <div class="stat-card" style="flex:1;min-width:140px;border-left:4px solid var(--green)">
+        <div class="stat-icon" style="background:#D1FAE5">💰</div>
+        <div><div class="stat-value" style="color:var(--green)">৳${totalIncome.toLocaleString()}</div><div class="stat-label">মোট আয় (Paid)</div></div>
+      </div>
+      <div class="stat-card" style="flex:1;min-width:140px;border-left:4px solid var(--red)">
+        <div class="stat-icon" style="background:#FEE2E2">💸</div>
+        <div><div class="stat-value" style="color:var(--red)">৳${totalExpense.toLocaleString()}</div><div class="stat-label">মোট খরচ</div></div>
+      </div>
+      ${totalDue>0?`<div class="stat-card" style="flex:1;min-width:140px;border-left:4px solid var(--yellow)">
+        <div class="stat-icon" style="background:#FEF3C7">⚠️</div>
+        <div><div class="stat-value" style="color:var(--yellow)">৳${totalDue.toLocaleString()}</div><div class="stat-label">অসংগৃহীত বকেয়া</div></div>
+      </div>`:""}
+    `;
+
+    // ── Income Details ──
+    const monthRows = Array.from({length:12},(_,i)=>i+1).map(m => {
+      const mc = chandas.filter(c=>c.month===m);
+      if(!mc.length) return `<tr><td style="color:var(--text-muted)">${MONTHS_BN[m]}</td><td colspan="4" style="color:#D1D5DB;font-size:12px">—</td></tr>`;
+      const mp = mc.filter(c=>c.entryType==="monthly"&&c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+      const pp = mc.filter(c=>c.entryType==="puja"&&c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+      const md = mc.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+      return `<tr>
+        <td><strong>${MONTHS_BN[m]}</strong></td>
+        <td>৳${mp.toLocaleString()}</td>
+        <td>৳${pp.toLocaleString()}</td>
+        <td><strong>৳${(mp+pp).toLocaleString()}</strong></td>
+        <td>${md>0?`<span style="color:var(--red)">৳${md.toLocaleString()}</span>`:"-"}</td>
+      </tr>`;
+    }).join("");
+
+    $("finalIncomeSection").innerHTML = `
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px">
+        <div class="fin-source-card" style="background:#F0FDF4;border-color:#BBF7D0">
+          <div class="fin-source-label" style="color:#166534">📅 মাসিক প্রণামী</div>
+          <div class="fin-source-value" style="color:#166534">৳${mPaid.toLocaleString()}</div>
+          <div class="fin-source-sub">${monthly.filter(c=>c.status==="paid").length} এন্ট্রি পরিশোধিত
+          ${mDue>0?` · বকেয়া: ৳${mDue.toLocaleString()}`:""}
+          ${mPending>0?` · অপেক্ষমান: ৳${mPending.toLocaleString()}`:""}</div>
+        </div>
+        <div class="fin-source-card" style="background:#FFFBEB;border-color:#FDE68A">
+          <div class="fin-source-label" style="color:#92400E">🪷 পূজার প্রণামী</div>
+          <div class="fin-source-value" style="color:#92400E">৳${pPaid.toLocaleString()}</div>
+          <div class="fin-source-sub">${puja.filter(c=>c.status==="paid").length} এন্ট্রি পরিশোধিত
+          ${pDue>0?` · বকেয়া: ৳${pDue.toLocaleString()}`:""}
+          ${pPending>0?` · অপেক্ষমান: ৳${pPending.toLocaleString()}`:""}</div>
+        </div>
+        <div class="fin-source-card" style="background:#F5F3FF;border-color:#DDD6FE">
+          <div class="fin-source-label" style="color:var(--primary-dark)">💰 মোট আয়</div>
+          <div class="fin-source-value" style="color:var(--primary)">৳${totalIncome.toLocaleString()}</div>
+          <div class="fin-source-sub">Paid entries: ${chandas.filter(c=>c.status==="paid").length}
+          ${totalDue>0?` · মোট বকেয়া: ৳${totalDue.toLocaleString()}`:""}
+          ${totalPending>0?` · অপেক্ষমান: ৳${totalPending.toLocaleString()}`:""}</div>
+        </div>
+      </div>
+      <p style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:8px">মাস ভিত্তিক আয় — ${year}</p>
+      <div class="table-wrap" style="margin-bottom:0">
+        <table class="data-table">
+          <thead><tr>
+            <th>মাস</th><th>মাসিক প্রণামী</th><th>পূজার প্রণামী</th>
+            <th>মোট আয়</th><th>বকেয়া</th>
+          </tr></thead>
+          <tbody>${monthRows}</tbody>
+          <tfoot><tr style="background:#F0FDF4;font-weight:700">
+            <td>মোট</td>
+            <td>৳${mPaid.toLocaleString()}</td>
+            <td>৳${pPaid.toLocaleString()}</td>
+            <td>৳${totalIncome.toLocaleString()}</td>
+            <td>${totalDue>0?`<span style="color:var(--red)">৳${totalDue.toLocaleString()}</span>`:"-"}</td>
+          </tr></tfoot>
+        </table>
+      </div>`;
+
+    // ── Expense Details ──
+    const expGrouped = {};
+    khorocs.forEach(e=>{
+      const k = e.addedBy||"Unknown";
+      if(!expGrouped[k]) expGrouped[k]=[];
+      expGrouped[k].push(e);
+    });
+
+    const expItemRows = khorocs
+      .sort((a,b)=>(a.addedBy||"").localeCompare(b.addedBy||"")||(a.date||"").localeCompare(b.date||""))
+      .map(e=>(e.items||[]).map((item,i)=>`<tr>
+        <td>${i===0?e.date||"—":""}</td>
+        <td>${i===0?e.addedBy||"—":""}</td>
+        <td>${item.khat}</td>
+        <td style="font-weight:600">৳${(item.poriman||0).toLocaleString()}</td>
+        <td>${i===0&&e.note?e.note:""}</td>
+      </tr>`).join("")).join("");
+
+    $("finalExpenseSection").innerHTML = `
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px">
+        ${Object.keys(expGrouped).sort().map(officer=>{
+          const ot = expGrouped[officer].reduce((s,e)=>s+(e.totalAmount||0),0);
+          return `<div class="fin-source-card" style="background:#FFF5F5;border-color:#FECACA">
+            <div class="fin-source-label" style="color:#991B1B">👤 ${officer}</div>
+            <div class="fin-source-value" style="color:var(--red)">৳${ot.toLocaleString()}</div>
+            <div class="fin-source-sub">${expGrouped[officer].length} এন্ট্রি · ${expGrouped[officer].reduce((s,e)=>s+(e.items?.length||0),0)} আইটেম</div>
+          </div>`;
+        }).join("")}
+        <div class="fin-source-card" style="background:#FEE2E2;border-color:#FCA5A5">
+          <div class="fin-source-label" style="color:#991B1B">💸 সর্বমোট খরচ</div>
+          <div class="fin-source-value" style="color:var(--red)">৳${totalExpense.toLocaleString()}</div>
+          <div class="fin-source-sub">${khorocs.length} এন্ট্রি · ${khorocs.reduce((s,e)=>s+(e.items?.length||0),0)} আইটেম</div>
+        </div>
+      </div>
+      <p style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:8px">খাত ভিত্তিক খরচ — ${year}</p>
+      <div class="table-wrap" style="margin-bottom:0">
+        <table class="data-table">
+          <thead><tr><th>তারিখ</th><th>সংযোজনকারী</th><th>খরচের খাত</th><th>পরিমাণ</th><th>মন্তব্য</th></tr></thead>
+          <tbody>${expItemRows||`<tr><td colspan="5"><div class="empty-state" style="padding:16px"><div class="empty-state-text">কোনো খরচ নেই</div></div></td></tr>`}</tbody>
+          <tfoot><tr style="background:#FEE2E2;font-weight:700">
+            <td colspan="3">সর্বমোট খরচ</td>
+            <td>৳${totalExpense.toLocaleString()}</td><td></td>
+          </tr></tfoot>
+        </table>
+      </div>`;
+
+  } catch(e) { console.error(e); }
+};
+
+// ── Final Report PDF ──
+window.downloadFinalReportPDF = async function() {
+  if(currentUser.role !== "admin") return;
+  const year = parseInt($("finalReportYear").value);
+  try {
+    const [chandaSnap, khorocSnap] = await Promise.all([
+      getDocs(query(collection(db,"chanda"), where("year","==",year))),
+      getDocs(collection(db,"khoroc"))
+    ]);
+    const chandas = chandaSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const khorocs = khorocSnap.docs.map(d=>({id:d.id,...d.data()}))
+      .filter(e => e.date && new Date(e.date).getFullYear() === year);
+
+    const monthly  = chandas.filter(c=>c.entryType==="monthly");
+    const puja     = chandas.filter(c=>c.entryType==="puja");
+    const mPaid    = monthly.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+    const mDue     = monthly.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+    const pPaid    = puja.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+    const pDue     = puja.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+    const totalIncome  = mPaid + pPaid;
+    const totalDue     = mDue + pDue;
+    const totalExpense = khorocs.reduce((s,e)=>s+(e.totalAmount||0),0);
+    const netBalance   = totalIncome - totalExpense;
+    const surplus      = netBalance >= 0;
+
+    // month income rows
+    const monthIncRows = Array.from({length:12},(_,i)=>i+1).map(m=>{
+      const mc = chandas.filter(c=>c.month===m);
+      const mp = mc.filter(c=>c.entryType==="monthly"&&c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+      const pp = mc.filter(c=>c.entryType==="puja"&&c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+      const md = mc.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+      return `<tr${!mc.length?' style="color:#9CA3AF"':''}><td>${MONTHS_BN[m]}</td><td>৳${mp.toLocaleString()}</td><td>৳${pp.toLocaleString()}</td><td><b>৳${(mp+pp).toLocaleString()}</b></td><td>${md>0?`৳${md.toLocaleString()}`:"-"}</td></tr>`;
+    }).join("");
+
+    // expense rows
+    const expGrouped = {};
+    khorocs.forEach(e=>{const k=e.addedBy||"Unknown";if(!expGrouped[k])expGrouped[k]=[];expGrouped[k].push(e);});
+    let expRows = "";
+    Object.keys(expGrouped).sort().forEach(officer=>{
+      const ot = expGrouped[officer].reduce((s,e)=>s+(e.totalAmount||0),0);
+      expRows += `<tr><td colspan="4" style="background:#FEE2E2;font-weight:700;padding:8px 10px">👤 ${officer} — মোট: ৳${ot.toLocaleString()}</td></tr>`;
+      expGrouped[officer].forEach(e=>{
+        (e.items||[]).forEach((item,i)=>{
+          expRows += `<tr><td>${i===0?e.date||"—":""}</td><td>${item.khat}</td><td style="text-align:right">৳${(item.poriman||0).toLocaleString()}</td><td>${i===0&&e.note?e.note:""}</td></tr>`;
+        });
+      });
+    });
+
+    const w = window.open("","_blank","width=980,height=750");
+    w.document.write(`<!DOCTYPE html><html><head>
+    <meta charset="UTF-8">
+    <title>চূড়ান্ত রিপোর্ট — ${year}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+      *{margin:0;padding:0;box-sizing:border-box}
+      body{font-family:'Hind Siliguri',sans-serif;padding:28px;color:#111;font-size:13px}
+      h1{font-size:22px;font-weight:700;text-align:center}
+      h2{font-size:14px;font-weight:600;margin:18px 0 8px;padding:8px 12px;border-radius:6px}
+      .inc-h{background:#D1FAE5;color:#065F46} .exp-h{background:#FEE2E2;color:#991B1B}
+      .header{text-align:center;margin-bottom:18px;padding-bottom:14px;border-bottom:2px solid #7C3AED}
+      .header p{font-size:12px;color:#6B7280;margin-top:3px}
+      .net-box{border-radius:12px;padding:16px 20px;margin:16px 0;display:flex;justify-content:space-between;align-items:center}
+      .net-box.surplus{background:#D1FAE5;border:2px solid #10B981}
+      .net-box.deficit{background:#FEE2E2;border:2px solid #EF4444}
+      .net-label{font-size:13px;font-weight:600}
+      .net-val{font-size:26px;font-weight:900}
+      .net-sub{font-size:11px;color:#6B7280;margin-top:2px}
+      .sum-row{display:flex;gap:12px;margin-bottom:16px}
+      .sc{flex:1;border-radius:8px;padding:12px;border:1.5px solid}
+      .sc-v{font-size:18px;font-weight:700;margin:4px 0}
+      .sc-l{font-size:11px;color:#6B7280}
+      table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:16px}
+      thead th{padding:7px 10px;text-align:left;font-size:11px}
+      .inc-th{background:#065F46;color:white} .exp-th{background:#991B1B;color:white}
+      tbody td{padding:6px 10px;border-bottom:1px solid #F3F4F6}
+      tbody tr:nth-child(even){background:#FAFAFA}
+      tfoot td{font-weight:700;padding:8px 10px}
+      .tfoot-inc{background:#D1FAE5} .tfoot-exp{background:#FEE2E2}
+      .footer{margin-top:20px;text-align:right;font-size:11px;color:#9CA3AF;border-top:1px solid #E5E7EB;padding-top:10px}
+      @media print{body{padding:15px}.no-print{display:none}}
+    </style>
+    </head><body>
+    <div class="header">
+      <h1>🪷 একতা যুব সংঘ — চূড়ান্ত রিপোর্ট</h1>
+      <p>বছর: ${year} &nbsp;|&nbsp; তৈরির তারিখ: ${new Date().toLocaleDateString("en-GB")}</p>
+    </div>
+    <button onclick="window.print()" class="no-print"
+      style="background:#7C3AED;color:white;border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;margin-bottom:14px">
+      🖨️ Print / Save as PDF
+    </button>
+
+    <!-- Net Balance -->
+    <div class="net-box ${surplus?'surplus':'deficit'}">
+      <div>
+        <div class="net-label">${surplus?"✅ নিট উদ্বৃত্ত (Surplus)":"❌ নিট ঘাটতি (Deficit)"}</div>
+        <div class="net-val" style="color:${surplus?"#065F46":"#991B1B"}">৳${Math.abs(netBalance).toLocaleString()}</div>
+        <div class="net-sub">মোট আয়: ৳${totalIncome.toLocaleString()} &nbsp;−&nbsp; মোট খরচ: ৳${totalExpense.toLocaleString()}</div>
+      </div>
+      <div style="font-size:48px">${surplus?"📈":"📉"}</div>
+    </div>
+
+    <!-- Summary -->
+    <div class="sum-row">
+      <div class="sc" style="background:#F0FDF4;border-color:#BBF7D0">
+        <div class="sc-l" style="color:#166534">📅 মাসিক প্রণামী (Paid)</div>
+        <div class="sc-v" style="color:#166534">৳${mPaid.toLocaleString()}</div>
+        ${mDue>0?`<div class="sc-l" style="color:#EF4444">বকেয়া: ৳${mDue.toLocaleString()}</div>`:""}
+      </div>
+      <div class="sc" style="background:#FFFBEB;border-color:#FDE68A">
+        <div class="sc-l" style="color:#92400E">🪷 পূজার প্রণামী (Paid)</div>
+        <div class="sc-v" style="color:#92400E">৳${pPaid.toLocaleString()}</div>
+        ${pDue>0?`<div class="sc-l" style="color:#EF4444">বকেয়া: ৳${pDue.toLocaleString()}</div>`:""}
+      </div>
+      <div class="sc" style="background:#EDE9FE;border-color:#DDD6FE">
+        <div class="sc-l" style="color:#5B21B6">💰 মোট আয়</div>
+        <div class="sc-v" style="color:#5B21B6">৳${totalIncome.toLocaleString()}</div>
+        ${totalDue>0?`<div class="sc-l" style="color:#EF4444">মোট বকেয়া: ৳${totalDue.toLocaleString()}</div>`:""}
+      </div>
+      <div class="sc" style="background:#FEE2E2;border-color:#FECACA">
+        <div class="sc-l" style="color:#991B1B">💸 মোট খরচ</div>
+        <div class="sc-v" style="color:#991B1B">৳${totalExpense.toLocaleString()}</div>
+        <div class="sc-l">${khorocs.length} এন্ট্রি</div>
+      </div>
+    </div>
+
+    <!-- Income Table -->
+    <h2 class="inc-h">💰 আয়ের বিবরণ — মাস ভিত্তিক</h2>
+    <table>
+      <thead class="inc-th"><tr>
+        <th class="inc-th">মাস</th><th class="inc-th">মাসিক প্রণামী</th>
+        <th class="inc-th">পূজার প্রণামী</th><th class="inc-th">মোট আয়</th><th class="inc-th">বকেয়া</th>
+      </tr></thead>
+      <tbody>${monthIncRows}</tbody>
+      <tfoot><tr class="tfoot-inc">
+        <td>মোট</td><td>৳${mPaid.toLocaleString()}</td>
+        <td>৳${pPaid.toLocaleString()}</td><td><b>৳${totalIncome.toLocaleString()}</b></td>
+        <td>${totalDue>0?`৳${totalDue.toLocaleString()}`:"-"}</td>
+      </tr></tfoot>
+    </table>
+
+    <!-- Expense Table -->
+    <h2 class="exp-h">💸 খরচের বিবরণ — অফিসার ভিত্তিক</h2>
+    <table>
+      <thead><tr>
+        <th class="exp-th">তারিখ</th><th class="exp-th">খরচের খাত</th>
+        <th class="exp-th" style="text-align:right">পরিমাণ</th><th class="exp-th">মন্তব্য</th>
+      </tr></thead>
+      <tbody>${expRows||`<tr><td colspan="4" style="text-align:center;color:#9CA3AF;padding:16px">কোনো খরচ নেই</td></tr>`}</tbody>
+      <tfoot><tr class="tfoot-exp">
+        <td colspan="2">সর্বমোট খরচ</td>
+        <td style="text-align:right"><b>৳${totalExpense.toLocaleString()}</b></td><td></td>
+      </tr></tfoot>
+    </table>
+
+    <div class="footer">একতা যুব সংঘ | Developed by HRIDOOY DEY</div>
+    </body></html>`);
+    w.document.close();
+  } catch(e) { console.error(e); }
+};
 window.closeModal = function(id) { hideEl(id); };
 document.querySelectorAll(".modal-overlay").forEach(m => {
   m.addEventListener("click", e => { if(e.target===m) m.classList.add("hidden"); });
