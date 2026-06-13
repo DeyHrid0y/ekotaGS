@@ -1113,18 +1113,6 @@ body {
           <!-- ══ PUJA PRONAMI FIELDS ══ -->
           <div id="pujaFields" class="hidden">
             <div class="form-group">
-              <label>বছর / Year *</label>
-              <select id="pujaYear">
-                <option value="2025">২০২৫ / 2025</option>
-                <option value="2026" selected>২০২৬ / 2026</option>
-                <option value="2027">২০২৭ / 2027</option>
-                <option value="2028">২০২৮ / 2028</option>
-                <option value="2029">২০২৯ / 2029</option>
-                <option value="2030">২০৩০ / 2030</option>
-                <option value="2031">২০৩১ / 2031</option>
-              </select>
-            </div>
-            <div class="form-group">
               <label>লেবেল / Label *</label>
               <div style="display:flex;gap:8px;flex-wrap:wrap">
                 <label class="label-radio-btn" id="lbl-somossho">
@@ -1354,6 +1342,27 @@ body {
 
         <!-- Expense List -->
         <div id="khorocList"></div>
+      </section>
+
+      <!-- ══ APPROVALS PAGE (ADMIN ONLY) ══ -->
+      <section id="page-approvals" class="page hidden">
+        <div class="page-header-row">
+          <h3>✅ অনুমোদন / Approvals</h3>
+          <button class="btn-secondary" onclick="loadApprovals()">🔄 Refresh</button>
+        </div>
+        <div id="approvalsSummary" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px"></div>
+
+        <!-- Pending Chanda -->
+        <div class="card" style="margin-bottom:16px">
+          <h3 class="card-title" style="color:var(--primary)">💰 অপেক্ষমান প্রণামী এন্ট্রি</h3>
+          <div id="pendingChandaList"></div>
+        </div>
+
+        <!-- Pending Khoroc -->
+        <div class="card">
+          <h3 class="card-title" style="color:var(--red)">💸 অপেক্ষমান খরচ এন্ট্রি</h3>
+          <div id="pendingKhorocList"></div>
+        </div>
       </section>
 
       <!-- ══ FINAL REPORT (ADMIN ONLY) ══ -->
@@ -1647,6 +1656,7 @@ function enterApp(savedPage) {
   localStorage.setItem("sessionUser", JSON.stringify(currentUser));
   buildNav();
   navigateTo(savedPage || "dashboard");
+  setTimeout(updatePendingBadge, 1500);
 }
 
 window.doLogout = function() {
@@ -1677,6 +1687,7 @@ function buildNav() {
     <div class="nav-item" onclick="navigateTo('khoroc')"><span class="nav-icon">💸</span> খরচ এন্ট্রি</div>
     ${isAdmin ? `
     <div class="nav-section">Admin</div>
+    <div class="nav-item" onclick="navigateTo('approvals')"><span class="nav-icon">✅</span> অনুমোদন <span id="pendingApprovalBadge" style="background:var(--red);color:white;border-radius:20px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:4px;display:none">0</span></div>
     <div class="nav-item" onclick="navigateTo('final-report')"><span class="nav-icon">📊</span> চূড়ান্ত রিপোর্ট</div>
     <div class="nav-item" onclick="navigateTo('officers')"><span class="nav-icon">🛡️</span> Officers</div>
     <div class="nav-item" onclick="navigateTo('password-requests')"><span class="nav-icon">🔑</span> Password Change Request</div>
@@ -1697,7 +1708,7 @@ window.navigateTo = function(page) {
     "dashboard":"Dashboard","members":"সদস্য তালিকা","collection":"প্রণামী সংগ্রহ",
     "add-collection":"নতুন প্রণামী","officers":"অফিসার","password-requests":"পাসওয়ার্ড অনুরোধ",
     "change-password":"পাসওয়ার্ড পরিবর্তন","reports":"রিপোর্ট","my-collections":"আমার সংগ্রহ",
-    "khoroc":"💸 খরচ","final-report":"📊 চূড়ান্ত রিপোর্ট"
+    "khoroc":"💸 খরচ","final-report":"📊 চূড়ান্ত রিপোর্ট","approvals":"✅ অনুমোদন"
   }[page] || page;
   document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
   const active = [...document.querySelectorAll(".nav-item")].find(n => n.onclick && n.onclick.toString().includes(`'${page}'`));
@@ -1713,6 +1724,7 @@ window.navigateTo = function(page) {
   else if(page==="my-collections") loadMyCollections();
   else if(page==="khoroc") loadKhorocList();
   else if(page==="final-report") loadFinalReport();
+  else if(page==="approvals") loadApprovals();
   // close sidebar on mobile
   $("sidebar").classList.remove("open");
 };
@@ -1950,8 +1962,14 @@ window.loadCollectionPage = async function() {
       const m = allMembers.find(mb=>mb.id===c.memberId);
       const badge = c.status==="paid" ? "badge-paid" : c.status==="due" ? "badge-due" : "badge-pending";
       const label = c.status==="paid" ? "✅ Paid" : c.status==="due" ? "❌ Due" : "⏳ Pending";
-      // Officer can only edit chanda they collected; admin can edit all
-      const canEdit = isAdmin || (c.collectedBy === currentUser.name);
+      // Officer can only edit chanda they collected AND not yet approved
+      const canEdit = isAdmin || (c.collectedBy === currentUser.name && c.approvalStatus !== "approved");
+      // ── approval badge ──
+      const approvalBadge = c.approvalStatus === "approved"
+        ? `<span style="background:#D1FAE5;color:#065F46;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700">✅ অনুমোদিত</span>`
+        : c.approvalStatus === "rejected"
+        ? `<span style="background:#FEE2E2;color:#991B1B;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700">❌ বাতিল</span>`
+        : `<span style="background:#FEF3C7;color:#92400E;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700">⏳ অপেক্ষমান</span>`;
       // ── type badge ──
       const isPuja = c.entryType === "puja";
       const typeBadge = isPuja
@@ -1971,11 +1989,13 @@ window.loadCollectionPage = async function() {
         <td>${c.year}</td>
         <td>৳${(c.amount||0).toLocaleString()}</td>
         <td><span class="badge ${badge}">${label}</span></td>
+        <td>${approvalBadge}</td>
         <td>${c.collectedBy||"-"}</td>
         <td>${c.entryDate || (c.createdAt?.toDate ? c.createdAt.toDate().toLocaleDateString("en-GB") : "-")}</td>
         <td>
-          ${canEdit ? `<button class="btn-sm btn-edit" onclick="editChandaStatus('${c.id}','${c.status}')">✏️ Edit</button>` : `<span style="font-size:11px;color:var(--text-muted)">—</span>`}
+          ${canEdit ? `<button class="btn-sm btn-edit" onclick="editChandaStatus('${c.id}','${c.status}')">✏️ Edit</button>` : `<span style="font-size:11px;color:var(--text-muted)">${c.approvalStatus==="approved"?"🔒":""}</span>`}
           ${isAdmin ? `<button class="btn-sm btn-delete" onclick="deleteChanda('${c.id}')">🗑️ Delete</button>` : ""}
+          ${isAdmin && c.approvalStatus==="pending" ? `<button class="btn-sm" style="background:#D1FAE5;color:#065F46;border:none;padding:4px 8px;border-radius:6px;cursor:pointer;font-size:12px" onclick="approveEntry('chanda','${c.id}')">✅ Approve</button>` : ""}
         </td>
       </tr>`;
     }).join("") : `<tr><td colspan="10"><div class="empty-state"><div class="empty-state-icon">💰</div><div class="empty-state-text">কোনো এন্ট্রি নেই</div></div></td></tr>`;
@@ -2094,6 +2114,7 @@ window.submitChandaEntry = async function() {
         entryType:"monthly", memberId, memberName, month, year,
         amount, status, note, entryDate,
         collectedBy:currentUser.name, collectorId:currentUser.id,
+        approvalStatus: currentUser.role==="admin" ? "approved" : "pending",
         createdAt:serverTimestamp()
       });
 
@@ -2112,13 +2133,13 @@ window.submitChandaEntry = async function() {
         if(!donorName) { setErr("entryError","নাম/বিবরণ লিখুন।"); return; }
       }
       const now = new Date();
-      const pujaYear = parseInt($("pujaYear").value) || now.getFullYear();
       await addDoc(collection(db,"chanda"), {
         entryType:"puja", pujaLabel:label,
         memberId, donorName,
-        month: now.getMonth()+1, year: pujaYear,
+        month: now.getMonth()+1, year: now.getFullYear(),
         amount, status, note, entryDate,
         collectedBy:currentUser.name, collectorId:currentUser.id,
+        approvalStatus: currentUser.role==="admin" ? "approved" : "pending",
         createdAt:serverTimestamp()
       });
     }
@@ -2126,10 +2147,10 @@ window.submitChandaEntry = async function() {
     showToast("প্রণামী এন্ট্রি সংরক্ষিত হয়েছে। ✅");
     $("entryAmount").value=""; $("entryNote").value=""; $("entryDate").value="";
     $("entryMember").value=""; $("entryPujaMember").value=""; $("entryPujaDonorName").value="";
-    $("pujaYear").value = new Date().getFullYear();
     document.querySelectorAll('input[name="pujaLabel"]').forEach(r=>r.checked=false);
     hideEl("pujaLabelMemberGroup"); hideEl("pujaLabelNameGroup");
     setErr("entryError","");
+    updatePendingBadge();
     navigateTo("collection");
   } catch(e) { setErr("entryError","ত্রুটি: "+e.message); }
 };
@@ -2615,10 +2636,12 @@ window.submitKhoroc = async function() {
       items, totalAmount, date, note,
       addedBy: currentUser.name,
       officerId: currentUser.id,
+      approvalStatus: currentUser.role==="admin" ? "approved" : "pending",
       createdAt: serverTimestamp()
     });
     showToast(`✅ খরচ সংরক্ষিত! মোট: ৳${totalAmount.toLocaleString()}`);
     hideEl("khorocAddForm");
+    updatePendingBadge();
     loadKhorocList();
   } catch(e) { setErr("khorocError","ত্রুটি: "+e.message); }
 };
@@ -2754,20 +2777,26 @@ window.loadKhorocList = async function() {
           <span class="khoroc-item-khat">${i+1}. ${item.khat}</span>
           <span class="khoroc-item-amount">৳${(item.poriman||0).toLocaleString()}</span>
         </div>`).join("");
-      const canEdit = isAdmin || e.officerId === currentUser.id || e.addedBy === currentUser.name;
+      const canEdit = isAdmin || ((e.officerId === currentUser.id || e.addedBy === currentUser.name) && e.approvalStatus !== "approved");
+      const approvalBadge = e.approvalStatus === "approved"
+        ? `<span style="background:#D1FAE5;color:#065F46;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700">✅ অনুমোদিত</span>`
+        : e.approvalStatus === "rejected"
+        ? `<span style="background:#FEE2E2;color:#991B1B;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700">❌ বাতিল</span>`
+        : `<span style="background:#FEF3C7;color:#92400E;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700">⏳ অপেক্ষমান</span>`;
       return `
         <div class="khoroc-submission">
           <div class="khoroc-submission-header">
             <div>
-              <div style="font-weight:700;font-size:14px">📅 ${e.date||"—"}</div>
+              <div style="font-weight:700;font-size:14px">📅 ${e.date||"—"} &nbsp; ${approvalBadge}</div>
               <div class="khoroc-submission-meta">
                 👤 ${e.addedBy||"—"}${e.note ? ` &nbsp;·&nbsp; 📝 ${e.note}` : ""}
               </div>
             </div>
             <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
               <span class="khoroc-submission-total">৳${(e.totalAmount||0).toLocaleString()}</span>
-              ${canEdit ? `<button class="btn-sm btn-edit" onclick="openEditKhorocModal('${e.id}')" title="সম্পাদনা">✏️</button>` : ""}
+              ${canEdit ? `<button class="btn-sm btn-edit" onclick="openEditKhorocModal('${e.id}')" title="সম্পাদনা">✏️</button>` : (e.approvalStatus==="approved"?`<span style="font-size:16px" title="অনুমোদিত — সম্পাদনা বন্ধ">🔒</span>`:"")}
               ${canEdit ? `<button class="btn-sm btn-delete" onclick="deleteKhoroc('${e.id}')" title="মুছুন">🗑️</button>` : ""}
+              ${isAdmin && e.approvalStatus==="pending" ? `<button class="btn-sm" style="background:#D1FAE5;color:#065F46;border:none;padding:4px 8px;border-radius:6px;cursor:pointer;font-size:12px" onclick="approveEntry('khoroc','${e.id}')">✅ Approve</button>` : ""}
             </div>
           </div>
           <div class="khoroc-item-list">${itemRows}</div>
@@ -2887,6 +2916,175 @@ window.downloadKhorocPDF = async function() {
     w.document.close();
   } catch(e) { console.error(e); }
 };
+
+// ─── Approval System ───
+window.approveEntry = async function(type, id) {
+  if(!confirm("এই এন্ট্রিটি অনুমোদন করবেন? অনুমোদনের পর অফিসার আর সম্পাদনা করতে পারবে না।")) return;
+  try {
+    const col = type === "chanda" ? "chanda" : "khoroc";
+    await updateDoc(doc(db, col, id), {
+      approvalStatus: "approved",
+      approvedBy: currentUser.name,
+      approvedAt: serverTimestamp()
+    });
+    showToast("✅ এন্ট্রি অনুমোদিত হয়েছে।");
+    loadApprovals();
+    updatePendingBadge();
+    if(type === "chanda") loadCollectionPage();
+    else loadKhorocList();
+  } catch(e) { showToast("ত্রুটি: " + e.message, "error"); }
+};
+
+window.rejectEntry = async function(type, id) {
+  const reason = prompt("বাতিলের কারণ লিখুন (ঐচ্ছিক):");
+  if(reason === null) return; // cancelled
+  try {
+    const col = type === "chanda" ? "chanda" : "khoroc";
+    await updateDoc(doc(db, col, id), {
+      approvalStatus: "rejected",
+      rejectedBy: currentUser.name,
+      rejectedAt: serverTimestamp(),
+      rejectionReason: reason || ""
+    });
+    showToast("এন্ট্রি বাতিল করা হয়েছে।", "error");
+    loadApprovals();
+    updatePendingBadge();
+  } catch(e) { showToast("ত্রুটি: " + e.message, "error"); }
+};
+
+window.approveAll = async function(type, ids) {
+  if(!confirm(`${ids.length}টি এন্ট্রি একসাথে অনুমোদন করবেন?`)) return;
+  try {
+    const col = type === "chanda" ? "chanda" : "khoroc";
+    await Promise.all(ids.map(id => updateDoc(doc(db, col, id), {
+      approvalStatus: "approved",
+      approvedBy: currentUser.name,
+      approvedAt: serverTimestamp()
+    })));
+    showToast(`✅ ${ids.length}টি এন্ট্রি অনুমোদিত।`);
+    loadApprovals();
+    updatePendingBadge();
+  } catch(e) { showToast("ত্রুটি: " + e.message, "error"); }
+};
+
+window.loadApprovals = async function() {
+  if(currentUser.role !== "admin") return;
+  try {
+    const [chandaSnap, khorocSnap] = await Promise.all([
+      getDocs(query(collection(db,"chanda"), where("approvalStatus","==","pending"))),
+      getDocs(query(collection(db,"khoroc"), where("approvalStatus","==","pending")))
+    ]);
+    const pendingChandas = chandaSnap.docs.map(d=>({id:d.id,...d.data()}))
+      .sort((a,b) => (a.createdAt?.seconds||0) - (b.createdAt?.seconds||0));
+    const pendingKhorocs = khorocSnap.docs.map(d=>({id:d.id,...d.data()}))
+      .sort((a,b) => (a.createdAt?.seconds||0) - (b.createdAt?.seconds||0));
+
+    const totalPending = pendingChandas.length + pendingKhorocs.length;
+
+    // Summary
+    $("approvalsSummary").innerHTML = `
+      <div class="stat-card" style="flex:1;min-width:130px;border-left:4px solid var(--yellow)">
+        <div class="stat-icon" style="background:#FEF3C7">⏳</div>
+        <div><div class="stat-value" style="color:var(--yellow)">${totalPending}</div><div class="stat-label">মোট অপেক্ষমান</div></div>
+      </div>
+      <div class="stat-card" style="flex:1;min-width:130px;border-left:4px solid var(--primary)">
+        <div class="stat-icon" style="background:#EDE9FE">💰</div>
+        <div><div class="stat-value">${pendingChandas.length}</div><div class="stat-label">প্রণামী এন্ট্রি</div></div>
+      </div>
+      <div class="stat-card" style="flex:1;min-width:130px;border-left:4px solid var(--red)">
+        <div class="stat-icon" style="background:#FEE2E2">💸</div>
+        <div><div class="stat-value">${pendingKhorocs.length}</div><div class="stat-label">খরচ এন্ট্রি</div></div>
+      </div>
+    `;
+
+    // Update sidebar badge
+    const badge = $("pendingApprovalBadge");
+    if(badge) {
+      if(totalPending > 0) { badge.textContent = totalPending; badge.style.display = "inline"; }
+      else { badge.style.display = "none"; }
+    }
+
+    // ── Pending Chanda ──
+    if(!pendingChandas.length) {
+      $("pendingChandaList").innerHTML = `<div class="empty-state"><div class="empty-state-icon">✅</div><div class="empty-state-text">কোনো অপেক্ষমান প্রণামী এন্ট্রি নেই</div></div>`;
+    } else {
+      const chandaIds = pendingChandas.map(c=>c.id);
+      $("pendingChandaList").innerHTML = `
+        <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+          <button class="btn-primary" style="font-size:12px;padding:7px 14px" onclick="approveAll('chanda',${JSON.stringify(chandaIds)})">✅ সব অনুমোদন করুন (${pendingChandas.length})</button>
+        </div>
+        <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>#</th><th>ধরন</th><th>সদস্য/দাতা</th><th>মাস/বছর</th><th>পরিমাণ</th><th>Status</th><th>সংগ্রাহক</th><th>তারিখ</th><th>Action</th></tr></thead>
+          <tbody>
+          ${pendingChandas.map((c,i) => {
+            const isPuja = c.entryType === "puja";
+            const typeBadge = isPuja ? `<span style="background:#FEF3C7;color:#92400E;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600">🪷 পূজার</span>` : `<span style="background:#EDE9FE;color:#5B21B6;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600">📅 মাসিক</span>`;
+            const name = isPuja ? (c.donorName||"—") : (c.memberName||"—");
+            const monthYear = isPuja ? `${c.year}` : `${MONTHS_BN[c.month]||c.month} ${c.year}`;
+            const sBadge = c.status==="paid" ? "badge-paid" : c.status==="due" ? "badge-due" : "badge-pending";
+            const sLabel = c.status==="paid" ? "✅ Paid" : c.status==="due" ? "❌ Due" : "⏳ Pending";
+            return `<tr>
+              <td>${i+1}</td><td>${typeBadge}</td><td>${name}</td><td>${monthYear}</td>
+              <td>৳${(c.amount||0).toLocaleString()}</td>
+              <td><span class="badge ${sBadge}">${sLabel}</span></td>
+              <td>${c.collectedBy||"—"}</td>
+              <td>${c.entryDate||"—"}</td>
+              <td style="white-space:nowrap">
+                <button class="btn-sm" style="background:#D1FAE5;color:#065F46;border:none;padding:4px 9px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600" onclick="approveEntry('chanda','${c.id}')">✅ Approve</button>
+                <button class="btn-sm" style="background:#FEE2E2;color:#991B1B;border:none;padding:4px 9px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;margin-left:4px" onclick="rejectEntry('chanda','${c.id}')">❌ Reject</button>
+              </td>
+            </tr>`;
+          }).join("")}
+          </tbody>
+        </table></div>`;
+    }
+
+    // ── Pending Khoroc ──
+    if(!pendingKhorocs.length) {
+      $("pendingKhorocList").innerHTML = `<div class="empty-state"><div class="empty-state-icon">✅</div><div class="empty-state-text">কোনো অপেক্ষমান খরচ এন্ট্রি নেই</div></div>`;
+    } else {
+      const khorocIds = pendingKhorocs.map(k=>k.id);
+      $("pendingKhorocList").innerHTML = `
+        <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+          <button class="btn-primary" style="font-size:12px;padding:7px 14px;background:var(--red)" onclick="approveAll('khoroc',${JSON.stringify(khorocIds)})">✅ সব অনুমোদন করুন (${pendingKhorocs.length})</button>
+        </div>
+        ${pendingKhorocs.map(e => {
+          const itemRows = (e.items||[]).map((item,i)=>`<div class="khoroc-item-row"><span class="khoroc-item-khat">${i+1}. ${item.khat}</span><span class="khoroc-item-amount">৳${(item.poriman||0).toLocaleString()}</span></div>`).join("");
+          return `<div class="khoroc-submission" style="border-color:#FDE68A">
+            <div class="khoroc-submission-header">
+              <div>
+                <div style="font-weight:700;font-size:14px">📅 ${e.date||"—"}</div>
+                <div class="khoroc-submission-meta">👤 ${e.addedBy||"—"}${e.note?` · 📝 ${e.note}`:""}</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+                <span class="khoroc-submission-total">৳${(e.totalAmount||0).toLocaleString()}</span>
+                <button class="btn-sm" style="background:#D1FAE5;color:#065F46;border:none;padding:5px 10px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600" onclick="approveEntry('khoroc','${e.id}')">✅ Approve</button>
+                <button class="btn-sm" style="background:#FEE2E2;color:#991B1B;border:none;padding:5px 10px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600" onclick="rejectEntry('khoroc','${e.id}')">❌ Reject</button>
+              </div>
+            </div>
+            <div class="khoroc-item-list">${itemRows}</div>
+          </div>`;
+        }).join("")}`;
+    }
+  } catch(e) { console.error(e); }
+};
+
+async function updatePendingBadge() {
+  if(currentUser?.role !== "admin") return;
+  try {
+    const [cs, ks] = await Promise.all([
+      getDocs(query(collection(db,"chanda"), where("approvalStatus","==","pending"))),
+      getDocs(query(collection(db,"khoroc"), where("approvalStatus","==","pending")))
+    ]);
+    const total = cs.size + ks.size;
+    const badge = $("pendingApprovalBadge");
+    if(badge) {
+      if(total > 0) { badge.textContent = total; badge.style.display = "inline"; }
+      else { badge.style.display = "none"; }
+    }
+  } catch(e) {}
+}
 
 // ─── Final Report (Admin only) ───
 window.loadFinalReport = async function() {
