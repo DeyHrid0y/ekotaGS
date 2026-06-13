@@ -1,0 +1,3228 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>একতা যুব সংঘ — মাসিক প্রণামী সংগ্রহ</title>
+  <style>
+/* ─── CSS Variables ─── */
+:root {
+  --primary: #7C3AED;
+  --primary-dark: #5B21B6;
+  --primary-light: #EDE9FE;
+  --accent: #F59E0B;
+  --accent-light: #FEF3C7;
+  --green: #10B981;
+  --green-light: #D1FAE5;
+  --red: #EF4444;
+  --red-light: #FEE2E2;
+  --yellow: #F59E0B;
+  --yellow-light: #FEF3C7;
+  --bg: #F5F3FF;
+  --surface: #FFFFFF;
+  --border: #E5E7EB;
+  --text: #111827;
+  --text-muted: #6B7280;
+  --sidebar-w: 260px;
+  --header-h: 60px;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+}
+
+/* ─── Reset ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Hind Siliguri', 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ─── Screens ─── */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ─── Login ─── */
+.login-bg {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4C1D95 0%, #7C3AED 45%, #A78BFA 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-card {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-lg);
+}
+
+.login-header { text-align: center; margin-bottom: 28px; }
+.logo-circle {
+  width: 72px; height: 72px;
+  background: linear-gradient(135deg, #7C3AED, #F59E0B);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+  margin: 0 auto 14px;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.45);
+}
+.login-title {
+  font-size: 24px; font-weight: 800; color: var(--primary-dark);
+  letter-spacing: -0.3px;
+}
+.login-title-band {
+  display: inline-block;
+  background: linear-gradient(135deg, #7C3AED, #F59E0B);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 24px; font-weight: 800;
+}
+.login-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+.login-sub2 { font-size: 11px; color: #9CA3AF; margin-top: 1px; }
+
+.login-tabs {
+  display: flex;
+  background: #F3F4F6;
+  border-radius: 10px;
+  padding: 3px;
+  margin-bottom: 24px;
+}
+.tab-btn {
+  flex: 1; padding: 8px 12px;
+  border: none; background: transparent;
+  border-radius: 8px; cursor: pointer;
+  font-size: 13px; font-weight: 500; color: var(--text-muted);
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.tab-btn.active {
+  background: var(--surface);
+  color: var(--primary);
+  box-shadow: var(--shadow);
+}
+
+/* ─── Forms ─── */
+.form-group { margin-bottom: 16px; }
+.form-group label {
+  display: block; font-size: 13px;
+  font-weight: 500; color: #374151; margin-bottom: 6px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--surface);
+  color: var(--text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.form-group input:focus,
+.form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.btn-row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+/* ─── Buttons ─── */
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+  box-shadow: 0 2px 6px rgba(124,58,237,0.3);
+}
+.btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(124,58,237,0.4); }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary.full-width { width: 100%; }
+
+.btn-secondary {
+  background: #F3F4F6;
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+.btn-secondary:hover { background: #E5E7EB; }
+
+.btn-sm {
+  padding: 5px 12px; font-size: 12px; border-radius: 6px;
+  font-weight: 500; cursor: pointer; border: none; font-family: inherit;
+  transition: all 0.2s;
+}
+.btn-edit { background: #DBEAFE; color: #1D4ED8; }
+.btn-edit:hover { background: #BFDBFE; }
+.btn-delete { background: #FEE2E2; color: #DC2626; }
+.btn-delete:hover { background: #FECACA; }
+.btn-view { background: var(--primary-light); color: var(--primary); }
+.btn-view:hover { background: #DDD6FE; }
+.btn-approve { background: var(--green-light); color: #065F46; }
+.btn-approve:hover { background: #A7F3D0; }
+.btn-reject { background: var(--red-light); color: #991B1B; }
+.btn-reject:hover { background: #FECACA; }
+
+/* ─── Messages ─── */
+.error-msg {
+  background: var(--red-light); color: var(--red);
+  padding: 10px 14px; border-radius: 8px;
+  font-size: 13px; margin-top: 8px;
+  border-left: 3px solid var(--red);
+}
+.success-msg {
+  background: var(--green-light); color: #065F46;
+  padding: 10px 14px; border-radius: 8px;
+  font-size: 13px; margin-top: 8px;
+  border-left: 3px solid var(--green);
+}
+.info-text { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; }
+
+/* ─── App Layout ─── */
+#appScreen { display: flex; min-height: 100vh; }
+#appScreen.hidden { display: none; }
+
+/* ─── Sidebar ─── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: #1E1B4B;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 100;
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  display: flex; align-items: center; gap: 12px;
+  padding: 20px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.logo-icon { font-size: 28px; }
+.sidebar-title { font-size: 15px; font-weight: 700; color: #A5B4FC; }
+.sidebar-subtitle { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 1px; }
+
+.sidebar-nav { flex: 1; padding: 16px 0; }
+.nav-section { padding: 6px 16px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.3); margin-top: 8px; }
+
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 18px;
+  cursor: pointer;
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  border-radius: 0;
+  margin: 1px 8px;
+  border-radius: 8px;
+}
+.nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+.nav-item.active { background: var(--primary); color: white; box-shadow: 0 2px 8px rgba(124,58,237,0.4); }
+.nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.user-info {
+  font-size: 12px; color: rgba(255,255,255,0.6);
+  padding: 8px 0; margin-bottom: 8px;
+}
+.btn-logout {
+  width: 100%;
+  background: rgba(239,68,68,0.2);
+  color: #FCA5A5;
+  border: none;
+  padding: 9px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+.btn-logout:hover { background: rgba(239,68,68,0.35); }
+
+/* ─── Main Content ─── */
+.main-content {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ─── Topbar ─── */
+.topbar {
+  height: var(--header-h);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  position: sticky; top: 0; z-index: 50;
+  box-shadow: var(--shadow);
+}
+.hamburger {
+  background: none; border: none; cursor: pointer;
+  font-size: 20px; display: none; padding: 4px;
+}
+.page-title { font-size: 17px; font-weight: 600; color: var(--text); flex: 1; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.role-badge {
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.role-admin { background: var(--accent-light); color: #92400E; }
+.role-officer { background: var(--primary-light); color: var(--primary-dark); }
+.topbar-username { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+
+/* ─── Page Content ─── */
+.page-content { padding: 24px; flex: 1; }
+.page { display: none; }
+.page.active { display: block; }
+
+/* ─── Stats Grid ─── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  display: flex; align-items: center; gap: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.stat-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+}
+.stat-info { flex: 1; }
+.stat-value { font-size: 22px; font-weight: 700; color: var(--text); line-height: 1; }
+.stat-label { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+
+/* ─── Dashboard Grid ─── */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ─── Card ─── */
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow);
+}
+.card.max-600 { max-width: 600px; }
+.card-title {
+  font-size: 15px; font-weight: 600; margin-bottom: 16px;
+  color: var(--text);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ─── Page Header ─── */
+.page-header-row {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.page-header-row h3 { font-size: 16px; font-weight: 600; }
+
+.filter-row { display: flex; gap: 10px; }
+.filter-row select {
+  padding: 8px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  background: var(--surface);
+  cursor: pointer;
+  outline: none;
+}
+.filter-row select:focus { border-color: var(--primary); }
+
+.search-bar-row { margin-bottom: 14px; }
+.search-bar-row input {
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  width: 300px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-bar-row input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+
+/* ─── Tables ─── */
+.table-wrap {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow-x: auto;
+}
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table thead { background: #F9FAFB; }
+.data-table th {
+  padding: 12px 14px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.data-table td {
+  padding: 13px 14px;
+  border-bottom: 1px solid #F3F4F6;
+  vertical-align: middle;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: #FAFAFA; }
+
+/* ─── Status Badges ─── */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 600;
+}
+.badge-paid { background: var(--green-light); color: #065F46; }
+.badge-due { background: var(--red-light); color: #991B1B; }
+.badge-pending { background: var(--yellow-light); color: #92400E; }
+
+/* ─── Month Progress (Reports) ─── */
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.month-card {
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+}
+.month-card-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px;
+}
+.month-name { font-weight: 600; font-size: 14px; }
+.month-total { font-size: 12px; color: var(--text-muted); }
+.progress-bar-bg {
+  height: 6px; background: #E5E7EB;
+  border-radius: 3px; overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  transition: width 0.5s ease;
+}
+.month-stats { display: flex; gap: 8px; margin-top: 8px; font-size: 11px; }
+.month-stat-paid { color: var(--green); }
+.month-stat-due { color: var(--red); }
+.month-stat-pending { color: var(--yellow); }
+
+/* ─── Member Search Results (Public) ─── */
+.member-result-card {
+  background: #F9FAFB;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.member-result-card:hover { border-color: var(--primary); background: var(--primary-light); }
+.member-result-name { font-weight: 600; font-size: 15px; }
+.member-result-sub { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+
+/* ─── Password Request Card ─── */
+.pwd-req-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.pwd-req-info { flex: 1; }
+.pwd-req-name { font-weight: 600; }
+.pwd-req-date { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+.pwd-req-actions { display: flex; gap: 8px; }
+
+/* ─── Transaction List ─── */
+.transaction-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #F3F4F6;
+}
+.transaction-item:last-child { border-bottom: none; }
+.txn-icon {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.txn-info { flex: 1; }
+.txn-name { font-weight: 500; font-size: 13px; }
+.txn-sub { font-size: 11px; color: var(--text-muted); }
+.txn-amount { font-weight: 700; font-size: 14px; }
+
+/* ─── Modals ─── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(2px);
+}
+.modal-overlay.hidden { display: none; }
+.modal-card {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 28px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: var(--shadow-lg);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-card.wide { max-width: 700px; }
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.modal-header h3 { font-size: 16px; font-weight: 600; }
+.modal-close {
+  background: #F3F4F6; border: none; cursor: pointer;
+  width: 28px; height: 28px; border-radius: 50%;
+  font-size: 14px; display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.modal-close:hover { background: #E5E7EB; }
+
+/* ─── Member Detail ─── */
+.member-detail-header {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: var(--primary-light);
+  border-radius: 10px;
+}
+.member-avatar {
+  width: 52px; height: 52px;
+  background: var(--primary);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; color: white; font-weight: 700;
+}
+.member-detail-name { font-size: 17px; font-weight: 700; }
+.member-detail-sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.year-tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+.year-tab-btn {
+  padding: 5px 14px; border: 1.5px solid var(--border);
+  border-radius: 20px; background: var(--surface);
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  font-family: inherit; transition: all 0.2s; color: var(--text-muted);
+}
+.year-tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+/* ─── Member Public Summary ─── */
+.member-year-summary {
+  background: linear-gradient(135deg, #1E1B4B 0%, #4C1D95 100%);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  color: white;
+}
+.member-year-summary-title {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: rgba(255,255,255,0.6); margin-bottom: 14px;
+}
+.summary-stats-row {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+}
+.summary-stat-box {
+  background: rgba(255,255,255,0.12);
+  border-radius: 10px; padding: 12px 14px;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.summary-stat-box.paid-box { background: rgba(16,185,129,0.18); border-color: rgba(16,185,129,0.3); }
+.summary-stat-box.due-box { background: rgba(239,68,68,0.18); border-color: rgba(239,68,68,0.3); }
+.summary-stat-box.neutral-box { background: rgba(245,158,11,0.18); border-color: rgba(245,158,11,0.3); }
+.summary-stat-label { font-size: 11px; color: rgba(255,255,255,0.65); margin-bottom: 5px; }
+.summary-stat-num { font-size: 20px; font-weight: 800; color: white; line-height: 1; }
+.summary-stat-sub { font-size: 11px; color: rgba(255,255,255,0.75); margin-top: 4px; font-weight: 500; }
+.month-pills {
+  display: flex; flex-wrap: wrap; gap: 5px; margin-top: 14px;
+}
+.month-pill {
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 600;
+}
+.month-pill.paid { background: rgba(16,185,129,0.25); color: #6EE7B7; border: 1px solid rgba(16,185,129,0.3); }
+.month-pill.due { background: rgba(239,68,68,0.25); color: #FCA5A5; border: 1px solid rgba(239,68,68,0.3); }
+.month-pill.pending { background: rgba(245,158,11,0.2); color: #FCD34D; border: 1px solid rgba(245,158,11,0.3); }
+.month-pill.missing { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.45); border: 1px solid rgba(255,255,255,0.12); }
+
+/* ─── Toast ─── */
+.toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: #1F2937; color: white;
+  padding: 12px 20px; border-radius: 10px;
+  font-size: 13px; font-weight: 500;
+  z-index: 999;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(0);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.toast.hidden { display: none; }
+.toast.success { background: #065F46; border-left: 4px solid var(--green); }
+.toast.error { background: #7F1D1D; border-left: 4px solid var(--red); }
+
+/* ─── Empty State ─── */
+.empty-state {
+  text-align: center; padding: 40px 20px;
+  color: var(--text-muted);
+}
+.empty-state-icon { font-size: 40px; margin-bottom: 10px; }
+.empty-state-text { font-size: 14px; }
+
+/* ─── Khoroc (Expense) ─── */
+.khoroc-row {
+  display: grid;
+  grid-template-columns: 1fr 120px 34px;
+  gap: 8px;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid #F3F4F6;
+}
+.khoroc-row:last-child { border-bottom: none; }
+.khoroc-rows-container { margin-bottom: 4px; }
+.add-row-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 9px 14px; border: 1.5px dashed var(--primary);
+  border-radius: 8px; background: var(--primary-light);
+  color: var(--primary); font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit; width: 100%;
+  justify-content: center; margin: 10px 0 16px;
+  transition: all 0.2s;
+}
+.add-row-btn:hover { background: #DDD6FE; }
+.khoroc-total-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--primary-light); padding: 12px 16px; border-radius: 8px;
+  margin-bottom: 16px;
+}
+.khoroc-total-label { font-size: 13px; color: var(--primary-dark); font-weight: 600; }
+.khoroc-total-value { font-size: 18px; font-weight: 800; color: var(--primary); }
+.remove-row-btn {
+  background: #FEE2E2; border: none; color: var(--red); font-size: 14px;
+  width: 32px; height: 32px; border-radius: 6px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: background 0.2s; font-weight: 700;
+}
+.remove-row-btn:hover { background: #FECACA; }
+.khoroc-submission {
+  border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 16px;
+  margin-bottom: 12px; background: var(--surface);
+  transition: box-shadow 0.2s;
+}
+.khoroc-submission:hover { box-shadow: var(--shadow-md); }
+.khoroc-submission-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #F3F4F6;
+  gap: 10px;
+}
+.khoroc-submission-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.khoroc-submission-total { font-size: 16px; font-weight: 700; color: var(--red); white-space: nowrap; }
+.khoroc-item-list { display: flex; flex-direction: column; gap: 2px; }
+.khoroc-item-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; padding: 4px 6px; border-radius: 4px;
+}
+.khoroc-item-row:nth-child(odd) { background: #F9FAFB; }
+.khoroc-item-khat { color: var(--text); }
+.khoroc-item-amount { font-weight: 600; color: var(--red); }
+.khoroc-col-header {
+  display: grid; grid-template-columns: 1fr 120px 34px;
+  gap: 8px; padding: 4px 0;
+  font-size: 11px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border); margin-bottom: 4px;
+}
+
+/* ─── Final Report ─── */
+.fin-source-card {
+  flex: 1; min-width: 150px; border-radius: 10px; padding: 14px;
+  border: 1.5px solid;
+}
+.fin-source-value { font-size: 20px; font-weight: 800; margin: 6px 0 3px; }
+.fin-source-label { font-size: 12px; font-weight: 600; }
+.fin-source-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.net-balance-card {
+  border-radius: 14px; padding: 20px 24px;
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 20px; box-shadow: var(--shadow-md);
+}
+.net-balance-icon { font-size: 36px; }
+.net-balance-label { font-size: 13px; font-weight: 600; opacity: 0.8; }
+.net-balance-value { font-size: 28px; font-weight: 900; }
+
+/* ─── Report Filters ─── */
+.report-filters { display: flex; gap: 10px; margin-bottom: 16px; }
+.report-filters select {
+  padding: 8px 12px; border: 1.5px solid var(--border);
+  border-radius: 8px; font-size: 13px; font-family: inherit;
+  outline: none; cursor: pointer;
+}
+
+/* ─── Tab Content ─── */
+.tab-content.hidden { display: none; }
+.tab-content.active { display: block; }
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .main-content { margin-left: 0; }
+  .hamburger { display: block; }
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .search-bar-row input { width: 100%; }
+  .page-header-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 480px) {
+  .page-content { padding: 14px; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .topbar { padding: 0 14px; }
+  .modal-card { padding: 20px 16px; border-radius: 12px; }
+  .login-card { padding: 28px 20px; }
+  .data-table th, .data-table td { padding: 10px 8px; font-size: 12px; }
+  .btn-sm { padding: 4px 8px; font-size: 11px; }
+  .btn-row { flex-direction: column; }
+  .btn-row button { width: 100%; }
+  .filter-row { flex-wrap: wrap; }
+  .filter-row select { flex: 1; min-width: 120px; }
+  .pwd-req-card { flex-direction: column; gap: 10px; align-items: flex-start; }
+  .form-row { grid-template-columns: 1fr; }
+  .search-bar-row input { width: 100%; }
+  .page-header-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .topbar-username { display: none; }
+  .role-badge { font-size: 10px; }
+}
+
+/* ─── Footer ─── */
+.site-footer {
+  text-align: center;
+  padding: 18px 24px;
+  margin-top: 32px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--surface);
+}
+.site-footer span {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* ─── Login Footer ─── */
+.login-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 11px;
+  color: #9CA3AF;
+}
+.login-footer span {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* ─── Pujar Porani Level Badges ─── */
+.porani-level-badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 600;
+}
+.level-member { background: #EDE9FE; color: #5B21B6; }
+.level-village { background: #D1FAE5; color: #065F46; }
+.level-other { background: #FEF3C7; color: #92400E; }
+
+/* ─── Month Summary Box (member detail) ─── */
+.month-summary-box {
+  background: linear-gradient(135deg, #F0ECFF 0%, #FEF9E7 100%);
+  border-radius: 10px; padding: 14px 16px;
+  margin-bottom: 16px;
+  border: 1.5px solid #DDD6FE;
+}
+.month-summary-title {
+  font-size: 13px; font-weight: 700;
+  color: var(--primary-dark); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+.month-summary-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 8px;
+}
+.ms-stat {
+  background: white; border-radius: 8px;
+  padding: 10px 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+  text-align: center;
+}
+.ms-stat .ms-val { font-size: 17px; font-weight: 700; line-height: 1; }
+.ms-stat .ms-lbl { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+.ms-paid .ms-val { color: var(--green); }
+.ms-due .ms-val { color: var(--red); }
+.ms-pending .ms-val { color: var(--yellow); }
+.ms-total .ms-val { color: var(--primary); }
+
+/* ─── Month Detail Table (member view) ─── */
+.months-breakdown { margin-top: 12px; }
+.months-breakdown-title {
+  font-size: 12px; font-weight: 600;
+  color: var(--text-muted); margin-bottom: 8px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* ─── Pujar Porani Page ─── */
+.porani-stat-row {
+  display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
+}
+
+/* ─── Puja Label Radio Buttons ─── */
+.label-radio-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 8px;
+  border: 1.5px solid var(--border);
+  cursor: pointer; font-size: 13px; font-weight: 500;
+  transition: all 0.2s; background: var(--surface);
+  user-select: none;
+}
+.label-radio-btn input[type="radio"] { display: none; }
+.label-radio-btn:has(input:checked) {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+.label-radio-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+
+/* ─── Utilities ─── */
+.hidden { display: none !important; }
+.text-center { text-align: center; }
+.mt-8 { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.fw-600 { font-weight: 600; }
+.text-green { color: var(--green); }
+.text-red { color: var(--red); }
+.text-yellow { color: var(--yellow); }
+
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ───────────── LOGIN SCREEN ───────────── -->
+<div id="loginScreen" class="screen active">
+  <div class="login-bg">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="logo-circle">🪷</div>
+        <h1 class="login-title"><span class="login-title-band">একতা যুব সংঘ</span></h1>
+        <p class="login-subtitle">মাসিক প্রণামী সংগ্রহ ব্যবস্থাপনা</p>
+        <p class="login-sub2">Monthly Subscription Management</p>
+      </div>
+
+      <div class="login-tabs">
+        <button class="tab-btn active" onclick="switchLoginTab('admin')" id="tabAdmin">Admin / Officer</button>
+        <button class="tab-btn" onclick="switchLoginTab('member')" id="tabMember">Member Search</button>
+      </div>
+
+      <!-- Admin/Officer Login -->
+      <div id="loginForm" class="tab-content active">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="loginUsername" placeholder="email অথবা username" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="password" />
+        </div>
+        <div id="loginError" class="error-msg hidden"></div>
+        <button class="btn-primary full-width" onclick="doLogin()">Login</button>
+      </div>
+
+      <!-- Member Search -->
+      <div id="memberSearchForm" class="tab-content hidden">
+        <div class="form-group">
+          <label>আপনার নাম লিখুন / Enter Your Name</label>
+          <input type="text" id="memberSearchInput" placeholder="নাম দিয়ে খুঁজুন..." oninput="searchMemberPublic()" />
+        </div>
+        <div id="memberPublicResults"></div>
+      </div>
+
+      <div class="login-footer">Developed by <span>HRIDOOY DEY</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────── MAIN APP ───────────── -->
+<div id="appScreen" class="screen hidden">
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon">🪷</span>
+      <div>
+        <div class="sidebar-title">একতা যুব সংঘ</div>
+        <div class="sidebar-subtitle">প্রণামী Manager</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav" id="sidebarNav">
+      <!-- Populated by JS based on role -->
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info" id="sidebarUserInfo"></div>
+      <button class="btn-logout" onclick="doLogout()">🚪 Logout </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <button class="hamburger" onclick="toggleSidebar()">☰</button>
+      <h2 class="page-title" id="pageTitle">Dashboard</h2>
+      <div class="topbar-right">
+        <span id="topbarRole" class="role-badge"></span>
+        <span id="topbarUser" class="topbar-username"></span>
+      </div>
+    </header>
+
+    <!-- Pages -->
+    <div class="page-content">
+
+      <!-- Dashboard -->
+      <section id="page-dashboard" class="page active">
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="dashboard-grid">
+          <div class="card">
+            <h3 class="card-title">এই মাসের সংগ্রহ / This Month's Collection</h3>
+            <div id="thisMonthSummary"></div>
+          </div>
+          <div class="card">
+            <h3 class="card-title">সাম্প্রতিক লেনদেন / Recent Transactions</h3>
+            <div id="recentTransactions"></div>
+          </div>
+        </div>
+        <!-- Admin Members Panel -->
+        <div id="adminMembersPanel" class="card" style="margin-top:16px;display:none">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+            <h3 style="font-size:15px;font-weight:600">All Members — Admin View</h3>
+            <input type="text" id="dashMemberSearch" placeholder="Search by name or ID..." oninput="filterDashMembers()" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;width:220px;outline:none;font-family:inherit" />
+          </div>
+          <div class="table-wrap" style="box-shadow:none">
+            <table class="data-table">
+              <thead><tr><th>Member ID</th><th>Name</th><th>Phone</th><th>Address</th><th>Monthly</th><th>Action</th></tr></thead>
+              <tbody id="dashMembersBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Members -->
+      <section id="page-members" class="page hidden">
+        <div class="page-header-row">
+          <h3>সদস্য তালিকা / Member List</h3>
+        </div>
+        <div class="search-bar-row">
+          <input type="text" id="memberListSearch" placeholder="নাম বা ফোন দিয়ে খুঁজুন..." oninput="filterMemberList()" />
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="membersTable">
+            <thead>
+              <tr>
+                <th>Member ID</th>
+                <th>নাম / Name</th>
+                <th>ফোন / Phone</th>
+                <th>ঠিকানা / Address</th>
+                <th>মাসিক প্রণামী</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="membersTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Chanda Collection -->
+      <section id="page-collection" class="page hidden">
+        <div class="page-header-row">
+          <h3>প্রণামী সংগ্রহ / Pronami Collection</h3>
+          <div class="filter-row">
+            <select id="filterYear" onchange="loadCollectionPage()">
+              <option value="2025">২০২৫ / 2025</option>
+              <option value="2026" selected>২০২৬ / 2026</option>
+              <option value="2027">২০২৭ / 2027</option>
+              <option value="2028">২০২৮ / 2028</option>
+              <option value="2029">২০২৯ / 2029</option>
+              <option value="2030">২০৩০ / 2030</option>
+            </select>
+            <select id="filterMonth" onchange="loadCollectionPage()">
+              <option value="">সব মাস / All Months</option>
+              <option value="1">জানুয়ারি</option><option value="2">ফেব্রুয়ারি</option>
+              <option value="3">মার্চ</option><option value="4">এপ্রিল</option>
+              <option value="5">মে</option><option value="6">জুন</option>
+              <option value="7">জুলাই</option><option value="8">আগস্ট</option>
+              <option value="9">সেপ্টেম্বর</option><option value="10">অক্টোবর</option>
+              <option value="11">নভেম্বর</option><option value="12">ডিসেম্বর</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="collectionTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>ধরন / Type</th>
+                <th>সদস্য / দাতা</th>
+                <th>মাস / Month</th>
+                <th>বছর / Year</th>
+                <th>প্রণামীর পরিমাণ</th>
+                <th>Payment Status</th>
+                <th>সংগ্রহকারী</th>
+                <th>তারিখ</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="collectionTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Add Collection Entry -->
+      <section id="page-add-collection" class="page hidden">
+        <div class="card" style="max-width:640px">
+          <h3 class="card-title">নতুন প্রণামী এন্ট্রি / New Pronami Entry</h3>
+
+          <!-- ── Entry Type Toggle ── -->
+          <div class="entry-type-toggle" style="display:flex;gap:0;margin-bottom:20px;border:1.5px solid var(--border);border-radius:10px;overflow:hidden">
+            <button id="typeBtnMonthly" class="entry-type-btn active" onclick="switchEntryType('monthly')"
+              style="flex:1;padding:10px;border:none;background:var(--primary);color:white;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s">
+              📅 মাসিক প্রণামী
+            </button>
+            <button id="typeBtnPuja" class="entry-type-btn" onclick="switchEntryType('puja')"
+              style="flex:1;padding:10px;border:none;background:#F3F4F6;color:var(--text-muted);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s">
+              🪷 পূজার প্রণামী
+            </button>
+          </div>
+
+          <!-- ── সংগ্রহকারী (Officer/Admin — read only) ── -->
+          <div class="form-group">
+            <label>সংগ্রহকারী অফিসার / Collected By</label>
+            <input type="text" id="entryCollector" readonly
+              style="background:#F9FAFB;color:var(--primary);font-weight:600;cursor:not-allowed" />
+          </div>
+
+          <!-- ══ MONTHLY PRONAMI FIELDS ══ -->
+          <div id="monthlyFields">
+            <div class="form-group">
+              <label>সদস্য নির্বাচন / Select Member *</label>
+              <select id="entryMember">
+                <option value="">-- সদস্য নির্বাচন করুন --</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>মাস / Month *</label>
+                <select id="entryMonth">
+                  <option value="1">জানুয়ারি</option><option value="2">ফেব্রুয়ারি</option>
+                  <option value="3">মার্চ</option><option value="4">এপ্রিল</option>
+                  <option value="5">মে</option><option value="6">জুন</option>
+                  <option value="7">জুলাই</option><option value="8">আগস্ট</option>
+                  <option value="9">সেপ্টেম্বর</option><option value="10">অক্টোবর</option>
+                  <option value="11">নভেম্বর</option><option value="12">ডিসেম্বর</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>বছর / Year *</label>
+                <select id="entryYear">
+                  <option value="2025">২০২৫</option>
+                  <option value="2026" selected>২০২৬</option>
+                  <option value="2027">২০২৭</option>
+                  <option value="2028">২০২৮</option>
+                  <option value="2029">২০২৯</option>
+                  <option value="2030">২০৩০</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══ PUJA PRONAMI FIELDS ══ -->
+          <div id="pujaFields" class="hidden">
+            <div class="form-group">
+              <label>লেবেল / Label *</label>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <label class="label-radio-btn" id="lbl-somossho">
+                  <input type="radio" name="pujaLabel" value="সদস্য" onchange="onPujaLabelChange()" />
+                  <span>👤 সদস্য</span>
+                </label>
+                <label class="label-radio-btn" id="lbl-gram">
+                  <input type="radio" name="pujaLabel" value="গ্রাম" onchange="onPujaLabelChange()" />
+                  <span>🏘️ গ্রাম</span>
+                </label>
+                <label class="label-radio-btn" id="lbl-others">
+                  <input type="radio" name="pujaLabel" value="অন্যান্য" onchange="onPujaLabelChange()" />
+                  <span>🔖 অন্যান্য</span>
+                </label>
+              </div>
+            </div>
+            <!-- সদস্য label → member dropdown -->
+            <div class="form-group hidden" id="pujaLabelMemberGroup">
+              <label>সদস্য নির্বাচন / Select Member *</label>
+              <select id="entryPujaMember">
+                <option value="">-- সদস্য নির্বাচন করুন --</option>
+              </select>
+            </div>
+            <!-- গ্রাম / অন্যান্য label → free text -->
+            <div class="form-group hidden" id="pujaLabelNameGroup">
+              <label id="pujaLabelNameLabel">দাতার নাম *</label>
+              <input type="text" id="entryPujaDonorName" placeholder="নাম লিখুন..." />
+            </div>
+          </div>
+
+          <!-- ══ COMMON FIELDS ══ -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>প্রণামীর পরিমাণ (৳) *</label>
+              <input type="number" id="entryAmount" placeholder="পরিমাণ লিখুন" min="1" />
+            </div>
+            <div class="form-group">
+              <label>Payment Status *</label>
+              <select id="entryStatus">
+                <option value="paid">✅ Paid — পরিশোধিত</option>
+                <option value="due">❌ Due — বকেয়া</option>
+                <option value="pending">⏳ Pending — অপেক্ষমান</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>মন্তব্য / Notes</label>
+            <textarea id="entryNote" rows="2"
+              style="resize:vertical;width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;outline:none;transition:border-color 0.2s"
+              placeholder="মন্তব্য লিখুন..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Entry Date *</label>
+            <input type="date" id="entryDate" />
+          </div>
+
+          <div id="entryError" class="error-msg hidden"></div>
+          <div class="btn-row">
+            <button class="btn-secondary" onclick="navigateTo('collection')">বাতিল / Cancel</button>
+            <button class="btn-primary" onclick="submitChandaEntry()">💾 সংরক্ষণ করুন / Save</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Officers (Admin only) -->
+      <section id="page-officers" class="page hidden">
+        <div class="page-header-row">
+          <h3> Officers</h3>
+          <button class="btn-primary" onclick="openAddOfficerModal()">+ Add New Officer </button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>নাম / Name</th>
+                <th>Username</th>
+                <th>ফোন / Phone</th>
+                <th>তৈরির তারিখ</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="officersTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Password Requests (Admin only) -->
+      <section id="page-password-requests" class="page hidden">
+        <div class="page-header-row">
+          <h3>পাসওয়ার্ড পরিবর্তনের অনুরোধ</h3>
+        </div>
+        <div id="pwdRequestsList"></div>
+      </section>
+
+      <!-- Officer: Request Password Change -->
+      <section id="page-change-password" class="page hidden">
+        <div class="card max-600">
+          <h3 class="card-title">পাসওয়ার্ড পরিবর্তনের অনুরোধ</h3>
+          <p class="info-text">আপনার নতুন পাসওয়ার্ড প্রস্তাব করুন। Admin অনুমোদন করলে পরিবর্তন হবে।</p>
+          <div class="form-group">
+            <label>নতুন পাসওয়ার্ড / New Password</label>
+            <input type="password" id="newPwdInput" placeholder="নতুন পাসওয়ার্ড" />
+          </div>
+          <div class="form-group">
+            <label>পাসওয়ার্ড নিশ্চিত করুন / Confirm</label>
+            <input type="password" id="confirmPwdInput" placeholder="আবার লিখুন" />
+          </div>
+          <div id="pwdReqError" class="error-msg hidden"></div>
+          <div id="pwdReqSuccess" class="success-msg hidden"></div>
+          <button class="btn-primary" onclick="submitPasswordRequest()"> Send Request</button>
+        </div>
+      </section>
+
+      <!-- Reports -->
+      <section id="page-reports" class="page hidden">
+        <div class="card">
+          <h3 class="card-title">Reports</h3>
+          <div class="report-filters">
+            <select id="reportYear" onchange="generateReport()">
+              <option value="2025">২০২৫</option>
+              <option value="2026" selected>২০২৬</option>
+               <option value="2027">২০২৭</option>
+                <option value="2028">২০২৮</option>
+                <option value="2029">২০২৯</option>
+                <option value="2030">২০৩০</option>
+            </select>
+            <button class="btn-primary" onclick="downloadReportPDF()" style="margin-left:auto">📄 PDF Download</button>
+          </div>
+          <div id="reportContent"></div>
+        </div>
+      </section>
+
+      <section id="page-my-collections" class="page hidden">
+        <div class="card">
+          <h3 class="card-title">আমার প্রণামী সংগ্রহ</h3>
+          <div class="report-filters">
+            <select id="myColYear" onchange="loadMyCollections()">
+              <option value="2025">২০২৫</option>
+              <option value="2026" selected>২০২৬</option>
+               <option value="2027">২০২৭</option>
+                <option value="2028">২০২৮</option>
+                <option value="2029">২০২৯</option>
+                <option value="2030">২০৩০</option>
+            </select>
+          </div>
+          <div id="myCollectionSummary" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px"></div>
+          <div id="myCollectionTable"></div>
+        </div>
+      </section>
+
+      <!-- ══ KHOROC (EXPENSE) PAGE ══ -->
+      <section id="page-khoroc" class="page hidden">
+        <div class="page-header-row">
+          <h3>💸 খরচ / Expenses</h3>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <select id="khorocFilterYear" onchange="loadKhorocList()"
+              style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;cursor:pointer">
+              <option value="2025">২০২৫</option>
+              <option value="2026" selected>২০২৬</option>
+              <option value="2027">২০২৭</option>
+              <option value="2028">২০২৮</option>
+              <option value="2029">২০২৯</option>
+              <option value="2030">২০৩০</option>
+            </select>
+            <button id="khorocPdfBtn" class="btn-secondary" onclick="downloadKhorocPDF()"
+              style="display:none;gap:6px;align-items:center">📄 PDF Report</button>
+            <button class="btn-primary" onclick="showAddKhorocForm()">➕ নতুন খরচ যোগ করুন</button>
+          </div>
+        </div>
+
+        <!-- ── Add Expense Form (collapsible) ── -->
+        <div id="khorocAddForm" class="card max-600 hidden" style="margin-bottom:20px">
+          <h4 style="margin-bottom:16px;font-size:15px;font-weight:600;color:var(--primary)">💸 নতুন খরচ এন্ট্রি</h4>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>সংযোজনকারী / Added By</label>
+              <input type="text" id="khorocAddedBy" readonly
+                style="background:#F9FAFB;color:var(--primary);font-weight:600;cursor:not-allowed" />
+            </div>
+            <div class="form-group">
+              <label>তারিখ / Date *</label>
+              <input type="date" id="khorocDate" />
+            </div>
+          </div>
+
+          <!-- Expense Rows Header -->
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:8px;color:var(--text)">
+            খরচের তালিকা / Expense Items *
+          </label>
+          <div class="khoroc-col-header">
+            <div>খরচের খাত (Category)</div>
+            <div>পরিমাণ (৳)</div>
+            <div></div>
+          </div>
+
+          <!-- Dynamic Rows -->
+          <div id="khorocRowsContainer" class="khoroc-rows-container"></div>
+
+          <!-- Add Row Button -->
+          <button class="add-row-btn" onclick="addKhorocRow()">
+            ➕ আরো একটি আইটেম যোগ করুন
+          </button>
+
+          <!-- Running Total -->
+          <div class="khoroc-total-bar">
+            <span class="khoroc-total-label">মোট খরচ / Total:</span>
+            <span class="khoroc-total-value" id="khorocTotalDisplay">৳০</span>
+          </div>
+
+          <!-- Note -->
+          <div class="form-group">
+            <label>মন্তব্য / Notes (ঐচ্ছিক)</label>
+            <input type="text" id="khorocNote" placeholder="মন্তব্য লিখুন..." />
+          </div>
+
+          <div id="khorocError" class="error-msg hidden"></div>
+          <div class="btn-row">
+            <button class="btn-secondary" onclick="hideAddKhorocForm()">বাতিল / Cancel</button>
+            <button class="btn-primary" onclick="submitKhoroc()">💾 সংরক্ষণ করুন</button>
+          </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div id="khorocSummary" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px"></div>
+
+        <!-- Expense List -->
+        <div id="khorocList"></div>
+      </section>
+
+      <!-- ══ FINAL REPORT (ADMIN ONLY) ══ -->
+      <section id="page-final-report" class="page hidden">
+        <div class="page-header-row">
+          <h3>📊 চূড়ান্ত রিপোর্ট / Final Report</h3>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <select id="finalReportYear" onchange="loadFinalReport()"
+              style="padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;cursor:pointer">
+              <option value="2025">২০২৫</option>
+              <option value="2026" selected>২০২৬</option>
+              <option value="2027">২০২৭</option>
+              <option value="2028">২০২৮</option>
+              <option value="2029">২০২৯</option>
+              <option value="2030">২০৩০</option>
+            </select>
+            <button class="btn-primary" onclick="downloadFinalReportPDF()">📄 PDF Download</button>
+          </div>
+        </div>
+
+        <!-- Net Summary Cards -->
+        <div id="finalReportSummary" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:20px"></div>
+
+        <!-- Income Section -->
+        <div class="card" style="margin-bottom:16px">
+          <h3 class="card-title" style="color:var(--green)">💰 আয়ের বিবরণ / Income Details</h3>
+          <div id="finalIncomeSection"><div class="empty-state"><div class="empty-state-icon">⏳</div><div class="empty-state-text">লোড হচ্ছে...</div></div></div>
+        </div>
+
+        <!-- Expense Section -->
+        <div class="card">
+          <h3 class="card-title" style="color:var(--red)">💸 খরচের বিবরণ / Expense Details</h3>
+          <div id="finalExpenseSection"><div class="empty-state"><div class="empty-state-icon">⏳</div><div class="empty-state-text">লোড হচ্ছে...</div></div></div>
+        </div>
+      </section>
+
+    <footer class="site-footer">
+      Developed by <span>HRIDOOY DEY</span>
+    </footer>
+  </main>
+</div><!-- /appScreen -->
+
+
+<!-- ───── MODALS ───── -->
+
+<!-- Add Member Modal -->
+<div id="addMemberModal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 id="addMemberModalTitle">Add New Member</h3>
+      <button class="modal-close" onclick="closeModal('addMemberModal')">✕</button>
+    </div>
+    <div class="form-group">
+      <label>Member ID <span style="font-size:11px;color:var(--text-muted)">()</span></label>
+      <input type="text" id="mMemberId" placeholder="e.g. MEM-001" />
+    </div>
+    <div class="form-group">
+      <label>নাম / Name *</label>
+      <input type="text" id="mName" placeholder="পূর্ণ নাম" />
+    </div>
+    <div class="form-group">
+      <label>ফোন / Phone</label>
+      <input type="tel" id="mPhone" placeholder="মোবাইল নম্বর" />
+    </div>
+    <div class="form-group">
+      <label>ঠিকানা / Address</label>
+      <input type="text" id="mAddress" placeholder="ঠিকানা" />
+    </div>
+    <div class="form-group">
+      <label>মাসিক প্রণামীর পরিমাণ (৳)</label>
+      <input type="number" id="mAmount" placeholder="যেমন: 100" />
+    </div>
+    <div id="mError" class="error-msg hidden"></div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="closeModal('addMemberModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveMember()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Officer Modal -->
+<div id="addOfficerModal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Add New Officer</h3>
+      <button class="modal-close" onclick="closeModal('addOfficerModal')">✕</button>
+    </div>
+    <div class="form-group">
+      <label>পূর্ণ নাম / Full Name *</label>
+      <input type="text" id="oName" placeholder="অফিসারের নাম" />
+    </div>
+    <div class="form-group">
+      <label>Username *</label>
+      <input type="text" id="oUsername" placeholder="ইউজারনেম (ছোট হাতে)" />
+    </div>
+    <div class="form-group">
+      <label>Password *</label>
+      <input type="password" id="oPassword" placeholder="পাসওয়ার্ড" />
+    </div>
+    <div class="form-group">
+      <label>ফোন / Phone</label>
+      <input type="tel" id="oPhone" placeholder="মোবাইল নম্বর" />
+    </div>
+    <div id="oError" class="error-msg hidden"></div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="closeModal('addOfficerModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveOfficer()">Create</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Update Officer Password Modal -->
+<div id="updatePwdModal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Change Password</h3>
+      <button class="modal-close" onclick="closeModal('updatePwdModal')">✕</button>
+    </div>
+    <input type="hidden" id="updatePwdOfficerId" />
+    <div class="form-group">
+      <label>Add New Password *</label>
+      <input type="password" id="updatePwdNew" placeholder="New Password" />
+    </div>
+    <div id="updatePwdError" class="error-msg hidden"></div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="closeModal('updatePwdModal')">Cancel</button>
+      <button class="btn-primary" onclick="confirmUpdatePassword()">Change</button>
+    </div>
+  </div>
+</div>
+
+<!-- Member Detail Modal -->
+<div id="memberDetailModal" class="modal-overlay hidden">
+  <div class="modal-card wide">
+    <div class="modal-header">
+      <h3 id="memberDetailName">সদস্যের বিবরণ</h3>
+      <button class="modal-close" onclick="closeModal('memberDetailModal')">✕</button>
+    </div>
+    <div id="memberDetailContent"></div>
+  </div>
+</div>
+
+<!-- Edit Khoroc Modal -->
+<div id="editKhorocModal" class="modal-overlay hidden">
+  <div class="modal-card wide">
+    <div class="modal-header">
+      <h3>✏️ খরচ সম্পাদনা / Edit Expense</h3>
+      <button class="modal-close" onclick="closeModal('editKhorocModal')">✕</button>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>সংযোজনকারী / Added By</label>
+        <input type="text" id="editKhorocAddedBy" readonly
+          style="background:#F9FAFB;color:var(--primary);font-weight:600;cursor:not-allowed" />
+      </div>
+      <div class="form-group">
+        <label>তারিখ / Date *</label>
+        <input type="date" id="editKhorocDate" />
+      </div>
+    </div>
+
+    <label style="font-size:13px;font-weight:600;display:block;margin-bottom:8px">খরচের তালিকা *</label>
+    <div class="khoroc-col-header">
+      <div>খরচের খাত (Category)</div>
+      <div>পরিমাণ (৳)</div>
+      <div></div>
+    </div>
+    <div id="editKhorocRowsContainer" class="khoroc-rows-container"></div>
+    <button class="add-row-btn" onclick="addEditKhorocRow()">➕ আরো একটি আইটেম যোগ করুন</button>
+
+    <div class="khoroc-total-bar">
+      <span class="khoroc-total-label">মোট খরচ / Total:</span>
+      <span class="khoroc-total-value" id="editKhorocTotalDisplay">৳০</span>
+    </div>
+
+    <div class="form-group">
+      <label>মন্তব্য / Notes (ঐচ্ছিক)</label>
+      <input type="text" id="editKhorocNote" placeholder="মন্তব্য লিখুন..." />
+    </div>
+
+    <input type="hidden" id="editKhorocId" />
+    <div id="editKhorocError" class="error-msg hidden"></div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="closeModal('editKhorocModal')">বাতিল</button>
+      <button class="btn-primary" onclick="saveEditKhoroc()">💾 আপডেট করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast hidden"></div>
+
+<!-- Firebase + App Scripts -->
+<script type="module">
+// ─── Firebase Setup ───
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+import {
+  getFirestore, collection, doc, getDocs, getDoc,
+  addDoc, setDoc, updateDoc, deleteDoc, query, where, orderBy, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+import {
+  getAuth, signInWithEmailAndPassword, signOut
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyChTiNOIRv1w038c-O4w5aRzOiTY1mss28",
+  authDomain: "ekotags.firebaseapp.com",
+  projectId: "ekotags",
+  storageBucket: "ekotags.firebasestorage.app",
+  messagingSenderId: "307118619222",
+  appId: "1:307118619222:web:6f64a09413765506e599f7"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+// ─── State ───
+let currentUser = null; // { username, role, name, id }
+let allMembers = [];
+let editingMemberId = null;
+let editingOfficerId = null;
+
+// ─── Month Names (Bengali) ───
+const MONTHS_BN = ["","জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
+
+// ─── Utility ───
+function $(id) { return document.getElementById(id); }
+function showToast(msg, type="success") {
+  const t = $("toast");
+  t.textContent = msg;
+  t.className = `toast ${type}`;
+  t.classList.remove("hidden");
+  setTimeout(() => t.classList.add("hidden"), 3000);
+}
+function showEl(id) { const e=$(id); if(e) e.classList.remove("hidden"); }
+function hideEl(id) { const e=$(id); if(e) e.classList.add("hidden"); }
+function setErr(id, msg) { const e=$(id); if(!e) return; e.textContent=msg; msg ? e.classList.remove("hidden") : e.classList.add("hidden"); }
+
+// ─── Login ───
+window.switchLoginTab = function(tab) {
+  if(tab==="admin") {
+    $("tabAdmin").classList.add("active"); $("tabMember").classList.remove("active");
+    $("loginForm").classList.remove("hidden"); $("loginForm").classList.add("active");
+    $("memberSearchForm").classList.add("hidden"); $("memberSearchForm").classList.remove("active");
+  } else {
+    $("tabMember").classList.add("active"); $("tabAdmin").classList.remove("active");
+    $("memberSearchForm").classList.remove("hidden"); $("memberSearchForm").classList.add("active");
+    $("loginForm").classList.add("hidden"); $("loginForm").classList.remove("active");
+  }
+};
+
+window.doLogin = async function() {
+  const u = $("loginUsername").value.trim();
+  const p = $("loginPassword").value.trim();
+  setErr("loginError","");
+  if(!u||!p) { setErr("loginError","সব তথ্য দিন।"); return; }
+
+  // Check admin via Firebase Authentication (email login)
+  if(u.includes("@")) {
+    try {
+      const userCred = await signInWithEmailAndPassword(auth, u, p);
+      currentUser = { username: u, role: "admin", name: "Admin", id: userCred.user.uid };
+      enterApp();
+      return;
+    } catch(e) {
+      setErr("loginError","ভুল email বা password।");
+      return;
+    }
+  }
+  // Check officers in Firestore
+  try {
+    const q = query(collection(db,"officers"), where("username","==",u));
+    const snap = await getDocs(q);
+    if(snap.empty) { setErr("loginError","ভুল username বা password।"); return; }
+    const oDoc = snap.docs[0];
+    const o = oDoc.data();
+    if(o.password !== p) { setErr("loginError","ভুল password।"); return; }
+    currentUser = { username: o.username, role: "officer", name: o.name, id: oDoc.id };
+    enterApp();
+  } catch(e) { setErr("loginError","সংযোগ ত্রুটি: "+e.message); }
+};
+
+function enterApp(savedPage) {
+  $("loginScreen").classList.remove("active"); $("loginScreen").style.display="none";
+  $("appScreen").classList.remove("hidden"); $("appScreen").style.display="flex";
+  $("sidebarUserInfo").textContent = `👤 ${currentUser.name} (${currentUser.role})`;
+  $("topbarUser").textContent = currentUser.name;
+  $("topbarRole").textContent = currentUser.role==="admin" ? "🔴 Admin" : "🔵 Officer";
+  localStorage.setItem("sessionUser", JSON.stringify(currentUser));
+  buildNav();
+  navigateTo(savedPage || "dashboard");
+}
+
+window.doLogout = function() {
+  signOut(auth).catch(()=>{});
+  currentUser = null;
+  localStorage.removeItem("sessionUser");
+  localStorage.removeItem("sessionPage");
+  $("appScreen").style.display="none"; $("appScreen").classList.add("hidden");
+  $("loginScreen").style.display=""; $("loginScreen").classList.add("active");
+  $("loginUsername").value=""; $("loginPassword").value="";
+};
+
+// ─── Sidebar Nav ───
+function buildNav() {
+  const nav = $("sidebarNav");
+  const isAdmin = currentUser.role==="admin";
+  nav.innerHTML = `
+    <div class="nav-section">প্রধান</div>
+    <div class="nav-item" onclick="navigateTo('dashboard')"><span class="nav-icon">📊</span> Dashboard</div>
+    <div class="nav-item" onclick="navigateTo('members')"><span class="nav-icon">👥</span> সদস্য তালিকা</div>
+    <div class="nav-item" onclick="navigateTo('collection')"><span class="nav-icon">💰</span> প্রণামী সংগ্রহ</div>
+    <div class="nav-item" onclick="navigateTo('add-collection')"><span class="nav-icon">➕</span> নতুন মাসিক প্রণামী এন্ট্রি</div>
+     <div class="nav-item" onclick="navigateTo(' add-collection')"><span class="nav-icon">➕</span>  প্রণামী এন্ট্রি</div>
+    <div class="nav-section">Report</div>
+    ${!isAdmin ? `<div class="nav-item" onclick="navigateTo('my-collections')"><span class="nav-icon">🧾</span> My Collection</div>` : ""}
+    <div class="nav-item" onclick="navigateTo('reports')"><span class="nav-icon">📋</span> Report</div>
+    <div class="nav-section">খরচ</div>
+    <div class="nav-item" onclick="navigateTo('khoroc')"><span class="nav-icon">💸</span> খরচ এন্ট্রি</div>
+    ${isAdmin ? `
+    <div class="nav-section">Admin</div>
+    <div class="nav-item" onclick="navigateTo('final-report')"><span class="nav-icon">📊</span> চূড়ান্ত রিপোর্ট</div>
+    <div class="nav-item" onclick="navigateTo('officers')"><span class="nav-icon">🛡️</span> Officers</div>
+    <div class="nav-item" onclick="navigateTo('password-requests')"><span class="nav-icon">🔑</span> Password Change Request</div>
+    ` : `
+    <div class="nav-section">অ্যাকাউন্ট</div>
+    <div class="nav-item" onclick="navigateTo('change-password')"><span class="nav-icon">🔑</span> Change Password</div>
+    `}
+  `;
+}
+
+// ─── Navigation ───
+window.navigateTo = function(page) {
+  localStorage.setItem("sessionPage", page);
+  document.querySelectorAll(".page").forEach(p => { p.classList.add("hidden"); p.classList.remove("active"); });
+  const el = $(`page-${page}`);
+  if(el) { el.classList.remove("hidden"); el.classList.add("active"); }
+  $("pageTitle").textContent = {
+    "dashboard":"Dashboard","members":"সদস্য তালিকা","collection":"প্রণামী সংগ্রহ",
+    "add-collection":"নতুন প্রণামী","officers":"অফিসার","password-requests":"পাসওয়ার্ড অনুরোধ",
+    "change-password":"পাসওয়ার্ড পরিবর্তন","reports":"রিপোর্ট","my-collections":"আমার সংগ্রহ",
+    "khoroc":"💸 খরচ","final-report":"📊 চূড়ান্ত রিপোর্ট"
+  }[page] || page;
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+  const active = [...document.querySelectorAll(".nav-item")].find(n => n.onclick && n.onclick.toString().includes(`'${page}'`));
+  if(active) active.classList.add("active");
+  // Load page data
+  if(page==="dashboard") loadDashboard();
+  else if(page==="members") loadMembers();
+  else if(page==="collection") loadCollectionPage();
+  else if(page==="add-collection") loadAddCollectionForm();
+  else if(page==="officers") loadOfficers();
+  else if(page==="password-requests") loadPasswordRequests();
+  else if(page==="reports") generateReport();
+  else if(page==="my-collections") loadMyCollections();
+  else if(page==="khoroc") loadKhorocList();
+  else if(page==="final-report") loadFinalReport();
+  // close sidebar on mobile
+  $("sidebar").classList.remove("open");
+};
+
+window.toggleSidebar = function() { $("sidebar").classList.toggle("open"); };
+
+// ─── Dashboard ───
+async function loadDashboard() {
+  try {
+    const membersSnap = await getDocs(collection(db,"members"));
+    allMembers = membersSnap.docs.map(d => ({id:d.id,...d.data()}));
+    const total = allMembers.length;
+
+    const chandaSnap = await getDocs(collection(db,"chanda"));
+    const chandas = chandaSnap.docs.map(d => ({id:d.id,...d.data()}));
+
+    const now = new Date();
+    const thisMonth = now.getMonth()+1;
+    const thisYear = now.getFullYear();
+    const thisMonthChandas = chandas.filter(c => c.month==thisMonth && c.year==thisYear);
+    const totalCollected = thisMonthChandas.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+    const totalDue = thisMonthChandas.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+    const totalPending = thisMonthChandas.filter(c=>c.status==="pending").reduce((s,c)=>s+(c.amount||0),0);
+
+    $("statsGrid").innerHTML = `
+      <div class="stat-card"><div class="stat-icon" style="background:#EDE9FE">👥</div><div><div class="stat-value">${total}</div><div class="stat-label">মোট সদস্য</div></div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:#D1FAE5">💰</div><div><div class="stat-value">৳${totalCollected.toLocaleString()}</div><div class="stat-label">এই মাসে সংগ্রহ</div></div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:#FEE2E2">⚠️</div><div><div class="stat-value">৳${totalDue.toLocaleString()}</div><div class="stat-label">বকেয়া</div></div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:#FEF3C7">⏳</div><div><div class="stat-value">৳${totalPending.toLocaleString()}</div><div class="stat-label">অপেক্ষমান</div></div></div>
+    `;
+
+    // This month summary
+    const paid = thisMonthChandas.filter(c=>c.status==="paid").length;
+    const due = thisMonthChandas.filter(c=>c.status==="due").length;
+    const pending = thisMonthChandas.filter(c=>c.status==="pending").length;
+    $("thisMonthSummary").innerHTML = `
+      <p style="margin-bottom:10px;color:var(--text-muted)">${MONTHS_BN[thisMonth]} ${thisYear}</p>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <span class="badge badge-paid">✅ পরিশোধিত: ${paid}</span>
+        <span class="badge badge-due">❌ বকেয়া: ${due}</span>
+        <span class="badge badge-pending">⏳ অপেক্ষমান: ${pending}</span>
+      </div>
+    `;
+
+    // Recent transactions
+    const recent = [...chandas].sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0)).slice(0,8);
+    $("recentTransactions").innerHTML = recent.length ? recent.map(c => {
+      const m = allMembers.find(mb=>mb.id===c.memberId);
+      const color = c.status==="paid" ? "#D1FAE5" : c.status==="due" ? "#FEE2E2" : "#FEF3C7";
+      const icon = c.status==="paid" ? "✅" : c.status==="due" ? "❌" : "⏳";
+      return `<div class="transaction-item">
+        <div class="txn-icon" style="background:${color}">${icon}</div>
+        <div class="txn-info"><div class="txn-name">${m?.name||"অজানা"}</div><div class="txn-sub">${MONTHS_BN[c.month]||c.month} ${c.year}</div></div>
+        <div class="txn-amount">৳${(c.amount||0).toLocaleString()}</div>
+      </div>`;
+    }).join("") : `<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">কোনো লেনদেন নেই</div></div>`;
+    // Admin members panel
+    if(currentUser.role==="admin") {
+      const panel = document.getElementById("adminMembersPanel");
+      if(panel) panel.style.display="block";
+      renderDashMembers(allMembers);
+    }
+  } catch(e) { console.error(e); }
+}
+
+function renderDashMembers(members) {
+  const tbody = $("dashMembersBody");
+  if(!tbody) return;
+  tbody.innerHTML = members.length ? members.map(m=>`
+    <tr>
+      <td><span class="member-id-badge">${m.memberId||"—"}</span></td>
+      <td><strong>${m.name}</strong></td>
+      <td>${m.phone||"-"}</td>
+      <td>${m.address||"-"}</td>
+      <td>৳${(m.monthlyAmount||0).toLocaleString()}</td>
+      <td>
+        <button class="btn-sm btn-edit" onclick="openEditMemberModal('${m.id}');navigateTo('members')">✏️ Edit</button>
+        <button class="btn-sm btn-view" onclick="viewMemberDetail('${m.id}')">👁️ View</button>
+      </td>
+    </tr>
+  `).join("") : `<tr><td colspan="6"><div class="empty-state" style="padding:20px"><div class="empty-state-text">No members found</div></div></td></tr>`;
+}
+
+window.filterDashMembers = function() {
+  const q = ($("dashMemberSearch").value||"").toLowerCase();
+  renderDashMembers(allMembers.filter(m=>(m.name||"").toLowerCase().includes(q)||(m.memberId||"").toLowerCase().includes(q)));
+};
+async function loadMembers() {
+  try {
+    const snap = await getDocs(collection(db,"members"));
+    allMembers = snap.docs.map(d => ({id:d.id,...d.data()}));
+    renderMembersTable(allMembers);
+  } catch(e) { console.error(e); }
+}
+
+function renderMembersTable(members) {
+  const isAdmin = currentUser.role==="admin";
+  $("membersTableBody").innerHTML = members.length ? members.map((m,i) => `
+    <tr>
+      <td><span class="member-id-badge">${m.memberId||"—"}</span></td>
+      <td><strong>${m.name}</strong></td>
+      <td>${m.phone||"-"}</td>
+      <td>${m.address||"-"}</td>
+      <td>৳${(m.monthlyAmount||0).toLocaleString()}</td>
+      <td>
+        ${isAdmin ? `<button class="btn-sm btn-edit" onclick="openEditMemberModal('${m.id}')">✏️ Edit</button>
+        <button class="btn-sm btn-delete" onclick="deleteMember('${m.id}')">🗑️ Delete</button>` : ""}
+        <button class="btn-sm btn-view" onclick="viewMemberDetail('${m.id}')">👁️ View</button>
+      </td>
+    </tr>
+  `).join("") : `<tr><td colspan="6"><div class="empty-state"><div class="empty-state-icon">👥</div><div class="empty-state-text">কোনো সদস্য নেই</div></div></td></tr>`;
+  if(currentUser.role!=="admin") hideEl("addMemberBtn");
+}
+
+window.filterMemberList = function() {
+  const q = $("memberListSearch").value.toLowerCase();
+  renderMembersTable(allMembers.filter(m => (m.name||"").toLowerCase().includes(q) || (m.phone||"").includes(q) || (m.memberId||"").toLowerCase().includes(q)));
+};
+
+window.openAddMemberModal = function() {
+  if(currentUser.role !== "admin") { showToast("শুধুমাত্র Admin নতুন সদস্য যোগ করতে পারবে।"); return; }
+  editingMemberId = null;
+  $("addMemberModalTitle").textContent = "নতুন সদস্য যোগ করুন";
+  $("mMemberId").value=""; $("mName").value=""; $("mPhone").value=""; $("mAddress").value=""; $("mAmount").value="";
+  setErr("mError","");
+  showEl("addMemberModal");
+};
+
+window.openEditMemberModal = function(id) {
+  const m = allMembers.find(x=>x.id===id);
+  if(!m) return;
+  editingMemberId = id;
+  $("addMemberModalTitle").textContent = "Edit Member";
+  $("mMemberId").value=m.memberId||""; $("mName").value=m.name||""; $("mPhone").value=m.phone||""; $("mAddress").value=m.address||""; $("mAmount").value=m.monthlyAmount||"";
+  setErr("mError","");
+  showEl("addMemberModal");
+};
+
+window.saveMember = async function() {
+  if(currentUser.role !== "admin") { showToast("শুধুমাত্র Admin এই কাজ করতে পারবে।"); return; }
+  const memberId = $("mMemberId").value.trim();
+  const name = $("mName").value.trim();
+  const phone = $("mPhone").value.trim();
+  const address = $("mAddress").value.trim();
+  const amount = parseFloat($("mAmount").value)||0;
+  if(!memberId) { setErr("mError","Member ID আবশ্যক।"); return; }
+  if(!name) { setErr("mError","নাম আবশ্যক।"); return; }
+  try {
+    if(editingMemberId) {
+      // Check duplicate memberId (excluding self) via Firestore
+      const dupQ = query(collection(db,"members"), where("memberId","==",memberId));
+      const dupSnap = await getDocs(dupQ);
+      const dup = dupSnap.docs.find(d => d.id !== editingMemberId);
+      if(dup) { setErr("mError","এই Member ID আগে থেকেই আছে।"); return; }
+      await updateDoc(doc(db,"members",editingMemberId), {memberId,name,phone,address,monthlyAmount:amount});
+      showToast("Member updated successfully.");
+    } else {
+      // Check duplicate via Firestore (not stale allMembers)
+      const dupQ = query(collection(db,"members"), where("memberId","==",memberId));
+      const dupSnap = await getDocs(dupQ);
+      if(!dupSnap.empty) { setErr("mError","এই Member ID আগে থেকেই আছে।"); return; }
+      await setDoc(doc(db,"members", memberId), {memberId,name,phone,address,monthlyAmount:amount, createdAt:serverTimestamp()});
+      showToast("নতুন সদস্য সংরক্ষিত হয়েছে।");
+    }
+    closeModal("addMemberModal");
+    loadMembers();
+  } catch(e) { setErr("mError","ত্রুটি: "+e.message); }
+};
+
+window.deleteMember = async function(id) {
+  if(!confirm("এই সদস্য মুছে ফেলবেন?")) return;
+  try {
+    await deleteDoc(doc(db,"members",id));
+    showToast("সদস্য মুছে ফেলা হয়েছে।","error");
+    loadMembers();
+  } catch(e) { showToast("ত্রুটি: "+e.message,"error"); }
+};
+
+window.viewMemberDetail = async function(id) {
+  const m = allMembers.find(x=>x.id===id);
+  if(!m) return;
+  $("memberDetailName").textContent = m.name;
+  $("memberDetailContent").innerHTML = `<div class="member-detail-header">
+    <div class="member-avatar">${m.name.charAt(0)}</div>
+    <div><div class="member-detail-name">${m.name}</div>
+    <div class="member-detail-sub">🪪 Member ID: <strong>${m.memberId||"—"}</strong></div>
+    <div class="member-detail-sub">📞 ${m.phone||"-"} | 📍 ${m.address||"-"}</div>
+    <div class="member-detail-sub">Monthly: ৳${(m.monthlyAmount||0).toLocaleString()}</div></div>
+  </div><p style="color:var(--text-muted);font-size:13px">প্রণামীর ইতিহাস লোড হচ্ছে...</p>`;
+  showEl("memberDetailModal");
+  // Load chanda history
+  try {
+    const q = query(collection(db,"chanda"), where("memberId","==",id));
+    const snap = await getDocs(q);
+    const chandas = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.year-a.year||b.month-a.month);
+    const years = [...new Set(chandas.map(c=>c.year))].sort((a,b)=>b-a);
+    let html = `<div class="member-detail-header">
+      <div class="member-avatar">${m.name.charAt(0)}</div>
+      <div><div class="member-detail-name">${m.name}</div>
+      <div class="member-detail-sub">🪪 Member ID: <strong>${m.memberId||"—"}</strong></div>
+      <div class="member-detail-sub">📞 ${m.phone||"-"} | 📍 ${m.address||"-"}</div>
+      <div class="member-detail-sub">Monthly: ৳${(m.monthlyAmount||0).toLocaleString()}</div></div>
+    </div>`;
+    if(!chandas.length) { html+='<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">কোনো প্রণামীর রেকর্ড নেই</div></div>'; }
+    else {
+      years.forEach(yr => {
+        const yc = chandas.filter(c=>c.year==yr);
+        html += `<h4 style="margin:16px 0 8px;font-size:14px">${yr} সালের প্রণামী</h4>`;
+        html += `<div class="table-wrap"><table class="data-table"><thead><tr><th>মাস</th><th>পরিমাণ</th><th>Status</th><th>মন্তব্য</th></tr></thead><tbody>`;
+        yc.forEach(c => {
+          const badge = c.status==="paid" ? "badge-paid" : c.status==="due" ? "badge-due" : "badge-pending";
+          const label = c.status==="paid" ? "✅ পরিশোধিত" : c.status==="due" ? "❌ বকেয়া" : "⏳ অপেক্ষমান";
+          html += `<tr><td>${MONTHS_BN[c.month]||c.month}</td><td>৳${(c.amount||0).toLocaleString()}</td><td><span class="badge ${badge}">${label}</span></td><td>${c.note||"-"}</td></tr>`;
+        });
+        html += `</tbody></table></div>`;
+      });
+    }
+    $("memberDetailContent").innerHTML = html;
+  } catch(e) { console.error(e); }
+};
+
+// ─── Collection Page ───
+window.loadCollectionPage = async function() {
+  const year = $("filterYear").value;
+  const month = $("filterMonth").value;
+  try {
+    let q;
+    if(month) q = query(collection(db,"chanda"), where("year","==",parseInt(year)), where("month","==",parseInt(month)));
+    else q = query(collection(db,"chanda"), where("year","==",parseInt(year)));
+    const snap = await getDocs(q);
+    const chandas = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.month-a.month);
+    if(!allMembers.length) { const ms = await getDocs(collection(db,"members")); allMembers=ms.docs.map(d=>({id:d.id,...d.data()})); }
+    const isAdmin = currentUser.role==="admin";
+    $("collectionTableBody").innerHTML = chandas.length ? chandas.map((c,i) => {
+      const m = allMembers.find(mb=>mb.id===c.memberId);
+      const badge = c.status==="paid" ? "badge-paid" : c.status==="due" ? "badge-due" : "badge-pending";
+      const label = c.status==="paid" ? "✅ Paid" : c.status==="due" ? "❌ Due" : "⏳ Pending";
+      // Officer can only edit chanda they collected; admin can edit all
+      const canEdit = isAdmin || (c.collectedBy === currentUser.name);
+      // ── type badge ──
+      const isPuja = c.entryType === "puja";
+      const typeBadge = isPuja
+        ? `<span style="background:#FEF3C7;color:#92400E;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600">🪷 পূজার</span>${c.pujaLabel ? `<br><span style="font-size:10px;color:var(--text-muted)">${c.pujaLabel}</span>` : ""}`
+        : `<span style="background:#EDE9FE;color:#5B21B6;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600">📅 মাসিক</span>`;
+      // ── donor/member name ──
+      const displayName = isPuja
+        ? (c.donorName || m?.name || "—")
+        : `${m?.name||"অজানা"} <span style="font-size:11px;color:var(--text-muted)">[${m?.memberId||"—"}]</span>`;
+      // ── month col ──
+      const monthCol = isPuja ? `<span style="color:var(--text-muted);font-size:12px">—</span>` : (MONTHS_BN[c.month]||c.month);
+      return `<tr>
+        <td>${i+1}</td>
+        <td>${typeBadge}</td>
+        <td>${displayName}</td>
+        <td>${monthCol}</td>
+        <td>${c.year}</td>
+        <td>৳${(c.amount||0).toLocaleString()}</td>
+        <td><span class="badge ${badge}">${label}</span></td>
+        <td>${c.collectedBy||"-"}</td>
+        <td>${c.entryDate || (c.createdAt?.toDate ? c.createdAt.toDate().toLocaleDateString("en-GB") : "-")}</td>
+        <td>
+          ${canEdit ? `<button class="btn-sm btn-edit" onclick="editChandaStatus('${c.id}','${c.status}')">✏️ Edit</button>` : `<span style="font-size:11px;color:var(--text-muted)">—</span>`}
+          ${isAdmin ? `<button class="btn-sm btn-delete" onclick="deleteChanda('${c.id}')">🗑️ Delete</button>` : ""}
+        </td>
+      </tr>`;
+    }).join("") : `<tr><td colspan="10"><div class="empty-state"><div class="empty-state-icon">💰</div><div class="empty-state-text">কোনো এন্ট্রি নেই</div></div></td></tr>`;
+  } catch(e) { console.error(e); }
+};
+
+window.editChandaStatus = async function(id, currentStatus) {
+  const statuses = ["paid","due","pending"];
+  const labels = {"paid":"✅ Paid (পরিশোধিত)","due":"❌ Due (বকেয়া)","pending":"⏳ Pending (অপেক্ষমান)"};
+  const next = statuses[(statuses.indexOf(currentStatus)+1)%3];
+  if(!confirm(`Status পরিবর্তন করবেন?\n${labels[currentStatus]} → ${labels[next]}`)) return;
+  try {
+    await updateDoc(doc(db,"chanda",id), {status:next});
+    showToast("Status আপডেট হয়েছে।");
+    loadCollectionPage();
+  } catch(e) { showToast("ত্রুটি: "+e.message,"error"); }
+};
+
+window.deleteChanda = async function(id) {
+  if(!confirm("এই এন্ট্রি মুছে ফেলবেন?")) return;
+  try {
+    await deleteDoc(doc(db,"chanda",id));
+    showToast("এন্ট্রি মুছে ফেলা হয়েছে।","error");
+    loadCollectionPage();
+  } catch(e) { showToast("ত্রুটি: "+e.message,"error"); }
+};
+
+// ─── Add Collection Entry ───
+// ─── Entry Type Toggle ───
+let _currentEntryType = "monthly";
+
+window.switchEntryType = function(type) {
+  _currentEntryType = type;
+  if(type === "monthly") {
+    $("typeBtnMonthly").style.background = "var(--primary)";
+    $("typeBtnMonthly").style.color = "white";
+    $("typeBtnPuja").style.background = "#F3F4F6";
+    $("typeBtnPuja").style.color = "var(--text-muted)";
+    showEl("monthlyFields"); hideEl("pujaFields");
+  } else {
+    $("typeBtnPuja").style.background = "var(--primary)";
+    $("typeBtnPuja").style.color = "white";
+    $("typeBtnMonthly").style.background = "#F3F4F6";
+    $("typeBtnMonthly").style.color = "var(--text-muted)";
+    hideEl("monthlyFields"); showEl("pujaFields");
+    hideEl("pujaLabelMemberGroup"); hideEl("pujaLabelNameGroup");
+  }
+  setErr("entryError","");
+};
+
+window.onPujaLabelChange = function() {
+  const val = document.querySelector('input[name="pujaLabel"]:checked')?.value;
+  if(val === "সদস্য") {
+    showEl("pujaLabelMemberGroup"); hideEl("pujaLabelNameGroup");
+  } else {
+    hideEl("pujaLabelMemberGroup"); showEl("pujaLabelNameGroup");
+    if(val === "গ্রাম") {
+      $("pujaLabelNameLabel").textContent = "গ্রামের নাম *";
+      $("entryPujaDonorName").placeholder = "গ্রামের নাম লিখুন...";
+    } else {
+      $("pujaLabelNameLabel").textContent = "দাতার নাম / বিবরণ *";
+      $("entryPujaDonorName").placeholder = "নাম বা বিবরণ লিখুন...";
+    }
+  }
+};
+
+async function loadAddCollectionForm() {
+  if(!allMembers.length) { const ms = await getDocs(collection(db,"members")); allMembers=ms.docs.map(d=>({id:d.id,...d.data()})); }
+  // Populate both member dropdowns
+  const memberOpts = `<option value="">-- সদস্য নির্বাচন করুন --</option>` +
+    allMembers.map(m=>`<option value="${m.id}">${m.name} [${m.memberId||"—"}]</option>`).join("");
+  $("entryMember").innerHTML = memberOpts;
+  $("entryPujaMember").innerHTML = memberOpts;
+  const now = new Date();
+  $("entryMonth").value = now.getMonth()+1;
+  $("entryYear").value = now.getFullYear();
+  $("entryDate").value = now.toISOString().split("T")[0];
+  // Show collector name
+  $("entryCollector").value = currentUser.name + (currentUser.role==="admin" ? " (Admin)" : " (Officer)");
+  // Reset to monthly tab
+  switchEntryType("monthly");
+  // Reset puja label radios
+  document.querySelectorAll('input[name="pujaLabel"]').forEach(r => r.checked=false);
+  $("entryAmount").value=""; $("entryNote").value="";
+  setErr("entryError","");
+}
+
+// Auto-fill amount when member selected (monthly)
+document.addEventListener("change", function(e) {
+  if(e.target.id === "entryMember") {
+    const m = allMembers.find(x=>x.id===e.target.value);
+    if(m && m.monthlyAmount) $("entryAmount").value = m.monthlyAmount;
+  }
+});
+
+window.submitChandaEntry = async function() {
+  const amount = parseFloat($("entryAmount").value)||0;
+  const status = $("entryStatus").value;
+  const note = $("entryNote").value.trim();
+  const entryDate = $("entryDate").value;
+  if(!amount) { setErr("entryError","প্রণামীর পরিমাণ লিখুন।"); return; }
+  if(!entryDate) { setErr("entryError","তারিখ দিন।"); return; }
+
+  try {
+    if(_currentEntryType === "monthly") {
+      // ── Monthly pronami ──
+      const memberId = $("entryMember").value;
+      const month = parseInt($("entryMonth").value);
+      const year = parseInt($("entryYear").value);
+      if(!memberId) { setErr("entryError","সদস্য নির্বাচন করুন।"); return; }
+      const dup = query(collection(db,"chanda"), where("memberId","==",memberId), where("month","==",month), where("year","==",year));
+      const dupSnap = await getDocs(dup);
+      if(!dupSnap.empty) { setErr("entryError","এই সদস্যের এই মাসের প্রণামী এন্ট্রি আগে থেকেই আছে।"); return; }
+      const memberName = allMembers.find(m=>m.id===memberId)?.name || "";
+      await addDoc(collection(db,"chanda"), {
+        entryType:"monthly", memberId, memberName, month, year,
+        amount, status, note, entryDate,
+        collectedBy:currentUser.name, collectorId:currentUser.id,
+        createdAt:serverTimestamp()
+      });
+
+    } else {
+      // ── Puja pronami ──
+      const label = document.querySelector('input[name="pujaLabel"]:checked')?.value;
+      if(!label) { setErr("entryError","লেবেল নির্বাচন করুন (সদস্য / গ্রাম / অন্যান্য)।"); return; }
+      let donorName = "";
+      let memberId = "";
+      if(label === "সদস্য") {
+        memberId = $("entryPujaMember").value;
+        if(!memberId) { setErr("entryError","সদস্য নির্বাচন করুন।"); return; }
+        donorName = allMembers.find(m=>m.id===memberId)?.name || "";
+      } else {
+        donorName = $("entryPujaDonorName").value.trim();
+        if(!donorName) { setErr("entryError","নাম/বিবরণ লিখুন।"); return; }
+      }
+      const now = new Date();
+      await addDoc(collection(db,"chanda"), {
+        entryType:"puja", pujaLabel:label,
+        memberId, donorName,
+        month: now.getMonth()+1, year: now.getFullYear(),
+        amount, status, note, entryDate,
+        collectedBy:currentUser.name, collectorId:currentUser.id,
+        createdAt:serverTimestamp()
+      });
+    }
+
+    showToast("প্রণামী এন্ট্রি সংরক্ষিত হয়েছে। ✅");
+    $("entryAmount").value=""; $("entryNote").value=""; $("entryDate").value="";
+    $("entryMember").value=""; $("entryPujaMember").value=""; $("entryPujaDonorName").value="";
+    document.querySelectorAll('input[name="pujaLabel"]').forEach(r=>r.checked=false);
+    hideEl("pujaLabelMemberGroup"); hideEl("pujaLabelNameGroup");
+    setErr("entryError","");
+    navigateTo("collection");
+  } catch(e) { setErr("entryError","ত্রুটি: "+e.message); }
+};
+
+// ─── Officers ───
+async function loadOfficers() {
+  try {
+    const snap = await getDocs(collection(db,"officers"));
+    const officers = snap.docs.map(d=>({id:d.id,...d.data()}));
+    $("officersTableBody").innerHTML = officers.length ? officers.map((o,i)=>`
+      <tr>
+        <td>${i+1}</td>
+        <td>${o.name}</td>
+        <td>${o.username}</td>
+        <td>${o.phone||"-"}</td>
+        <td>${o.createdAt?.toDate ? o.createdAt.toDate().toLocaleDateString("en-GB") : "-"}</td>
+        <td>
+          <button class="btn-sm btn-edit" onclick="openUpdatePwdModal('${o.id}')">🔑 Password</button>
+          <button class="btn-sm btn-delete" onclick="deleteOfficer('${o.id}')">🗑️ Delete</button>
+        </td>
+      </tr>
+    `).join("") : `<tr><td colspan="6"><div class="empty-state"><div class="empty-state-icon">🛡️</div><div class="empty-state-text">কোনো অফিসার নেই</div></div></td></tr>`;
+  } catch(e) { console.error(e); }
+}
+
+window.openAddOfficerModal = function() {
+  editingOfficerId = null;
+  $("oName").value=""; $("oUsername").value=""; $("oPassword").value=""; $("oPhone").value="";
+  setErr("oError","");
+  showEl("addOfficerModal");
+};
+
+window.saveOfficer = async function() {
+  const name = $("oName").value.trim();
+  const username = $("oUsername").value.trim().toLowerCase();
+  const password = $("oPassword").value.trim();
+  const phone = $("oPhone").value.trim();
+  if(!name||!username||!password) { setErr("oError","নাম, username ও password আবশ্যক।"); return; }
+  if(username==="admin") { setErr("oError","'admin' username ব্যবহার করা যাবে না।"); return; }
+  try {
+    const dup = query(collection(db,"officers"), where("username","==",username));
+    const dupSnap = await getDocs(dup);
+    if(!dupSnap.empty) { setErr("oError","এই username আগে থেকেই আছে।"); return; }
+    await addDoc(collection(db,"officers"), {name,username,password,phone,createdAt:serverTimestamp()});
+    showToast("নতুন অফিসার তৈরি হয়েছে।");
+    closeModal("addOfficerModal");
+    loadOfficers();
+  } catch(e) { setErr("oError","ত্রুটি: "+e.message); }
+};
+
+window.deleteOfficer = async function(id) {
+  if(!confirm("এই অফিসার মুছে ফেলবেন?")) return;
+  try {
+    await deleteDoc(doc(db,"officers",id));
+    showToast("অফিসার মুছে ফেলা হয়েছে।","error");
+    loadOfficers();
+  } catch(e) { showToast("ত্রুটি: "+e.message,"error"); }
+};
+
+window.openUpdatePwdModal = function(id) {
+  $("updatePwdOfficerId").value = id;
+  $("updatePwdNew").value = "";
+  setErr("updatePwdError","");
+  showEl("updatePwdModal");
+};
+
+window.confirmUpdatePassword = async function() {
+  const id = $("updatePwdOfficerId").value;
+  const pwd = $("updatePwdNew").value.trim();
+  if(!pwd) { setErr("updatePwdError","পাসওয়ার্ড দিন।"); return; }
+  try {
+    await updateDoc(doc(db,"officers",id), {password:pwd});
+    showToast("পাসওয়ার্ড পরিবর্তন হয়েছে।");
+    closeModal("updatePwdModal");
+  } catch(e) { setErr("updatePwdError","ত্রুটি: "+e.message); }
+};
+
+// ─── Password Requests ───
+async function loadPasswordRequests() {
+  try {
+    const snap = await getDocs(collection(db,"passwordRequests"));
+    const reqs = snap.docs.map(d=>({id:d.id,...d.data()})).filter(r=>r.status==="pending");
+    $("pwdRequestsList").innerHTML = reqs.length ? reqs.map(r=>`
+      <div class="pwd-req-card">
+        <div class="pwd-req-info">
+          <div class="pwd-req-name">${r.officerName} (${r.username})</div>
+          <div class="pwd-req-date">নতুন পাসওয়ার্ড: <strong>${r.newPassword}</strong></div>
+        </div>
+        <div class="pwd-req-actions">
+          <button class="btn-sm btn-approve" onclick="approvePasswordReq('${r.id}','${r.officerId}','${r.newPassword}')">✅ Approve</button>
+          <button class="btn-sm btn-reject" onclick="rejectPasswordReq('${r.id}')">❌ Reject</button>
+        </div>
+      </div>
+    `).join("") : `<div class="empty-state"><div class="empty-state-icon">✅</div><div class="empty-state-text">কোনো অনুরোধ নেই</div></div>`;
+  } catch(e) { console.error(e); }
+}
+
+window.approvePasswordReq = async function(reqId, officerId, newPwd) {
+  try {
+    await updateDoc(doc(db,"officers",officerId), {password:newPwd});
+    await updateDoc(doc(db,"passwordRequests",reqId), {status:"approved"});
+    showToast("পাসওয়ার্ড পরিবর্তন অনুমোদিত হয়েছে।");
+    loadPasswordRequests();
+  } catch(e) { showToast("ত্রুটি: "+e.message,"error"); }
+};
+
+window.rejectPasswordReq = async function(reqId) {
+  try {
+    await updateDoc(doc(db,"passwordRequests",reqId), {status:"rejected"});
+    showToast("অনুরোধ প্রত্যাখ্যান করা হয়েছে।","error");
+    loadPasswordRequests();
+  } catch(e) { showToast("ত্রুটি: "+e.message,"error"); }
+};
+
+// ─── Officer Change Password Request ───
+window.submitPasswordRequest = async function() {
+  const newPwd = $("newPwdInput").value.trim();
+  const confirmPwd = $("confirmPwdInput").value.trim();
+  setErr("pwdReqError","");
+  hideEl("pwdReqSuccess");
+  if(!newPwd) { setErr("pwdReqError","নতুন পাসওয়ার্ড দিন।"); return; }
+  if(newPwd!==confirmPwd) { setErr("pwdReqError","পাসওয়ার্ড মিলছে না।"); return; }
+  try {
+    await addDoc(collection(db,"passwordRequests"), {
+      officerId: currentUser.id, officerName: currentUser.name,
+      username: currentUser.username, newPassword: newPwd,
+      status: "pending", createdAt: serverTimestamp()
+    });
+    showEl("pwdReqSuccess");
+    $("pwdReqSuccess").textContent = "অনুরোধ পাঠানো হয়েছে। Admin অনুমোদন করলে পরিবর্তন হবে।";
+    $("newPwdInput").value=""; $("confirmPwdInput").value="";
+  } catch(e) { setErr("pwdReqError","ত্রুটি: "+e.message); }
+};
+
+// ─── Reports ───
+window.generateReport = async function() {
+  const year = parseInt($("reportYear").value);
+  try {
+    const [memberSnap, chandaSnap] = await Promise.all([getDocs(collection(db,"members")), getDocs(query(collection(db,"chanda"),where("year","==",year)))]);
+    const members = memberSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const chandas = chandaSnap.docs.map(d=>({id:d.id,...d.data()}));
+    let html = `<div class="month-grid">`;
+    for(let m=1;m<=12;m++) {
+      const mc = chandas.filter(c=>c.month===m);
+      const paid = mc.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+      const due = mc.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+      const pending = mc.filter(c=>c.status==="pending").reduce((s,c)=>s+(c.amount||0),0);
+      const total = paid+due+pending;
+      const pct = total ? Math.round(paid/total*100) : 0;
+      html += `<div class="month-card">
+        <div class="month-card-header"><span class="month-name">${MONTHS_BN[m]}</span><span class="month-total">৳${total.toLocaleString()}</span></div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+        <div class="month-stats">
+          <span class="month-stat-paid">✅ ৳${paid.toLocaleString()}</span>
+          <span class="month-stat-due">❌ ৳${due.toLocaleString()}</span>
+          <span class="month-stat-pending">⏳ ৳${pending.toLocaleString()}</span>
+        </div>
+      </div>`;
+    }
+    html += `</div>`;
+    $("reportContent").innerHTML = html;
+  } catch(e) { console.error(e); }
+};
+
+// ─── Public Member Search ───
+window.searchMemberPublic = async function() {
+  const q = $("memberSearchInput").value.trim();
+  const res = $("memberPublicResults");
+  if(q.length < 2) { res.innerHTML=""; return; }
+  try {
+    const snap = await getDocs(collection(db,"members"));
+    const members = snap.docs.map(d=>({id:d.id,...d.data()})).filter(m=>
+      (m.name||"").toLowerCase().includes(q.toLowerCase()) ||
+      (m.memberId||"").toLowerCase().includes(q.toLowerCase())
+    );
+    res.innerHTML = members.length ? members.map(m=>`
+      <div class="member-result-card" onclick="showPublicMemberDetail('${m.id}')">
+        <div class="member-result-name">${m.name} <span style="font-size:12px;color:var(--primary);font-weight:600">[${m.memberId||"—"}]</span></div>
+        <div class="member-result-sub">📞 ${m.phone||"-"} | মাসিক প্রণামী: ৳${(m.monthlyAmount||0).toLocaleString()}</div>
+      </div>
+    `).join("") : `<div class="empty-state" style="padding:16px"><div class="empty-state-text">কোনো সদস্য পাওয়া যায়নি</div></div>`;
+  } catch(e) {}
+};
+
+window.showPublicMemberDetail = async function(id) {
+  try {
+    const mDoc = await getDoc(doc(db,"members",id));
+    if(!mDoc.exists()) return;
+    const m = {id:mDoc.id,...mDoc.data()};
+    const q = query(collection(db,"chanda"), where("memberId","==",id));
+    const snap = await getDocs(q);
+    const chandas = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.year-a.year||b.month-a.month);
+    $("memberDetailName").textContent = m.name;
+
+    // ── Current-year summary up to this month ──
+    const now = new Date();
+    const curYear = now.getFullYear();
+    const curMonth = now.getMonth() + 1; // 1-based
+
+    // Chandas of current year only, months 1..curMonth
+    const thisYearChandas = chandas.filter(c => c.year === curYear && c.month >= 1 && c.month <= curMonth);
+
+    const paidEntries   = thisYearChandas.filter(c => c.status === "paid");
+    const dueEntries    = thisYearChandas.filter(c => c.status === "due");
+    const pendingEntries= thisYearChandas.filter(c => c.status === "pending");
+    const recordedMonths= new Set(thisYearChandas.map(c => c.month));
+
+    const totalPaid   = paidEntries.reduce((s,c)=>s+(c.amount||0),0);
+    const totalDue    = dueEntries.reduce((s,c)=>s+(c.amount||0),0);
+    const totalPending= pendingEntries.reduce((s,c)=>s+(c.amount||0),0);
+    const paidCount   = paidEntries.length;
+    const dueCount    = dueEntries.length;
+    const missingCount= curMonth - recordedMonths.size; // months with no entry at all
+    const missingAmount   = missingCount * (m.monthlyAmount || 0);
+    const totalPendingAll = totalPending + missingAmount;
+    const pendingAllCount = pendingEntries.length + missingCount;
+
+    // Build month pill row — show each month 1..curMonth with its status
+    const monthPills = Array.from({length: curMonth}, (_,i) => {
+      const mn = i + 1;
+      const entry = thisYearChandas.find(c => c.month === mn);
+      if (!entry) return `<span class="month-pill missing" title="কোনো এন্ট্রি নেই">${MONTHS_BN[mn]}</span>`;
+      if (entry.status === "paid")    return `<span class="month-pill paid" title="পরিশোধিত">✅ ${MONTHS_BN[mn]}</span>`;
+      if (entry.status === "due")     return `<span class="month-pill due" title="বকেয়া">❌ ${MONTHS_BN[mn]}</span>`;
+      return `<span class="month-pill pending" title="অপেক্ষমান">⏳ ${MONTHS_BN[mn]}</span>`;
+    }).join("");
+
+    let html = `<div class="member-detail-header">
+      <div class="member-avatar">${(m.name||"?").charAt(0)}</div>
+      <div>
+        <div class="member-detail-name">${m.name}</div>
+        <div class="member-detail-sub">🪪 ID: ${m.memberId||"—"}</div>
+        <div class="member-detail-sub">📞 ${m.phone||"-"}</div>
+        <div class="member-detail-sub">মাসিক প্রণামী: ৳${(m.monthlyAmount||0).toLocaleString()}</div>
+      </div>
+    </div>
+
+    <!-- ── Current-year summary card ── -->
+    <div class="member-year-summary">
+      <div class="member-year-summary-title">
+        📅 ${curYear} সালের সারসংক্ষেপ — জানুয়ারি থেকে ${MONTHS_BN[curMonth]} পর্যন্ত (${curMonth} মাস)
+      </div>
+      <div class="summary-stats-row">
+        <div class="summary-stat-box paid-box">
+          <div class="summary-stat-label">✅ পরিশোধিত</div>
+          <div class="summary-stat-num">${paidCount} মাস</div>
+          <div class="summary-stat-sub" style="font-size:14px;font-weight:700;color:#6EE7B7;margin-top:5px">৳${totalPaid.toLocaleString()}</div>
+        </div>
+        <div class="summary-stat-box due-box">
+          <div class="summary-stat-label">❌ বকেয়া</div>
+          <div class="summary-stat-num">${dueCount} মাস</div>
+          <div class="summary-stat-sub" style="font-size:14px;font-weight:700;color:#FCA5A5;margin-top:5px">৳${totalDue.toLocaleString()}</div>
+        </div>
+        <div class="summary-stat-box neutral-box">
+          <div class="summary-stat-label">⏳ অপেক্ষমান / নেই</div>
+          <div class="summary-stat-num">${pendingAllCount} মাস</div>
+          <div class="summary-stat-sub" style="font-size:14px;font-weight:700;color:#FCD34D;margin-top:5px">৳${totalPendingAll.toLocaleString()}</div>
+        </div>
+      </div>
+      <div class="month-pills">${monthPills}</div>
+    </div>`;
+
+    if(!chandas.length) {
+      html += `<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">কোনো প্রণামীর রেকর্ড নেই</div></div>`;
+    } else {
+      const years = [...new Set(chandas.map(c=>c.year))].sort((a,b)=>b-a);
+      years.forEach(yr => {
+        const yc = chandas.filter(c=>c.year==yr);
+        html += `<h4 style="margin:16px 0 8px;font-size:14px;font-weight:600">${yr} সালের সম্পূর্ণ বিবরণ</h4>
+        <div class="table-wrap"><table class="data-table">
+        <thead><tr><th>মাস</th><th>পরিমাণ</th><th>Status</th><th>সংগ্রহকারী</th><th>তারিখ</th></tr></thead><tbody>`;
+        yc.forEach(c => {
+          const badge = c.status==="paid" ? "badge-paid" : c.status==="due" ? "badge-due" : "badge-pending";
+          const label = c.status==="paid" ? "✅ পরিশোধিত" : c.status==="due" ? "❌ বকেয়া" : "⏳ অপেক্ষমান";
+          const collDate = c.entryDate || (c.createdAt?.toDate ? c.createdAt.toDate().toLocaleDateString("bn-BD") : "-");
+          html += `<tr><td>${MONTHS_BN[c.month]||c.month}</td><td>৳${(c.amount||0).toLocaleString()}</td><td><span class="badge ${badge}">${label}</span></td><td>${c.collectedBy||"-"}</td><td>${collDate}</td></tr>`;
+        });
+        html += `</tbody></table></div>`;
+      });
+    }
+    $("memberDetailContent").innerHTML = html;
+    showEl("memberDetailModal");
+  } catch(e) { console.error(e); }
+};
+
+// ─── My Collections (Officer) ───
+window.loadMyCollections = async function() {
+  const year = parseInt($("myColYear").value);
+  const officerName = currentUser.name;
+  try {
+    const [chandaSnap, memberSnap] = await Promise.all([
+      getDocs(query(collection(db,"chanda"), where("year","==",year), where("collectedBy","==",officerName))),
+      getDocs(collection(db,"members"))
+    ]);
+    const chandas = chandaSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const members = memberSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const totalEntries = chandas.length;
+    const totalAmount = chandas.reduce((s,c)=>s+(c.amount||0),0);
+    const paidAmount = chandas.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+    const dueAmount = chandas.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+
+    $("myCollectionSummary").innerHTML = `
+      <div class="stat-card" style="flex:1;min-width:140px"><div class="stat-icon">📋</div><div class="stat-value">${totalEntries}</div><div class="stat-label">মোট এন্ট্রি</div></div>
+      <div class="stat-card" style="flex:1;min-width:140px"><div class="stat-icon">💰</div><div class="stat-value">৳${totalAmount.toLocaleString()}</div><div class="stat-label">মোট সংগ্রহ</div></div>
+      <div class="stat-card" style="flex:1;min-width:140px"><div class="stat-icon">✅</div><div class="stat-value">৳${paidAmount.toLocaleString()}</div><div class="stat-label">পরিশোধিত</div></div>
+      <div class="stat-card" style="flex:1;min-width:140px"><div class="stat-icon">❌</div><div class="stat-value">৳${dueAmount.toLocaleString()}</div><div class="stat-label">বকেয়া</div></div>
+    `;
+
+    const sorted = chandas.sort((a,b)=>b.year-a.year||b.month-a.month);
+    $("myCollectionTable").innerHTML = sorted.length ? `
+      <div class="table-wrap"><table class="data-table">
+        <thead><tr><th>#</th><th>ধরন</th><th>সদস্য / দাতা</th><th>মাস</th><th>পরিমাণ</th><th>Status</th><th>মন্তব্য</th><th>তারিখ</th></tr></thead>
+        <tbody>${sorted.map((c,i)=>{
+          const m = members.find(mb=>mb.id===c.memberId);
+          const badge = c.status==="paid"?"badge-paid":c.status==="due"?"badge-due":"badge-pending";
+          const statusLabel = c.status==="paid"?"✅ Paid":c.status==="due"?"❌ Due":"⏳ Pending";
+          const isPuja = c.entryType==="puja";
+          const typeBadge = isPuja
+            ? `<span style="background:#FEF3C7;color:#92400E;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600">🪷 পূজার</span>${c.pujaLabel?`<br><span style="font-size:10px;color:var(--text-muted)">${c.pujaLabel}</span>`:""}`
+            : `<span style="background:#EDE9FE;color:#5B21B6;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600">📅 মাসিক</span>`;
+          const displayName = isPuja ? (c.donorName||m?.name||"—") : `${m?.name||"অজানা"} <span style="font-size:11px;color:var(--primary)">[${m?.memberId||"—"}]</span>`;
+          const monthCol = isPuja ? `<span style="color:var(--text-muted);font-size:12px">—</span>` : (MONTHS_BN[c.month]||c.month);
+          return `<tr><td>${i+1}</td><td>${typeBadge}</td><td>${displayName}</td><td>${monthCol}</td><td>৳${(c.amount||0).toLocaleString()}</td><td><span class="badge ${badge}">${statusLabel}</span></td><td style="color:var(--text-muted);font-size:12px">${c.note||"-"}</td><td>${c.entryDate||"-"}</td></tr>`;
+        }).join("")}</tbody>
+      </table></div>` : `<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">${year} সালে কোনো সংগ্রহ নেই</div></div>`;
+  } catch(e) { console.error(e); }
+};
+
+// ─── PDF Report ───
+window.downloadReportPDF = async function() {
+  const year = parseInt($("reportYear").value);
+  try {
+    const [memberSnap, chandaSnap] = await Promise.all([
+      getDocs(collection(db,"members")),
+      getDocs(query(collection(db,"chanda"), where("year","==",year)))
+    ]);
+    const members = memberSnap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.memberId||"").localeCompare(b.memberId||""));
+    const chandas = chandaSnap.docs.map(d=>({id:d.id,...d.data()}));
+
+    let grandTotal = 0;
+    const rows = members.map(m => {
+      const mc = chandas.filter(c=>c.memberId===m.id);
+      const paidMonths = mc.filter(c=>c.status==="paid").length;
+      const totalPaid = mc.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+      const totalDue = mc.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+      const officers = [...new Set(mc.map(c=>c.collectedBy).filter(Boolean))].join(", ")||"-";
+      grandTotal += totalPaid;
+      return { id:m.memberId||"—", name:m.name, paidMonths, totalPaid, totalDue, officers };
+    });
+
+    const w = window.open("","_blank","width=900,height=700");
+    w.document.write(`<!DOCTYPE html><html><head>
+      <meta charset="UTF-8">
+      <title>একতা যুব সংঘ — প্রণামী রিপোর্ট ${year}</title>
+      <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+      <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Hind Siliguri',sans-serif; padding:30px; color:#111; font-size:13px; }
+        .header { text-align:center; margin-bottom:24px; border-bottom:2px solid #7C3AED; padding-bottom:16px; }
+        .header h1 { font-size:22px; color:#7C3AED; font-weight:700; }
+        .header h2 { font-size:15px; color:#374151; margin-top:4px; }
+        .header p { font-size:12px; color:#6B7280; margin-top:4px; }
+        table { width:100%; border-collapse:collapse; margin-top:16px; }
+        thead th { background:#7C3AED; color:white; padding:8px 10px; text-align:left; font-size:12px; }
+        tbody tr:nth-child(even) { background:#F5F3FF; }
+        tbody td { padding:7px 10px; border-bottom:1px solid #E5E7EB; font-size:12px; }
+        .tfoot td { background:#EDE9FE; font-weight:700; padding:8px 10px; font-size:13px; }
+        .badge-paid { color:#065F46; background:#D1FAE5; padding:2px 8px; border-radius:999px; font-size:11px; }
+        .badge-due { color:#991B1B; background:#FEE2E2; padding:2px 8px; border-radius:999px; font-size:11px; }
+        .footer { margin-top:24px; text-align:right; font-size:11px; color:#9CA3AF; }
+        @media print { body { padding:15px; } button { display:none; } }
+      </style>
+    </head><body>
+      <div class="header">
+        <h1>🪷 একতা যুব সংঘ</h1>
+        <h2>প্রণামী সংগ্রহ রিপোর্ট — ${year}</h2>
+        <p>তৈরির তারিখ: ${new Date().toLocaleDateString("en-GB")}</p>
+      </div>
+      <button onclick="window.print()" style="background:#7C3AED;color:white;border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;margin-bottom:12px">🖨️ Print / Save as PDF</button>
+      <table>
+        <thead><tr>
+          <th>#</th><th>Member ID</th><th>সদস্যের নাম</th>
+          <th>পরিশোধিত মাস</th><th>মোট পরিমাণ (৳)</th><th>বকেয়া (৳)</th><th>সংগ্রাহক</th>
+        </tr></thead>
+        <tbody>
+          ${rows.map((r,i)=>`<tr>
+            <td>${i+1}</td>
+            <td><strong>${r.id}</strong></td>
+            <td>${r.name}</td>
+            <td><span class="badge-paid">${r.paidMonths} মাস</span></td>
+            <td>৳${r.totalPaid.toLocaleString()}</td>
+            <td>${r.totalDue>0?`<span class="badge-due">৳${r.totalDue.toLocaleString()}</span>`:`-`}</td>
+            <td>${r.officers}</td>
+          </tr>`).join("")}
+        </tbody>
+        <tfoot><tr class="tfoot">
+          <td colspan="4" style="text-align:right">মোট সংগ্রহ:</td>
+          <td colspan="3">৳${grandTotal.toLocaleString()}</td>
+        </tr></tfoot>
+      </table>
+      <div class="footer">একতা যুব সংঘ | Developed by HRIDOOY DEY</div>
+    </body></html>`);
+    w.document.close();
+  } catch(e) { console.error(e); }
+};
+
+// ─── Khoroc (Expense) ───
+let khorocRowCount = 0;
+let editKhorocRowCount = 0;
+
+window.showAddKhorocForm = function() {
+  $("khorocAddedBy").value = currentUser.name;
+  $("khorocDate").value = new Date().toISOString().split("T")[0];
+  $("khorocNote").value = "";
+  $("khorocRowsContainer").innerHTML = "";
+  khorocRowCount = 0;
+  addKhorocRow();
+  setErr("khorocError","");
+  showEl("khorocAddForm");
+  setTimeout(() => $("khorocAddForm").scrollIntoView({behavior:"smooth", block:"nearest"}), 100);
+};
+
+window.hideAddKhorocForm = function() {
+  hideEl("khorocAddForm");
+};
+
+window.addKhorocRow = function() {
+  khorocRowCount++;
+  const id = khorocRowCount;
+  const row = document.createElement("div");
+  row.className = "khoroc-row";
+  row.id = `khorocRow_${id}`;
+  row.innerHTML = `
+    <input type="text" id="khorocKhat_${id}"
+      placeholder="যেমন: ডেকোরেশন, মাইক ভাড়া..."
+      style="padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;width:100%;transition:border-color 0.2s"
+      onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'" />
+    <input type="number" id="khorocAmount_${id}"
+      placeholder="৳" min="0"
+      style="padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;width:100%;transition:border-color 0.2s"
+      onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'"
+      oninput="updateKhorocTotal()" />
+    <button class="remove-row-btn" onclick="removeKhorocRow(${id})" title="সরান">✕</button>
+  `;
+  $("khorocRowsContainer").appendChild(row);
+  document.getElementById(`khorocKhat_${id}`).focus();
+  updateKhorocTotal();
+};
+
+window.removeKhorocRow = function(id) {
+  const row = $(`khorocRow_${id}`);
+  if(row) row.remove();
+  updateKhorocTotal();
+  if($("khorocRowsContainer").children.length === 0) addKhorocRow();
+};
+
+window.updateKhorocTotal = function() {
+  let total = 0;
+  document.querySelectorAll("[id^='khorocAmount_']").forEach(inp => {
+    total += parseFloat(inp.value) || 0;
+  });
+  $("khorocTotalDisplay").textContent = "৳" + total.toLocaleString("en-IN");
+};
+
+window.submitKhoroc = async function() {
+  setErr("khorocError","");
+  const date = $("khorocDate").value;
+  const note = ($("khorocNote").value||"").trim();
+  if(!date) { setErr("khorocError","তারিখ দিন।"); return; }
+  const items = [];
+  let hasError = false;
+  document.querySelectorAll("[id^='khorocRow_']").forEach(row => {
+    const idNum = row.id.replace("khorocRow_","");
+    const khat = (document.getElementById(`khorocKhat_${idNum}`)?.value||"").trim();
+    const poriman = parseFloat(document.getElementById(`khorocAmount_${idNum}`)?.value) || 0;
+    if(!khat||!poriman) { hasError = true; return; }
+    items.push({ khat, poriman });
+  });
+  if(hasError || items.length === 0) { setErr("khorocError","সব খরচের খাত ও পরিমাণ পূরণ করুন।"); return; }
+  const totalAmount = items.reduce((s, i) => s + i.poriman, 0);
+  try {
+    await addDoc(collection(db,"khoroc"), {
+      items, totalAmount, date, note,
+      addedBy: currentUser.name,
+      officerId: currentUser.id,
+      createdAt: serverTimestamp()
+    });
+    showToast(`✅ খরচ সংরক্ষিত! মোট: ৳${totalAmount.toLocaleString()}`);
+    hideEl("khorocAddForm");
+    loadKhorocList();
+  } catch(e) { setErr("khorocError","ত্রুটি: "+e.message); }
+};
+
+// ── Edit Khoroc ──
+window.openEditKhorocModal = async function(id) {
+  try {
+    const d = await getDoc(doc(db,"khoroc",id));
+    if(!d.exists()) return;
+    const e = d.data();
+    $("editKhorocId").value = id;
+    $("editKhorocAddedBy").value = e.addedBy||"";
+    $("editKhorocDate").value = e.date||"";
+    $("editKhorocNote").value = e.note||"";
+    $("editKhorocRowsContainer").innerHTML = "";
+    editKhorocRowCount = 0;
+    setErr("editKhorocError","");
+    (e.items||[]).forEach(item => addEditKhorocRow(item.khat, item.poriman));
+    if(!(e.items||[]).length) addEditKhorocRow();
+    updateEditKhorocTotal();
+    showEl("editKhorocModal");
+  } catch(err) { console.error(err); }
+};
+
+window.addEditKhorocRow = function(khat="", poriman="") {
+  editKhorocRowCount++;
+  const id = editKhorocRowCount;
+  const row = document.createElement("div");
+  row.className = "khoroc-row";
+  row.id = `editKhorocRow_${id}`;
+  row.innerHTML = `
+    <input type="text" id="editKhorocKhat_${id}" value="${khat}"
+      placeholder="খরচের খাত..."
+      style="padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;width:100%;transition:border-color 0.2s"
+      onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'" />
+    <input type="number" id="editKhorocAmt_${id}" value="${poriman}"
+      placeholder="৳" min="0"
+      style="padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;width:100%;transition:border-color 0.2s"
+      onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'"
+      oninput="updateEditKhorocTotal()" />
+    <button class="remove-row-btn" onclick="removeEditKhorocRow(${id})">✕</button>
+  `;
+  $("editKhorocRowsContainer").appendChild(row);
+  updateEditKhorocTotal();
+};
+
+window.removeEditKhorocRow = function(id) {
+  const row = $(`editKhorocRow_${id}`);
+  if(row) row.remove();
+  updateEditKhorocTotal();
+  if($("editKhorocRowsContainer").children.length === 0) addEditKhorocRow();
+};
+
+window.updateEditKhorocTotal = function() {
+  let total = 0;
+  document.querySelectorAll("[id^='editKhorocAmt_']").forEach(inp => {
+    total += parseFloat(inp.value)||0;
+  });
+  $("editKhorocTotalDisplay").textContent = "৳" + total.toLocaleString();
+};
+
+window.saveEditKhoroc = async function() {
+  setErr("editKhorocError","");
+  const id = $("editKhorocId").value;
+  const date = $("editKhorocDate").value;
+  const note = ($("editKhorocNote").value||"").trim();
+  if(!date) { setErr("editKhorocError","তারিখ দিন।"); return; }
+  const items = [];
+  let hasError = false;
+  document.querySelectorAll("[id^='editKhorocRow_']").forEach(row => {
+    const num = row.id.replace("editKhorocRow_","");
+    const khat = (document.getElementById(`editKhorocKhat_${num}`)?.value||"").trim();
+    const poriman = parseFloat(document.getElementById(`editKhorocAmt_${num}`)?.value)||0;
+    if(!khat||!poriman) { hasError = true; return; }
+    items.push({khat, poriman});
+  });
+  if(hasError || items.length === 0) { setErr("editKhorocError","সব ঘর সঠিকভাবে পূরণ করুন।"); return; }
+  const totalAmount = items.reduce((s,i) => s+i.poriman, 0);
+  try {
+    await updateDoc(doc(db,"khoroc",id), {items, totalAmount, date, note});
+    showToast("✅ খরচ আপডেট হয়েছে।");
+    closeModal("editKhorocModal");
+    loadKhorocList();
+  } catch(e) { setErr("editKhorocError","ত্রুটি: "+e.message); }
+};
+
+// ── Load List ──
+window.loadKhorocList = async function() {
+  const yearSel = $("khorocFilterYear");
+  const year = parseInt(yearSel ? yearSel.value : new Date().getFullYear());
+  const isAdmin = currentUser.role === "admin";
+
+  // show PDF button only for admin
+  const pdfBtn = $("khorocPdfBtn");
+  if(pdfBtn) pdfBtn.style.display = isAdmin ? "inline-flex" : "none";
+
+  try {
+    const snap = await getDocs(collection(db,"khoroc"));
+    let entries = snap.docs.map(d => ({id:d.id,...d.data()}));
+    entries = entries.filter(e => e.date && new Date(e.date).getFullYear() === year);
+    if(!isAdmin) {
+      entries = entries.filter(e => e.officerId === currentUser.id || e.addedBy === currentUser.name);
+    }
+    entries.sort((a,b) => (b.date||"").localeCompare(a.date||""));
+
+    const totalAmount = entries.reduce((s,e) => s+(e.totalAmount||0), 0);
+    const totalEntries = entries.length;
+    const totalItems = entries.reduce((s,e) => s+(e.items?.length||0), 0);
+
+    $("khorocSummary").innerHTML = `
+      <div class="stat-card" style="flex:1;min-width:130px">
+        <div class="stat-icon" style="background:#FEE2E2">💸</div>
+        <div><div class="stat-value">৳${totalAmount.toLocaleString()}</div><div class="stat-label">মোট খরচ (${year})</div></div>
+      </div>
+      <div class="stat-card" style="flex:1;min-width:130px">
+        <div class="stat-icon" style="background:#EDE9FE">📋</div>
+        <div><div class="stat-value">${totalEntries}</div><div class="stat-label">মোট এন্ট্রি</div></div>
+      </div>
+      <div class="stat-card" style="flex:1;min-width:130px">
+        <div class="stat-icon" style="background:#D1FAE5">🗂️</div>
+        <div><div class="stat-value">${totalItems}</div><div class="stat-label">মোট আইটেম</div></div>
+      </div>
+    `;
+
+    if(!entries.length) {
+      $("khorocList").innerHTML = `<div class="empty-state"><div class="empty-state-icon">💸</div><div class="empty-state-text">${year} সালে কোনো খরচ নেই</div></div>`;
+      return;
+    }
+
+    $("khorocList").innerHTML = entries.map(e => {
+      const itemRows = (e.items||[]).map((item,i) => `
+        <div class="khoroc-item-row">
+          <span class="khoroc-item-khat">${i+1}. ${item.khat}</span>
+          <span class="khoroc-item-amount">৳${(item.poriman||0).toLocaleString()}</span>
+        </div>`).join("");
+      const canEdit = isAdmin || e.officerId === currentUser.id || e.addedBy === currentUser.name;
+      return `
+        <div class="khoroc-submission">
+          <div class="khoroc-submission-header">
+            <div>
+              <div style="font-weight:700;font-size:14px">📅 ${e.date||"—"}</div>
+              <div class="khoroc-submission-meta">
+                👤 ${e.addedBy||"—"}${e.note ? ` &nbsp;·&nbsp; 📝 ${e.note}` : ""}
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+              <span class="khoroc-submission-total">৳${(e.totalAmount||0).toLocaleString()}</span>
+              ${canEdit ? `<button class="btn-sm btn-edit" onclick="openEditKhorocModal('${e.id}')" title="সম্পাদনা">✏️</button>` : ""}
+              ${canEdit ? `<button class="btn-sm btn-delete" onclick="deleteKhoroc('${e.id}')" title="মুছুন">🗑️</button>` : ""}
+            </div>
+          </div>
+          <div class="khoroc-item-list">${itemRows}</div>
+        </div>`;
+    }).join("");
+  } catch(e) { console.error(e); }
+};
+
+window.deleteKhoroc = async function(id) {
+  if(!confirm("এই খরচ এন্ট্রি মুছে ফেলবেন?")) return;
+  try {
+    await deleteDoc(doc(db,"khoroc",id));
+    showToast("খরচ মুছে ফেলা হয়েছে।","error");
+    loadKhorocList();
+  } catch(e) { showToast("ত্রুটি: "+e.message,"error"); }
+};
+
+// ── PDF Report (Admin only) ──
+window.downloadKhorocPDF = async function() {
+  const year = parseInt($("khorocFilterYear")?.value || new Date().getFullYear());
+  try {
+    const snap = await getDocs(collection(db,"khoroc"));
+    let entries = snap.docs.map(d => ({id:d.id,...d.data()}))
+      .filter(e => e.date && new Date(e.date).getFullYear() === year)
+      .sort((a,b) => (a.addedBy||"").localeCompare(b.addedBy||"")||(a.date||"").localeCompare(b.date||""));
+
+    // Group by officer
+    const grouped = {};
+    entries.forEach(e => {
+      const k = e.addedBy||"Unknown";
+      if(!grouped[k]) grouped[k] = [];
+      grouped[k].push(e);
+    });
+
+    const grandTotal = entries.reduce((s,e) => s+(e.totalAmount||0), 0);
+    const officerCount = Object.keys(grouped).length;
+
+    let tableRows = "";
+    let serial = 1;
+    Object.keys(grouped).sort().forEach(officer => {
+      const list = grouped[officer];
+      const officerTotal = list.reduce((s,e) => s+(e.totalAmount||0), 0);
+      tableRows += `<tr><td colspan="5" style="background:#FEE2E2;font-weight:700;padding:9px 12px;font-size:13px;color:#991B1B">
+        👤 ${officer} &nbsp;—&nbsp; এন্ট্রি: ${list.length} &nbsp;|&nbsp; মোট: ৳${officerTotal.toLocaleString()}
+      </td></tr>`;
+      list.forEach(e => {
+        (e.items||[]).forEach((item,i) => {
+          tableRows += `<tr>
+            <td>${i===0 ? serial++ : ""}</td>
+            <td>${i===0 ? e.date : ""}</td>
+            <td>${item.khat}</td>
+            <td style="text-align:right;font-weight:600">৳${(item.poriman||0).toLocaleString()}</td>
+            <td>${i===0 && e.note ? e.note : ""}</td>
+          </tr>`;
+        });
+        tableRows += `<tr style="background:#FFF5F5">
+          <td colspan="3" style="text-align:right;font-size:11px;color:#9CA3AF">উপমোট:</td>
+          <td style="text-align:right;font-weight:700;color:#EF4444">৳${(e.totalAmount||0).toLocaleString()}</td>
+          <td></td>
+        </tr>`;
+      });
+    });
+
+    const w = window.open("","_blank","width=950,height=700");
+    w.document.write(`<!DOCTYPE html><html><head>
+      <meta charset="UTF-8">
+      <title>খরচ রিপোর্ট — ${year}</title>
+      <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+      <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Hind Siliguri',sans-serif;padding:30px;color:#111;font-size:13px}
+        .header{text-align:center;margin-bottom:20px;border-bottom:2px solid #EF4444;padding-bottom:14px}
+        .header h1{font-size:22px;color:#EF4444;font-weight:700}
+        .header h2{font-size:15px;color:#374151;margin-top:4px}
+        .header p{font-size:12px;color:#6B7280;margin-top:3px}
+        .summary{display:flex;gap:16px;margin-bottom:20px}
+        .sc{flex:1;border:1px solid #E5E7EB;border-radius:8px;padding:12px;text-align:center}
+        .sv{font-size:20px;font-weight:700;color:#EF4444}
+        .sl{font-size:11px;color:#6B7280;margin-top:2px}
+        table{width:100%;border-collapse:collapse}
+        thead th{background:#EF4444;color:white;padding:8px 10px;text-align:left;font-size:12px}
+        tbody td{padding:7px 10px;border-bottom:1px solid #F3F4F6;font-size:12px}
+        .tfoot-row td{background:#FEE2E2;font-weight:700;padding:9px 10px;font-size:13px}
+        .footer{margin-top:24px;text-align:right;font-size:11px;color:#9CA3AF}
+        @media print{body{padding:15px}.no-print{display:none}}
+      </style>
+    </head><body>
+      <div class="header">
+        <h1>💸 একতা যুব সংঘ — খরচ রিপোর্ট</h1>
+        <h2>বছর: ${year}</h2>
+        <p>তৈরির তারিখ: ${new Date().toLocaleDateString("en-GB")}</p>
+      </div>
+      <div class="summary">
+        <div class="sc"><div class="sv">৳${grandTotal.toLocaleString()}</div><div class="sl">সর্বমোট খরচ</div></div>
+        <div class="sc"><div class="sv">${entries.length}</div><div class="sl">মোট এন্ট্রি</div></div>
+        <div class="sc"><div class="sv">${officerCount}</div><div class="sl">অফিসার সংখ্যা</div></div>
+        <div class="sc"><div class="sv">${entries.reduce((s,e)=>s+(e.items?.length||0),0)}</div><div class="sl">মোট আইটেম</div></div>
+      </div>
+      <button onclick="window.print()" class="no-print"
+        style="background:#EF4444;color:white;border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;margin-bottom:14px">
+        🖨️ Print / Save as PDF
+      </button>
+      <table>
+        <thead><tr>
+          <th>#</th><th>তারিখ</th><th>খরচের খাত</th>
+          <th style="text-align:right">পরিমাণ (৳)</th><th>মন্তব্য</th>
+        </tr></thead>
+        <tbody>${tableRows}</tbody>
+        <tfoot><tr class="tfoot-row">
+          <td colspan="3" style="text-align:right">সর্বমোট খরচ:</td>
+          <td style="text-align:right">৳${grandTotal.toLocaleString()}</td>
+          <td></td>
+        </tr></tfoot>
+      </table>
+      <div class="footer">একতা যুব সংঘ | Developed by HRIDOOY DEY</div>
+    </body></html>`);
+    w.document.close();
+  } catch(e) { console.error(e); }
+};
+
+// ─── Final Report (Admin only) ───
+window.loadFinalReport = async function() {
+  if(currentUser.role !== "admin") return;
+  const year = parseInt($("finalReportYear").value);
+
+  $("finalReportSummary").innerHTML = `<div style="color:var(--text-muted);font-size:13px;padding:10px">ডেটা লোড হচ্ছে...</div>`;
+  $("finalIncomeSection").innerHTML  = "";
+  $("finalExpenseSection").innerHTML = "";
+
+  try {
+    const [chandaSnap, khorocSnap] = await Promise.all([
+      getDocs(query(collection(db,"chanda"), where("year","==",year))),
+      getDocs(collection(db,"khoroc"))
+    ]);
+
+    const chandas = chandaSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const khorocs = khorocSnap.docs.map(d=>({id:d.id,...d.data()}))
+      .filter(e => e.date && new Date(e.date).getFullYear() === year);
+
+    // ── Income breakdown ──
+    const monthly   = chandas.filter(c => c.entryType === "monthly");
+    const puja      = chandas.filter(c => c.entryType === "puja");
+
+    const mPaid    = monthly.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+    const mDue     = monthly.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+    const mPending = monthly.filter(c=>c.status==="pending").reduce((s,c)=>s+(c.amount||0),0);
+    const pPaid    = puja.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+    const pDue     = puja.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+    const pPending = puja.filter(c=>c.status==="pending").reduce((s,c)=>s+(c.amount||0),0);
+
+    const totalIncome  = mPaid + pPaid;
+    const totalDue     = mDue + pDue;
+    const totalPending = mPending + pPending;
+
+    // ── Expense breakdown ──
+    const totalExpense = khorocs.reduce((s,e)=>s+(e.totalAmount||0),0);
+    const netBalance   = totalIncome - totalExpense;
+    const surplus      = netBalance >= 0;
+
+    // ── Net Summary ──
+    $("finalReportSummary").innerHTML = `
+      <div class="net-balance-card" style="background:${surplus?"linear-gradient(135deg,#065F46,#10B981)":"linear-gradient(135deg,#7F1D1D,#EF4444)"};color:white;flex:2;min-width:260px">
+        <div class="net-balance-icon">${surplus?"📈":"📉"}</div>
+        <div>
+          <div class="net-balance-label">${surplus?"নিট উদ্বৃত্ত (Surplus)":"নিট ঘাটতি (Deficit)"} — ${year}</div>
+          <div class="net-balance-value">৳${Math.abs(netBalance).toLocaleString()}</div>
+          <div style="font-size:11px;opacity:0.8;margin-top:3px">আয় ৳${totalIncome.toLocaleString()} − খরচ ৳${totalExpense.toLocaleString()}</div>
+        </div>
+      </div>
+      <div class="stat-card" style="flex:1;min-width:140px;border-left:4px solid var(--green)">
+        <div class="stat-icon" style="background:#D1FAE5">💰</div>
+        <div><div class="stat-value" style="color:var(--green)">৳${totalIncome.toLocaleString()}</div><div class="stat-label">মোট আয় (Paid)</div></div>
+      </div>
+      <div class="stat-card" style="flex:1;min-width:140px;border-left:4px solid var(--red)">
+        <div class="stat-icon" style="background:#FEE2E2">💸</div>
+        <div><div class="stat-value" style="color:var(--red)">৳${totalExpense.toLocaleString()}</div><div class="stat-label">মোট খরচ</div></div>
+      </div>
+      ${totalDue>0?`<div class="stat-card" style="flex:1;min-width:140px;border-left:4px solid var(--yellow)">
+        <div class="stat-icon" style="background:#FEF3C7">⚠️</div>
+        <div><div class="stat-value" style="color:var(--yellow)">৳${totalDue.toLocaleString()}</div><div class="stat-label">অসংগৃহীত বকেয়া</div></div>
+      </div>`:""}
+    `;
+
+    // ── Income Details ──
+    const monthRows = Array.from({length:12},(_,i)=>i+1).map(m => {
+      const mc = chandas.filter(c=>c.month===m);
+      if(!mc.length) return `<tr><td style="color:var(--text-muted)">${MONTHS_BN[m]}</td><td colspan="4" style="color:#D1D5DB;font-size:12px">—</td></tr>`;
+      const mp = mc.filter(c=>c.entryType==="monthly"&&c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+      const pp = mc.filter(c=>c.entryType==="puja"&&c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+      const md = mc.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+      return `<tr>
+        <td><strong>${MONTHS_BN[m]}</strong></td>
+        <td>৳${mp.toLocaleString()}</td>
+        <td>৳${pp.toLocaleString()}</td>
+        <td><strong>৳${(mp+pp).toLocaleString()}</strong></td>
+        <td>${md>0?`<span style="color:var(--red)">৳${md.toLocaleString()}</span>`:"-"}</td>
+      </tr>`;
+    }).join("");
+
+    $("finalIncomeSection").innerHTML = `
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px">
+        <div class="fin-source-card" style="background:#F0FDF4;border-color:#BBF7D0">
+          <div class="fin-source-label" style="color:#166534">📅 মাসিক প্রণামী</div>
+          <div class="fin-source-value" style="color:#166534">৳${mPaid.toLocaleString()}</div>
+          <div class="fin-source-sub">${monthly.filter(c=>c.status==="paid").length} এন্ট্রি পরিশোধিত
+          ${mDue>0?` · বকেয়া: ৳${mDue.toLocaleString()}`:""}
+          ${mPending>0?` · অপেক্ষমান: ৳${mPending.toLocaleString()}`:""}</div>
+        </div>
+        <div class="fin-source-card" style="background:#FFFBEB;border-color:#FDE68A">
+          <div class="fin-source-label" style="color:#92400E">🪷 পূজার প্রণামী</div>
+          <div class="fin-source-value" style="color:#92400E">৳${pPaid.toLocaleString()}</div>
+          <div class="fin-source-sub">${puja.filter(c=>c.status==="paid").length} এন্ট্রি পরিশোধিত
+          ${pDue>0?` · বকেয়া: ৳${pDue.toLocaleString()}`:""}
+          ${pPending>0?` · অপেক্ষমান: ৳${pPending.toLocaleString()}`:""}</div>
+        </div>
+        <div class="fin-source-card" style="background:#F5F3FF;border-color:#DDD6FE">
+          <div class="fin-source-label" style="color:var(--primary-dark)">💰 মোট আয়</div>
+          <div class="fin-source-value" style="color:var(--primary)">৳${totalIncome.toLocaleString()}</div>
+          <div class="fin-source-sub">Paid entries: ${chandas.filter(c=>c.status==="paid").length}
+          ${totalDue>0?` · মোট বকেয়া: ৳${totalDue.toLocaleString()}`:""}
+          ${totalPending>0?` · অপেক্ষমান: ৳${totalPending.toLocaleString()}`:""}</div>
+        </div>
+      </div>
+      <p style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:8px">মাস ভিত্তিক আয় — ${year}</p>
+      <div class="table-wrap" style="margin-bottom:0">
+        <table class="data-table">
+          <thead><tr>
+            <th>মাস</th><th>মাসিক প্রণামী</th><th>পূজার প্রণামী</th>
+            <th>মোট আয়</th><th>বকেয়া</th>
+          </tr></thead>
+          <tbody>${monthRows}</tbody>
+          <tfoot><tr style="background:#F0FDF4;font-weight:700">
+            <td>মোট</td>
+            <td>৳${mPaid.toLocaleString()}</td>
+            <td>৳${pPaid.toLocaleString()}</td>
+            <td>৳${totalIncome.toLocaleString()}</td>
+            <td>${totalDue>0?`<span style="color:var(--red)">৳${totalDue.toLocaleString()}</span>`:"-"}</td>
+          </tr></tfoot>
+        </table>
+      </div>`;
+
+    // ── Expense Details ──
+    const expGrouped = {};
+    khorocs.forEach(e=>{
+      const k = e.addedBy||"Unknown";
+      if(!expGrouped[k]) expGrouped[k]=[];
+      expGrouped[k].push(e);
+    });
+
+    const expItemRows = khorocs
+      .sort((a,b)=>(a.addedBy||"").localeCompare(b.addedBy||"")||(a.date||"").localeCompare(b.date||""))
+      .map(e=>(e.items||[]).map((item,i)=>`<tr>
+        <td>${i===0?e.date||"—":""}</td>
+        <td>${i===0?e.addedBy||"—":""}</td>
+        <td>${item.khat}</td>
+        <td style="font-weight:600">৳${(item.poriman||0).toLocaleString()}</td>
+        <td>${i===0&&e.note?e.note:""}</td>
+      </tr>`).join("")).join("");
+
+    $("finalExpenseSection").innerHTML = `
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px">
+        ${Object.keys(expGrouped).sort().map(officer=>{
+          const ot = expGrouped[officer].reduce((s,e)=>s+(e.totalAmount||0),0);
+          return `<div class="fin-source-card" style="background:#FFF5F5;border-color:#FECACA">
+            <div class="fin-source-label" style="color:#991B1B">👤 ${officer}</div>
+            <div class="fin-source-value" style="color:var(--red)">৳${ot.toLocaleString()}</div>
+            <div class="fin-source-sub">${expGrouped[officer].length} এন্ট্রি · ${expGrouped[officer].reduce((s,e)=>s+(e.items?.length||0),0)} আইটেম</div>
+          </div>`;
+        }).join("")}
+        <div class="fin-source-card" style="background:#FEE2E2;border-color:#FCA5A5">
+          <div class="fin-source-label" style="color:#991B1B">💸 সর্বমোট খরচ</div>
+          <div class="fin-source-value" style="color:var(--red)">৳${totalExpense.toLocaleString()}</div>
+          <div class="fin-source-sub">${khorocs.length} এন্ট্রি · ${khorocs.reduce((s,e)=>s+(e.items?.length||0),0)} আইটেম</div>
+        </div>
+      </div>
+      <p style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:8px">খাত ভিত্তিক খরচ — ${year}</p>
+      <div class="table-wrap" style="margin-bottom:0">
+        <table class="data-table">
+          <thead><tr><th>তারিখ</th><th>সংযোজনকারী</th><th>খরচের খাত</th><th>পরিমাণ</th><th>মন্তব্য</th></tr></thead>
+          <tbody>${expItemRows||`<tr><td colspan="5"><div class="empty-state" style="padding:16px"><div class="empty-state-text">কোনো খরচ নেই</div></div></td></tr>`}</tbody>
+          <tfoot><tr style="background:#FEE2E2;font-weight:700">
+            <td colspan="3">সর্বমোট খরচ</td>
+            <td>৳${totalExpense.toLocaleString()}</td><td></td>
+          </tr></tfoot>
+        </table>
+      </div>`;
+
+  } catch(e) { console.error(e); }
+};
+
+// ── Final Report PDF ──
+window.downloadFinalReportPDF = async function() {
+  if(currentUser.role !== "admin") return;
+  const year = parseInt($("finalReportYear").value);
+  try {
+    const [chandaSnap, khorocSnap] = await Promise.all([
+      getDocs(query(collection(db,"chanda"), where("year","==",year))),
+      getDocs(collection(db,"khoroc"))
+    ]);
+    const chandas = chandaSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const khorocs = khorocSnap.docs.map(d=>({id:d.id,...d.data()}))
+      .filter(e => e.date && new Date(e.date).getFullYear() === year);
+
+    const monthly  = chandas.filter(c=>c.entryType==="monthly");
+    const puja     = chandas.filter(c=>c.entryType==="puja");
+    const mPaid    = monthly.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+    const mDue     = monthly.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+    const pPaid    = puja.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+    const pDue     = puja.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+    const totalIncome  = mPaid + pPaid;
+    const totalDue     = mDue + pDue;
+    const totalExpense = khorocs.reduce((s,e)=>s+(e.totalAmount||0),0);
+    const netBalance   = totalIncome - totalExpense;
+    const surplus      = netBalance >= 0;
+
+    // month income rows
+    const monthIncRows = Array.from({length:12},(_,i)=>i+1).map(m=>{
+      const mc = chandas.filter(c=>c.month===m);
+      const mp = mc.filter(c=>c.entryType==="monthly"&&c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+      const pp = mc.filter(c=>c.entryType==="puja"&&c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+      const md = mc.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+      return `<tr${!mc.length?' style="color:#9CA3AF"':''}><td>${MONTHS_BN[m]}</td><td>৳${mp.toLocaleString()}</td><td>৳${pp.toLocaleString()}</td><td><b>৳${(mp+pp).toLocaleString()}</b></td><td>${md>0?`৳${md.toLocaleString()}`:"-"}</td></tr>`;
+    }).join("");
+
+    // expense rows
+    const expGrouped = {};
+    khorocs.forEach(e=>{const k=e.addedBy||"Unknown";if(!expGrouped[k])expGrouped[k]=[];expGrouped[k].push(e);});
+    let expRows = "";
+    Object.keys(expGrouped).sort().forEach(officer=>{
+      const ot = expGrouped[officer].reduce((s,e)=>s+(e.totalAmount||0),0);
+      expRows += `<tr><td colspan="4" style="background:#FEE2E2;font-weight:700;padding:8px 10px">👤 ${officer} — মোট: ৳${ot.toLocaleString()}</td></tr>`;
+      expGrouped[officer].forEach(e=>{
+        (e.items||[]).forEach((item,i)=>{
+          expRows += `<tr><td>${i===0?e.date||"—":""}</td><td>${item.khat}</td><td style="text-align:right">৳${(item.poriman||0).toLocaleString()}</td><td>${i===0&&e.note?e.note:""}</td></tr>`;
+        });
+      });
+    });
+
+    const w = window.open("","_blank","width=980,height=750");
+    w.document.write(`<!DOCTYPE html><html><head>
+    <meta charset="UTF-8">
+    <title>চূড়ান্ত রিপোর্ট — ${year}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+      *{margin:0;padding:0;box-sizing:border-box}
+      body{font-family:'Hind Siliguri',sans-serif;padding:28px;color:#111;font-size:13px}
+      h1{font-size:22px;font-weight:700;text-align:center}
+      h2{font-size:14px;font-weight:600;margin:18px 0 8px;padding:8px 12px;border-radius:6px}
+      .inc-h{background:#D1FAE5;color:#065F46} .exp-h{background:#FEE2E2;color:#991B1B}
+      .header{text-align:center;margin-bottom:18px;padding-bottom:14px;border-bottom:2px solid #7C3AED}
+      .header p{font-size:12px;color:#6B7280;margin-top:3px}
+      .net-box{border-radius:12px;padding:16px 20px;margin:16px 0;display:flex;justify-content:space-between;align-items:center}
+      .net-box.surplus{background:#D1FAE5;border:2px solid #10B981}
+      .net-box.deficit{background:#FEE2E2;border:2px solid #EF4444}
+      .net-label{font-size:13px;font-weight:600}
+      .net-val{font-size:26px;font-weight:900}
+      .net-sub{font-size:11px;color:#6B7280;margin-top:2px}
+      .sum-row{display:flex;gap:12px;margin-bottom:16px}
+      .sc{flex:1;border-radius:8px;padding:12px;border:1.5px solid}
+      .sc-v{font-size:18px;font-weight:700;margin:4px 0}
+      .sc-l{font-size:11px;color:#6B7280}
+      table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:16px}
+      thead th{padding:7px 10px;text-align:left;font-size:11px}
+      .inc-th{background:#065F46;color:white} .exp-th{background:#991B1B;color:white}
+      tbody td{padding:6px 10px;border-bottom:1px solid #F3F4F6}
+      tbody tr:nth-child(even){background:#FAFAFA}
+      tfoot td{font-weight:700;padding:8px 10px}
+      .tfoot-inc{background:#D1FAE5} .tfoot-exp{background:#FEE2E2}
+      .footer{margin-top:20px;text-align:right;font-size:11px;color:#9CA3AF;border-top:1px solid #E5E7EB;padding-top:10px}
+      @media print{body{padding:15px}.no-print{display:none}}
+    </style>
+    </head><body>
+    <div class="header">
+      <h1>🪷 একতা যুব সংঘ — চূড়ান্ত রিপোর্ট</h1>
+      <p>বছর: ${year} &nbsp;|&nbsp; তৈরির তারিখ: ${new Date().toLocaleDateString("en-GB")}</p>
+    </div>
+    <button onclick="window.print()" class="no-print"
+      style="background:#7C3AED;color:white;border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;margin-bottom:14px">
+      🖨️ Print / Save as PDF
+    </button>
+
+    <!-- Net Balance -->
+    <div class="net-box ${surplus?'surplus':'deficit'}">
+      <div>
+        <div class="net-label">${surplus?"✅ নিট উদ্বৃত্ত (Surplus)":"❌ নিট ঘাটতি (Deficit)"}</div>
+        <div class="net-val" style="color:${surplus?"#065F46":"#991B1B"}">৳${Math.abs(netBalance).toLocaleString()}</div>
+        <div class="net-sub">মোট আয়: ৳${totalIncome.toLocaleString()} &nbsp;−&nbsp; মোট খরচ: ৳${totalExpense.toLocaleString()}</div>
+      </div>
+      <div style="font-size:48px">${surplus?"📈":"📉"}</div>
+    </div>
+
+    <!-- Summary -->
+    <div class="sum-row">
+      <div class="sc" style="background:#F0FDF4;border-color:#BBF7D0">
+        <div class="sc-l" style="color:#166534">📅 মাসিক প্রণামী (Paid)</div>
+        <div class="sc-v" style="color:#166534">৳${mPaid.toLocaleString()}</div>
+        ${mDue>0?`<div class="sc-l" style="color:#EF4444">বকেয়া: ৳${mDue.toLocaleString()}</div>`:""}
+      </div>
+      <div class="sc" style="background:#FFFBEB;border-color:#FDE68A">
+        <div class="sc-l" style="color:#92400E">🪷 পূজার প্রণামী (Paid)</div>
+        <div class="sc-v" style="color:#92400E">৳${pPaid.toLocaleString()}</div>
+        ${pDue>0?`<div class="sc-l" style="color:#EF4444">বকেয়া: ৳${pDue.toLocaleString()}</div>`:""}
+      </div>
+      <div class="sc" style="background:#EDE9FE;border-color:#DDD6FE">
+        <div class="sc-l" style="color:#5B21B6">💰 মোট আয়</div>
+        <div class="sc-v" style="color:#5B21B6">৳${totalIncome.toLocaleString()}</div>
+        ${totalDue>0?`<div class="sc-l" style="color:#EF4444">মোট বকেয়া: ৳${totalDue.toLocaleString()}</div>`:""}
+      </div>
+      <div class="sc" style="background:#FEE2E2;border-color:#FECACA">
+        <div class="sc-l" style="color:#991B1B">💸 মোট খরচ</div>
+        <div class="sc-v" style="color:#991B1B">৳${totalExpense.toLocaleString()}</div>
+        <div class="sc-l">${khorocs.length} এন্ট্রি</div>
+      </div>
+    </div>
+
+    <!-- Income Table -->
+    <h2 class="inc-h">💰 আয়ের বিবরণ — মাস ভিত্তিক</h2>
+    <table>
+      <thead class="inc-th"><tr>
+        <th class="inc-th">মাস</th><th class="inc-th">মাসিক প্রণামী</th>
+        <th class="inc-th">পূজার প্রণামী</th><th class="inc-th">মোট আয়</th><th class="inc-th">বকেয়া</th>
+      </tr></thead>
+      <tbody>${monthIncRows}</tbody>
+      <tfoot><tr class="tfoot-inc">
+        <td>মোট</td><td>৳${mPaid.toLocaleString()}</td>
+        <td>৳${pPaid.toLocaleString()}</td><td><b>৳${totalIncome.toLocaleString()}</b></td>
+        <td>${totalDue>0?`৳${totalDue.toLocaleString()}`:"-"}</td>
+      </tr></tfoot>
+    </table>
+
+    <!-- Expense Table -->
+    <h2 class="exp-h">💸 খরচের বিবরণ — অফিসার ভিত্তিক</h2>
+    <table>
+      <thead><tr>
+        <th class="exp-th">তারিখ</th><th class="exp-th">খরচের খাত</th>
+        <th class="exp-th" style="text-align:right">পরিমাণ</th><th class="exp-th">মন্তব্য</th>
+      </tr></thead>
+      <tbody>${expRows||`<tr><td colspan="4" style="text-align:center;color:#9CA3AF;padding:16px">কোনো খরচ নেই</td></tr>`}</tbody>
+      <tfoot><tr class="tfoot-exp">
+        <td colspan="2">সর্বমোট খরচ</td>
+        <td style="text-align:right"><b>৳${totalExpense.toLocaleString()}</b></td><td></td>
+      </tr></tfoot>
+    </table>
+
+    <div class="footer">একতা যুব সংঘ | Developed by HRIDOOY DEY</div>
+    </body></html>`);
+    w.document.close();
+  } catch(e) { console.error(e); }
+};
+window.closeModal = function(id) { hideEl(id); };
+document.querySelectorAll(".modal-overlay").forEach(m => {
+  m.addEventListener("click", e => { if(e.target===m) m.classList.add("hidden"); });
+});
+
+// ─── Restore Session on Refresh ───
+(function restoreSession() {
+  try {
+    const saved = localStorage.getItem("sessionUser");
+    if(saved) {
+      currentUser = JSON.parse(saved);
+      const savedPage = localStorage.getItem("sessionPage") || "dashboard";
+      enterApp(savedPage);
+    }
+  } catch(e) {
+    localStorage.removeItem("sessionUser");
+    localStorage.removeItem("sessionPage");
+  }
+})();
+
+</script>
+</body>
+</html>
