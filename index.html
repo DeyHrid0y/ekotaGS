@@ -1138,8 +1138,13 @@ body {
             </div>
             <!-- গ্রাম / অন্যান্য label → free text -->
             <div class="form-group hidden" id="pujaLabelNameGroup">
-              <label id="pujaLabelNameLabel">দাতার নাম *</label>
-              <input type="text" id="entryPujaDonorName" placeholder="নাম লিখুন..." />
+              <label id="pujaLabelNameLabel">দাতার নাম / Donor Name *</label>
+              <input type="text" id="entryPujaDonorName" placeholder="দাতার নাম লিখুন..." />
+            </div>
+            <!-- গ্রাম label → gram name field (shown below donor name) -->
+            <div class="form-group hidden" id="pujaGramNameGroup">
+              <label>গ্রামের নাম / Village Name *</label>
+              <input type="text" id="entryGramName" placeholder="গ্রামের নাম লিখুন..." />
             </div>
           </div>
 
@@ -1977,7 +1982,9 @@ window.loadCollectionPage = async function() {
         : `<span style="background:#EDE9FE;color:#5B21B6;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600">📅 মাসিক</span>`;
       // ── donor/member name ──
       const displayName = isPuja
-        ? (c.donorName || m?.name || "—")
+        ? (c.pujaLabel === "গ্রাম" && c.gramName
+            ? `${c.donorName||"—"} <span style="font-size:11px;color:var(--text-muted)">(${c.gramName})</span>`
+            : (c.donorName || m?.name || "—"))
         : `${m?.name||"অজানা"} <span style="font-size:11px;color:var(--text-muted)">[${m?.memberId||"—"}]</span>`;
       // ── month col ──
       const monthCol = isPuja ? `<span style="color:var(--text-muted);font-size:12px">—</span>` : (MONTHS_BN[c.month]||c.month);
@@ -2048,17 +2055,22 @@ window.switchEntryType = function(type) {
 
 window.onPujaLabelChange = function() {
   const val = document.querySelector('input[name="pujaLabel"]:checked')?.value;
+  hideEl("pujaLabelMemberGroup");
+  hideEl("pujaLabelNameGroup");
+  hideEl("pujaGramNameGroup");
+  if($("entryGramName")) $("entryGramName").value = "";
+
   if(val === "সদস্য") {
-    showEl("pujaLabelMemberGroup"); hideEl("pujaLabelNameGroup");
+    showEl("pujaLabelMemberGroup");
+  } else if(val === "গ্রাম") {
+    showEl("pujaLabelNameGroup");
+    $("pujaLabelNameLabel").textContent = "দাতার নাম / Donor Name *";
+    $("entryPujaDonorName").placeholder = "দাতার নাম লিখুন...";
+    showEl("pujaGramNameGroup");
   } else {
-    hideEl("pujaLabelMemberGroup"); showEl("pujaLabelNameGroup");
-    if(val === "গ্রাম") {
-      $("pujaLabelNameLabel").textContent = "গ্রামের নাম *";
-      $("entryPujaDonorName").placeholder = "গ্রামের নাম লিখুন...";
-    } else {
-      $("pujaLabelNameLabel").textContent = "দাতার নাম / বিবরণ *";
-      $("entryPujaDonorName").placeholder = "নাম বা বিবরণ লিখুন...";
-    }
+    showEl("pujaLabelNameGroup");
+    $("pujaLabelNameLabel").textContent = "দাতার নাম / বিবরণ *";
+    $("entryPujaDonorName").placeholder = "নাম বা বিবরণ লিখুন...";
   }
 };
 
@@ -2130,12 +2142,17 @@ window.submitChandaEntry = async function() {
         donorName = allMembers.find(m=>m.id===memberId)?.name || "";
       } else {
         donorName = $("entryPujaDonorName").value.trim();
-        if(!donorName) { setErr("entryError","নাম/বিবরণ লিখুন।"); return; }
+        if(!donorName) { setErr("entryError","দাতার নাম লিখুন।"); return; }
+        if(label === "গ্রাম") {
+          const gramName = ($("entryGramName")?.value||"").trim();
+          if(!gramName) { setErr("entryError","গ্রামের নাম লিখুন।"); return; }
+        }
       }
+      const gramName = label === "গ্রাম" ? ($("entryGramName")?.value||"").trim() : "";
       const now = new Date();
       await addDoc(collection(db,"chanda"), {
         entryType:"puja", pujaLabel:label,
-        memberId, donorName,
+        memberId, donorName, gramName,
         month: now.getMonth()+1, year: now.getFullYear(),
         amount, status, note, entryDate,
         collectedBy:currentUser.name, collectorId:currentUser.id,
@@ -2147,8 +2164,9 @@ window.submitChandaEntry = async function() {
     showToast("প্রণামী এন্ট্রি সংরক্ষিত হয়েছে। ✅");
     $("entryAmount").value=""; $("entryNote").value=""; $("entryDate").value="";
     $("entryMember").value=""; $("entryPujaMember").value=""; $("entryPujaDonorName").value="";
+    if($("entryGramName")) $("entryGramName").value="";
     document.querySelectorAll('input[name="pujaLabel"]').forEach(r=>r.checked=false);
-    hideEl("pujaLabelMemberGroup"); hideEl("pujaLabelNameGroup");
+    hideEl("pujaLabelMemberGroup"); hideEl("pujaLabelNameGroup"); hideEl("pujaGramNameGroup");
     setErr("entryError","");
     updatePendingBadge();
     navigateTo("collection");
