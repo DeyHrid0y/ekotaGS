@@ -19,7 +19,8 @@
   --yellow: #F59E0B;
   --yellow-light: #FEF3C7;
   --bg: #F5F3FF;
-  --surface: #FFFFFF;
+  --surface: #FFF6EC;
+  --surface-soft: #FFEFDC;
   --border: #E5E7EB;
   --text: #111827;
   --text-muted: #6B7280;
@@ -50,34 +51,66 @@ body {
 /* ─── Login ─── */
 .login-bg {
   min-height: 100vh;
-  background: linear-gradient(135deg, #4C1D95 0%, #7C3AED 45%, #A78BFA 100%);
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 15% 15%, #6D28D9 0%, transparent 45%),
+              radial-gradient(circle at 85% 80%, #F59E0B 0%, transparent 40%),
+              linear-gradient(135deg, #3B0F73 0%, #6D28D9 45%, #9F67F0 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
 }
+.login-bg::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.14) 1px, transparent 1px);
+  background-size: 26px 26px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.login-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+.login-blob-1 { width: 260px; height: 260px; background: #F59E0B; top: -60px; right: -60px; }
+.login-blob-2 { width: 220px; height: 220px; background: #A78BFA; bottom: -70px; left: -50px; }
 
 .login-card {
+  position: relative;
+  z-index: 1;
   background: var(--surface);
-  border-radius: 20px;
-  padding: 40px 36px;
+  border: 1px solid rgba(245,158,11,0.18);
+  border-radius: 22px;
+  padding: 42px 36px 34px;
   width: 100%;
   max-width: 420px;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 25px 50px -12px rgba(76,29,149,0.45), var(--shadow-lg);
+  animation: loginCardIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes loginCardIn {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .login-card { animation: none; }
 }
 
-.login-header { text-align: center; margin-bottom: 28px; }
+.login-header { text-align: center; margin-bottom: 26px; }
 .logo-circle {
-  width: 72px; height: 72px;
+  width: 76px; height: 76px;
   background: linear-gradient(135deg, #7C3AED, #F59E0B);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 32px;
-  margin: 0 auto 14px;
-  box-shadow: 0 4px 16px rgba(124,58,237,0.45);
+  font-size: 34px;
+  margin: 0 auto 16px;
+  box-shadow: 0 0 0 6px rgba(245,158,11,0.14), 0 8px 20px rgba(124,58,237,0.4);
 }
 .login-title {
-  font-size: 24px; font-weight: 800; color: var(--primary-dark);
+  font-size: 25px; font-weight: 800; color: var(--primary-dark);
   letter-spacing: -0.3px;
 }
 .login-title-band {
@@ -86,14 +119,14 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  font-size: 24px; font-weight: 800;
+  font-size: 25px; font-weight: 800;
 }
-.login-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+.login-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
 .login-sub2 { font-size: 11px; color: #9CA3AF; margin-top: 1px; }
 
 .login-tabs {
   display: flex;
-  background: #F3F4F6;
+  background: var(--surface-soft);
   border-radius: 10px;
   padding: 3px;
   margin-bottom: 24px;
@@ -111,6 +144,7 @@ body {
   color: var(--primary);
   box-shadow: var(--shadow);
 }
+.tab-btn:hover:not(.active) { color: var(--primary); }
 
 /* ─── Forms ─── */
 .form-group { margin-bottom: 16px; }
@@ -814,7 +848,7 @@ body {
   gap: 8px;
 }
 .ms-stat {
-  background: white; border-radius: 8px;
+  background: var(--surface); border-radius: 8px;
   padding: 10px 12px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.07);
   text-align: center;
@@ -869,12 +903,37 @@ body {
 
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
 </head>
 <body>
+<script>
+(function() {
+  function showDiag(msg, color) {
+    var d = document.createElement('div');
+    d.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:999999;background:'+color+';color:#fff;padding:14px 16px;font-family:sans-serif;font-size:13px;line-height:1.5;white-space:pre-wrap;box-shadow:0 2px 10px rgba(0,0,0,0.3)';
+    d.textContent = msg;
+    document.body.appendChild(d);
+  }
+  if(location.protocol === 'file:') {
+    showDiag('⚠️ সমস্যা পাওয়া গেছে: ফাইলটা সরাসরি file:// দিয়ে খোলা হয়েছে (ঠিকানা বার দেখুন)। এই কারণে Firebase লোড হচ্ছে না, তাই Login/Search কাজ করছে না। সমাধান: ফাইলটা কোনো ওয়েব হোস্টিং-এ (Firebase Hosting / Netlify) আপলোড করে https:// দিয়ে খুলুন।', '#B91C1C');
+    return;
+  }
+  setTimeout(function() {
+    if(typeof window.doLogin !== 'function') {
+      showDiag('⚠️ অ্যাপের মূল কোড লোড হয়নি (window.doLogin পাওয়া যায়নি)। সম্ভবত ইন্টারনেট/নেটওয়ার্ক ব্লক করছে Firebase-এর ফাইল লোড হওয়া, অথবা ব্রাউজার কনসোলে একটা এরর আছে। ব্রাউজারের F12 → Console ট্যাব চেক করুন, অথবা অন্য ব্রাউজার/নেটওয়ার্কে চেষ্টা করুন।', '#B45309');
+    }
+  }, 4000);
+  window.addEventListener('error', function(e) {
+    showDiag('❌ JS Error: ' + (e.message || e.error) + '\n(লাইন: ' + e.lineno + ', ফাইল: ' + (e.filename||'').split('/').pop() + ')', '#7C2D12');
+  });
+})();
+</script>
 
 <!-- ───────────── LOGIN SCREEN ───────────── -->
 <div id="loginScreen" class="screen active">
   <div class="login-bg">
+    <div class="login-blob login-blob-1"></div>
+    <div class="login-blob login-blob-2"></div>
     <div class="login-card">
       <div class="login-header">
         <div class="logo-circle">🪷</div>
@@ -997,6 +1056,7 @@ body {
                 <th>Member ID</th>
                 <th>নাম / Name</th>
                 <th>ফোন / Phone</th>
+                <th>Email</th>
                 <th>ঠিকানা / Address</th>
                 <th>মাসিক প্রণামী</th>
                 <th>Action</th>
@@ -1136,15 +1196,15 @@ body {
                 <option value="">-- সদস্য নির্বাচন করুন --</option>
               </select>
             </div>
+            <!-- গ্রাম label → দাতার নাম (person) + গ্রামের নাম (village) -->
+            <div class="form-group hidden" id="pujaGramDonorGroup">
+              <label>দাতার নাম *</label>
+              <input type="text" id="entryPujaGramDonorName" placeholder="দাতার নাম লিখুন..." />
+            </div>
             <!-- গ্রাম / অন্যান্য label → free text -->
             <div class="form-group hidden" id="pujaLabelNameGroup">
-              <label id="pujaLabelNameLabel">দাতার নাম / Donor Name *</label>
-              <input type="text" id="entryPujaDonorName" placeholder="দাতার নাম লিখুন..." />
-            </div>
-            <!-- গ্রাম label → gram name field (shown below donor name) -->
-            <div class="form-group hidden" id="pujaGramNameGroup">
-              <label>গ্রামের নাম / Village Name *</label>
-              <input type="text" id="entryGramName" placeholder="গ্রামের নাম লিখুন..." />
+              <label id="pujaLabelNameLabel">দাতার নাম *</label>
+              <input type="text" id="entryPujaDonorName" placeholder="নাম লিখুন..." />
             </div>
           </div>
 
@@ -1364,9 +1424,15 @@ body {
         </div>
 
         <!-- Pending Khoroc -->
-        <div class="card">
+        <div class="card" style="margin-bottom:16px">
           <h3 class="card-title" style="color:var(--red)">💸 অপেক্ষমান খরচ এন্ট্রি</h3>
           <div id="pendingKhorocList"></div>
+        </div>
+
+        <!-- Pending Email Requests -->
+        <div class="card">
+          <h3 class="card-title" style="color:var(--accent)">✉️ অপেক্ষমান ইমেইল অনুরোধ</h3>
+          <div id="pendingEmailList"></div>
         </div>
       </section>
 
@@ -1431,6 +1497,10 @@ body {
     <div class="form-group">
       <label>ফোন / Phone</label>
       <input type="tel" id="mPhone" placeholder="মোবাইল নম্বর" />
+    </div>
+    <div class="form-group">
+      <label>Email <span style="font-size:11px;color:var(--text-muted)">(অনুমোদন নোটিফিকেশনের জন্য, ঐচ্ছিক)</span></label>
+      <input type="email" id="mEmail" placeholder="member@example.com" />
     </div>
     <div class="form-group">
       <label>ঠিকানা / Address</label>
@@ -1586,6 +1656,12 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
+// ─── EmailJS (auto-email on pronami approval) ───
+const EMAILJS_SERVICE_ID = "service_7e91pbg";
+const EMAILJS_TEMPLATE_ID = "template_psd14ff";
+const EMAILJS_PUBLIC_KEY = "43rKcEMSwdAsKJmJu";
+try { if(window.emailjs) { window.emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); } } catch(e) { console.error("EmailJS init failed:", e); }
+
 // ─── State ───
 let currentUser = null; // { username, role, name, id }
 let allMembers = [];
@@ -1594,6 +1670,14 @@ let editingOfficerId = null;
 
 // ─── Month Names (Bengali) ───
 const MONTHS_BN = ["","জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
+
+// ─── Puja donor display (দাতার নাম — গ্রামের নাম for গ্রাম level entries) ───
+function pujaDonorDisplay(c, memberName) {
+  if(c.pujaLabel === "গ্রাম" && c.donorName) {
+    return c.gramName ? `${c.donorName} <span style="color:var(--text-muted)">— ${c.gramName}</span>` : c.donorName;
+  }
+  return c.donorName || memberName || "—";
+}
 
 // ─── Utility ───
 function $(id) { return document.getElementById(id); }
@@ -1832,6 +1916,7 @@ function renderMembersTable(members) {
       <td><span class="member-id-badge">${m.memberId||"—"}</span></td>
       <td><strong>${m.name}</strong></td>
       <td>${m.phone||"-"}</td>
+      <td>${m.email ? m.email : `<span style="color:var(--text-muted);font-size:12px">— যোগ করা হয়নি</span>`}</td>
       <td>${m.address||"-"}</td>
       <td>৳${(m.monthlyAmount||0).toLocaleString()}</td>
       <td>
@@ -1840,7 +1925,7 @@ function renderMembersTable(members) {
         <button class="btn-sm btn-view" onclick="viewMemberDetail('${m.id}')">👁️ View</button>
       </td>
     </tr>
-  `).join("") : `<tr><td colspan="6"><div class="empty-state"><div class="empty-state-icon">👥</div><div class="empty-state-text">কোনো সদস্য নেই</div></div></td></tr>`;
+  `).join("") : `<tr><td colspan="7"><div class="empty-state"><div class="empty-state-icon">👥</div><div class="empty-state-text">কোনো সদস্য নেই</div></div></td></tr>`;
   if(currentUser.role!=="admin") hideEl("addMemberBtn");
 }
 
@@ -1853,7 +1938,7 @@ window.openAddMemberModal = function() {
   if(currentUser.role !== "admin") { showToast("শুধুমাত্র Admin নতুন সদস্য যোগ করতে পারবে।"); return; }
   editingMemberId = null;
   $("addMemberModalTitle").textContent = "নতুন সদস্য যোগ করুন";
-  $("mMemberId").value=""; $("mName").value=""; $("mPhone").value=""; $("mAddress").value=""; $("mAmount").value="";
+  $("mMemberId").value=""; $("mName").value=""; $("mPhone").value=""; $("mEmail").value=""; $("mAddress").value=""; $("mAmount").value="";
   setErr("mError","");
   showEl("addMemberModal");
 };
@@ -1863,7 +1948,7 @@ window.openEditMemberModal = function(id) {
   if(!m) return;
   editingMemberId = id;
   $("addMemberModalTitle").textContent = "Edit Member";
-  $("mMemberId").value=m.memberId||""; $("mName").value=m.name||""; $("mPhone").value=m.phone||""; $("mAddress").value=m.address||""; $("mAmount").value=m.monthlyAmount||"";
+  $("mMemberId").value=m.memberId||""; $("mName").value=m.name||""; $("mPhone").value=m.phone||""; $("mEmail").value=m.email||""; $("mAddress").value=m.address||""; $("mAmount").value=m.monthlyAmount||"";
   setErr("mError","");
   showEl("addMemberModal");
 };
@@ -1873,6 +1958,7 @@ window.saveMember = async function() {
   const memberId = $("mMemberId").value.trim();
   const name = $("mName").value.trim();
   const phone = $("mPhone").value.trim();
+  const email = $("mEmail").value.trim();
   const address = $("mAddress").value.trim();
   const amount = parseFloat($("mAmount").value)||0;
   if(!memberId) { setErr("mError","Member ID আবশ্যক।"); return; }
@@ -1884,14 +1970,14 @@ window.saveMember = async function() {
       const dupSnap = await getDocs(dupQ);
       const dup = dupSnap.docs.find(d => d.id !== editingMemberId);
       if(dup) { setErr("mError","এই Member ID আগে থেকেই আছে।"); return; }
-      await updateDoc(doc(db,"members",editingMemberId), {memberId,name,phone,address,monthlyAmount:amount});
+      await updateDoc(doc(db,"members",editingMemberId), {memberId,name,phone,email,address,monthlyAmount:amount});
       showToast("Member updated successfully.");
     } else {
       // Check duplicate via Firestore (not stale allMembers)
       const dupQ = query(collection(db,"members"), where("memberId","==",memberId));
       const dupSnap = await getDocs(dupQ);
       if(!dupSnap.empty) { setErr("mError","এই Member ID আগে থেকেই আছে।"); return; }
-      await setDoc(doc(db,"members", memberId), {memberId,name,phone,address,monthlyAmount:amount, createdAt:serverTimestamp()});
+      await setDoc(doc(db,"members", memberId), {memberId,name,phone,email,address,monthlyAmount:amount, createdAt:serverTimestamp()});
       showToast("নতুন সদস্য সংরক্ষিত হয়েছে।");
     }
     closeModal("addMemberModal");
@@ -1982,9 +2068,7 @@ window.loadCollectionPage = async function() {
         : `<span style="background:#EDE9FE;color:#5B21B6;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600">📅 মাসিক</span>`;
       // ── donor/member name ──
       const displayName = isPuja
-        ? (c.pujaLabel === "গ্রাম" && c.gramName
-            ? `${c.donorName||"—"} <span style="font-size:11px;color:var(--text-muted)">(${c.gramName})</span>`
-            : (c.donorName || m?.name || "—"))
+        ? pujaDonorDisplay(c, m?.name)
         : `${m?.name||"অজানা"} <span style="font-size:11px;color:var(--text-muted)">[${m?.memberId||"—"}]</span>`;
       // ── month col ──
       const monthCol = isPuja ? `<span style="color:var(--text-muted);font-size:12px">—</span>` : (MONTHS_BN[c.month]||c.month);
@@ -2003,6 +2087,7 @@ window.loadCollectionPage = async function() {
           ${canEdit ? `<button class="btn-sm btn-edit" onclick="editChandaStatus('${c.id}','${c.status}')">✏️ Edit</button>` : `<span style="font-size:11px;color:var(--text-muted)">${c.approvalStatus==="approved"?"🔒":""}</span>`}
           ${isAdmin ? `<button class="btn-sm btn-delete" onclick="deleteChanda('${c.id}')">🗑️ Delete</button>` : ""}
           ${isAdmin && c.approvalStatus==="pending" ? `<button class="btn-sm" style="background:#D1FAE5;color:#065F46;border:none;padding:4px 8px;border-radius:6px;cursor:pointer;font-size:12px" onclick="approveEntry('chanda','${c.id}')">✅ Approve</button>` : ""}
+          ${isAdmin && c.approvalStatus==="approved" ? `<button class="btn-sm" style="background:#FEF3C7;color:#92400E;border:none;padding:4px 8px;border-radius:6px;cursor:pointer;font-size:12px" onclick="unapproveEntry('chanda','${c.id}')">↩️ Unapprove</button>` : ""}
         </td>
       </tr>`;
     }).join("") : `<tr><td colspan="10"><div class="empty-state"><div class="empty-state-icon">💰</div><div class="empty-state-text">কোনো এন্ট্রি নেই</div></div></td></tr>`;
@@ -2048,29 +2133,26 @@ window.switchEntryType = function(type) {
     $("typeBtnMonthly").style.background = "#F3F4F6";
     $("typeBtnMonthly").style.color = "var(--text-muted)";
     hideEl("monthlyFields"); showEl("pujaFields");
-    hideEl("pujaLabelMemberGroup"); hideEl("pujaLabelNameGroup");
+    hideEl("pujaLabelMemberGroup"); hideEl("pujaLabelNameGroup"); hideEl("pujaGramDonorGroup");
   }
   setErr("entryError","");
 };
 
 window.onPujaLabelChange = function() {
   const val = document.querySelector('input[name="pujaLabel"]:checked')?.value;
-  hideEl("pujaLabelMemberGroup");
-  hideEl("pujaLabelNameGroup");
-  hideEl("pujaGramNameGroup");
-  if($("entryGramName")) $("entryGramName").value = "";
-
   if(val === "সদস্য") {
-    showEl("pujaLabelMemberGroup");
-  } else if(val === "গ্রাম") {
-    showEl("pujaLabelNameGroup");
-    $("pujaLabelNameLabel").textContent = "দাতার নাম / Donor Name *";
-    $("entryPujaDonorName").placeholder = "দাতার নাম লিখুন...";
-    showEl("pujaGramNameGroup");
+    showEl("pujaLabelMemberGroup"); hideEl("pujaLabelNameGroup"); hideEl("pujaGramDonorGroup");
   } else {
-    showEl("pujaLabelNameGroup");
-    $("pujaLabelNameLabel").textContent = "দাতার নাম / বিবরণ *";
-    $("entryPujaDonorName").placeholder = "নাম বা বিবরণ লিখুন...";
+    hideEl("pujaLabelMemberGroup"); showEl("pujaLabelNameGroup");
+    if(val === "গ্রাম") {
+      showEl("pujaGramDonorGroup");
+      $("pujaLabelNameLabel").textContent = "গ্রামের নাম *";
+      $("entryPujaDonorName").placeholder = "গ্রামের নাম লিখুন...";
+    } else {
+      hideEl("pujaGramDonorGroup");
+      $("pujaLabelNameLabel").textContent = "দাতার নাম / বিবরণ *";
+      $("entryPujaDonorName").placeholder = "নাম বা বিবরণ লিখুন...";
+    }
   }
 };
 
@@ -2135,20 +2217,21 @@ window.submitChandaEntry = async function() {
       const label = document.querySelector('input[name="pujaLabel"]:checked')?.value;
       if(!label) { setErr("entryError","লেবেল নির্বাচন করুন (সদস্য / গ্রাম / অন্যান্য)।"); return; }
       let donorName = "";
+      let gramName = "";
       let memberId = "";
       if(label === "সদস্য") {
         memberId = $("entryPujaMember").value;
         if(!memberId) { setErr("entryError","সদস্য নির্বাচন করুন।"); return; }
         donorName = allMembers.find(m=>m.id===memberId)?.name || "";
+      } else if(label === "গ্রাম") {
+        donorName = $("entryPujaGramDonorName").value.trim();
+        gramName = $("entryPujaDonorName").value.trim();
+        if(!donorName) { setErr("entryError","দাতার নাম লিখুন।"); return; }
+        if(!gramName) { setErr("entryError","গ্রামের নাম লিখুন।"); return; }
       } else {
         donorName = $("entryPujaDonorName").value.trim();
-        if(!donorName) { setErr("entryError","দাতার নাম লিখুন।"); return; }
-        if(label === "গ্রাম") {
-          const gramName = ($("entryGramName")?.value||"").trim();
-          if(!gramName) { setErr("entryError","গ্রামের নাম লিখুন।"); return; }
-        }
+        if(!donorName) { setErr("entryError","নাম/বিবরণ লিখুন।"); return; }
       }
-      const gramName = label === "গ্রাম" ? ($("entryGramName")?.value||"").trim() : "";
       const now = new Date();
       await addDoc(collection(db,"chanda"), {
         entryType:"puja", pujaLabel:label,
@@ -2163,10 +2246,9 @@ window.submitChandaEntry = async function() {
 
     showToast("প্রণামী এন্ট্রি সংরক্ষিত হয়েছে। ✅");
     $("entryAmount").value=""; $("entryNote").value=""; $("entryDate").value="";
-    $("entryMember").value=""; $("entryPujaMember").value=""; $("entryPujaDonorName").value="";
-    if($("entryGramName")) $("entryGramName").value="";
+    $("entryMember").value=""; $("entryPujaMember").value=""; $("entryPujaDonorName").value=""; $("entryPujaGramDonorName").value="";
     document.querySelectorAll('input[name="pujaLabel"]').forEach(r=>r.checked=false);
-    hideEl("pujaLabelMemberGroup"); hideEl("pujaLabelNameGroup"); hideEl("pujaGramNameGroup");
+    hideEl("pujaLabelMemberGroup"); hideEl("pujaLabelNameGroup"); hideEl("pujaGramDonorGroup");
     setErr("entryError","");
     updatePendingBadge();
     navigateTo("collection");
@@ -2363,6 +2445,10 @@ window.showPublicMemberDetail = async function(id) {
     const chandas = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.year-a.year||b.month-a.month);
     $("memberDetailName").textContent = m.name;
 
+    // ── Check for an existing pending email request ──
+    const emailReqSnap = await getDocs(query(collection(db,"emailRequests"), where("memberId","==",id), where("status","==","pending")));
+    const pendingEmailReq = emailReqSnap.docs[0]?.data();
+
     // ── Current-year summary up to this month ──
     const now = new Date();
     const curYear = now.getFullYear();
@@ -2404,6 +2490,21 @@ window.showPublicMemberDetail = async function(id) {
         <div class="member-detail-sub">📞 ${m.phone||"-"}</div>
         <div class="member-detail-sub">মাসিক প্রণামী: ৳${(m.monthlyAmount||0).toLocaleString()}</div>
       </div>
+    </div>
+
+    <!-- ── Self-service email (for approval notification emails) ── -->
+    <div class="card" style="margin:14px 0;padding:14px;background:var(--surface-soft)">
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px">✉️ ইমেইল ${m.email ? "(অনুমোদন নোটিফিকেশন পাঠানো হয়)" : "যোগ করুন (প্রণামী অনুমোদনের নোটিফিকেশন পেতে)"}</div>
+      ${pendingEmailReq ? `
+      <div style="font-size:12px;color:var(--yellow);background:var(--yellow-light);padding:8px 12px;border-radius:8px">⏳ "${pendingEmailReq.email}" যুক্ত করার অনুরোধ Admin অনুমোদনের অপেক্ষায় আছে।</div>
+      ` : `
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <input type="email" id="publicMemberEmailInput" placeholder="আপনার ইমেইল লিখুন..." value="${m.email||""}"
+          style="flex:1;min-width:200px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none" />
+        <button class="btn-primary btn-sm" onclick="savePublicMemberEmail('${m.id}')">💾 Save</button>
+      </div>
+      <div id="publicEmailMsg" style="margin-top:6px"></div>
+      `}
     </div>
 
     <!-- ── Current-year summary card ── -->
@@ -2454,6 +2555,33 @@ window.showPublicMemberDetail = async function(id) {
   } catch(e) { console.error(e); }
 };
 
+window.savePublicMemberEmail = async function(id) {
+  const input = $("publicMemberEmailInput");
+  const msgEl = $("publicEmailMsg");
+  const email = input.value.trim();
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!email || !emailRe.test(email)) {
+    msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">সঠিক ইমেইল ঠিকানা লিখুন।</span>`;
+    return;
+  }
+  try {
+    const mDoc = await getDoc(doc(db,"members",id));
+    const m = mDoc.exists() ? mDoc.data() : {};
+    await addDoc(collection(db,"emailRequests"), {
+      memberId: id,
+      memberName: m.name || "",
+      memberCode: m.memberId || "",
+      email,
+      status: "pending",
+      requestedAt: serverTimestamp()
+    });
+    msgEl.innerHTML = `<span style="color:var(--green);font-size:12px">✅ অনুরোধ পাঠানো হয়েছে। Admin অনুমোদন করলে ইমেইল যুক্ত হবে।</span>`;
+    input.disabled = true;
+  } catch(e) {
+    msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">ত্রুটি: ${e.message}</span>`;
+  }
+};
+
 // ─── My Collections (Officer) ───
 window.loadMyCollections = async function() {
   const year = parseInt($("myColYear").value);
@@ -2489,7 +2617,7 @@ window.loadMyCollections = async function() {
           const typeBadge = isPuja
             ? `<span style="background:#FEF3C7;color:#92400E;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600">🪷 পূজার</span>${c.pujaLabel?`<br><span style="font-size:10px;color:var(--text-muted)">${c.pujaLabel}</span>`:""}`
             : `<span style="background:#EDE9FE;color:#5B21B6;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600">📅 মাসিক</span>`;
-          const displayName = isPuja ? (c.donorName||m?.name||"—") : `${m?.name||"অজানা"} <span style="font-size:11px;color:var(--primary)">[${m?.memberId||"—"}]</span>`;
+          const displayName = isPuja ? pujaDonorDisplay(c, m?.name) : `${m?.name||"অজানা"} <span style="font-size:11px;color:var(--primary)">[${m?.memberId||"—"}]</span>`;
           const monthCol = isPuja ? `<span style="color:var(--text-muted);font-size:12px">—</span>` : (MONTHS_BN[c.month]||c.month);
           return `<tr><td>${i+1}</td><td>${typeBadge}</td><td>${displayName}</td><td>${monthCol}</td><td>৳${(c.amount||0).toLocaleString()}</td><td><span class="badge ${badge}">${statusLabel}</span></td><td style="color:var(--text-muted);font-size:12px">${c.note||"-"}</td><td>${c.entryDate||"-"}</td></tr>`;
         }).join("")}</tbody>
@@ -2815,6 +2943,7 @@ window.loadKhorocList = async function() {
               ${canEdit ? `<button class="btn-sm btn-edit" onclick="openEditKhorocModal('${e.id}')" title="সম্পাদনা">✏️</button>` : (e.approvalStatus==="approved"?`<span style="font-size:16px" title="অনুমোদিত — সম্পাদনা বন্ধ">🔒</span>`:"")}
               ${canEdit ? `<button class="btn-sm btn-delete" onclick="deleteKhoroc('${e.id}')" title="মুছুন">🗑️</button>` : ""}
               ${isAdmin && e.approvalStatus==="pending" ? `<button class="btn-sm" style="background:#D1FAE5;color:#065F46;border:none;padding:4px 8px;border-radius:6px;cursor:pointer;font-size:12px" onclick="approveEntry('khoroc','${e.id}')">✅ Approve</button>` : ""}
+              ${isAdmin && e.approvalStatus==="approved" ? `<button class="btn-sm" style="background:#FEF3C7;color:#92400E;border:none;padding:4px 8px;border-radius:6px;cursor:pointer;font-size:12px" onclick="unapproveEntry('khoroc','${e.id}')">↩️ Unapprove</button>` : ""}
             </div>
           </div>
           <div class="khoroc-item-list">${itemRows}</div>
@@ -2936,6 +3065,26 @@ window.downloadKhorocPDF = async function() {
 };
 
 // ─── Approval System ───
+// ─── Send pronami approval email to member (if email on file) ───
+async function sendApprovalEmail(chandaData) {
+  try {
+    if(!chandaData || !chandaData.memberId || !window.emailjs) return;
+    const memberSnap = await getDoc(doc(db, "members", chandaData.memberId));
+    if(!memberSnap.exists()) return;
+    const member = memberSnap.data();
+    if(!member.email) return;
+    await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_email: member.email,
+      to_name: member.name || "",
+      amount: chandaData.amount || 0,
+      date: chandaData.entryDate || "",
+      collector_name: chandaData.collectedBy || "",
+      note: chandaData.note || "",
+      org_name: "একতা যুব সংঘ"
+    });
+  } catch(e) { console.error("Approval email failed:", e); }
+}
+
 window.approveEntry = async function(type, id) {
   if(!confirm("এই এন্ট্রিটি অনুমোদন করবেন? অনুমোদনের পর অফিসার আর সম্পাদনা করতে পারবে না।")) return;
   try {
@@ -2945,7 +3094,31 @@ window.approveEntry = async function(type, id) {
       approvedBy: currentUser.name,
       approvedAt: serverTimestamp()
     });
+    if(type === "chanda") {
+      const snap = await getDoc(doc(db, col, id));
+      if(snap.exists()) sendApprovalEmail({ id, ...snap.data() });
+    }
     showToast("✅ এন্ট্রি অনুমোদিত হয়েছে।");
+    loadApprovals();
+    updatePendingBadge();
+    if(type === "chanda") loadCollectionPage();
+    else loadKhorocList();
+  } catch(e) { showToast("ত্রুটি: " + e.message, "error"); }
+};
+
+window.unapproveEntry = async function(type, id) {
+  if(currentUser.role !== "admin") return;
+  if(!confirm("এই এন্ট্রির অনুমোদন বাতিল করে আবার 'অপেক্ষমান' করবেন? এতে অফিসার আবার এন্ট্রিটি সম্পাদনা করতে পারবে।")) return;
+  try {
+    const col = type === "chanda" ? "chanda" : "khoroc";
+    await updateDoc(doc(db, col, id), {
+      approvalStatus: "pending",
+      approvedBy: null,
+      approvedAt: null,
+      unapprovedBy: currentUser.name,
+      unapprovedAt: serverTimestamp()
+    });
+    showToast("↩️ অনুমোদন বাতিল করা হয়েছে, এন্ট্রিটি এখন অপেক্ষমান।");
     loadApprovals();
     updatePendingBadge();
     if(type === "chanda") loadCollectionPage();
@@ -2979,6 +3152,12 @@ window.approveAll = async function(type, ids) {
       approvedBy: currentUser.name,
       approvedAt: serverTimestamp()
     })));
+    if(type === "chanda") {
+      Promise.all(ids.map(async id => {
+        const snap = await getDoc(doc(db, col, id));
+        if(snap.exists()) sendApprovalEmail({ id, ...snap.data() });
+      }));
+    }
     showToast(`✅ ${ids.length}টি এন্ট্রি অনুমোদিত।`);
     loadApprovals();
     updatePendingBadge();
@@ -2988,16 +3167,19 @@ window.approveAll = async function(type, ids) {
 window.loadApprovals = async function() {
   if(currentUser.role !== "admin") return;
   try {
-    const [chandaSnap, khorocSnap] = await Promise.all([
+    const [chandaSnap, khorocSnap, emailSnap] = await Promise.all([
       getDocs(query(collection(db,"chanda"), where("approvalStatus","==","pending"))),
-      getDocs(query(collection(db,"khoroc"), where("approvalStatus","==","pending")))
+      getDocs(query(collection(db,"khoroc"), where("approvalStatus","==","pending"))),
+      getDocs(query(collection(db,"emailRequests"), where("status","==","pending")))
     ]);
     const pendingChandas = chandaSnap.docs.map(d=>({id:d.id,...d.data()}))
       .sort((a,b) => (a.createdAt?.seconds||0) - (b.createdAt?.seconds||0));
     const pendingKhorocs = khorocSnap.docs.map(d=>({id:d.id,...d.data()}))
       .sort((a,b) => (a.createdAt?.seconds||0) - (b.createdAt?.seconds||0));
+    const pendingEmails = emailSnap.docs.map(d=>({id:d.id,...d.data()}))
+      .sort((a,b) => (a.requestedAt?.seconds||0) - (b.requestedAt?.seconds||0));
 
-    const totalPending = pendingChandas.length + pendingKhorocs.length;
+    const totalPending = pendingChandas.length + pendingKhorocs.length + pendingEmails.length;
 
     // Summary
     $("approvalsSummary").innerHTML = `
@@ -3012,6 +3194,10 @@ window.loadApprovals = async function() {
       <div class="stat-card" style="flex:1;min-width:130px;border-left:4px solid var(--red)">
         <div class="stat-icon" style="background:#FEE2E2">💸</div>
         <div><div class="stat-value">${pendingKhorocs.length}</div><div class="stat-label">খরচ এন্ট্রি</div></div>
+      </div>
+      <div class="stat-card" style="flex:1;min-width:130px;border-left:4px solid var(--accent)">
+        <div class="stat-icon" style="background:#FEF3C7">✉️</div>
+        <div><div class="stat-value">${pendingEmails.length}</div><div class="stat-label">ইমেইল অনুরোধ</div></div>
       </div>
     `;
 
@@ -3038,7 +3224,7 @@ window.loadApprovals = async function() {
           ${pendingChandas.map((c,i) => {
             const isPuja = c.entryType === "puja";
             const typeBadge = isPuja ? `<span style="background:#FEF3C7;color:#92400E;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600">🪷 পূজার</span>` : `<span style="background:#EDE9FE;color:#5B21B6;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600">📅 মাসিক</span>`;
-            const name = isPuja ? (c.donorName||"—") : (c.memberName||"—");
+            const name = isPuja ? pujaDonorDisplay(c) : (c.memberName||"—");
             const monthYear = isPuja ? `${c.year}` : `${MONTHS_BN[c.month]||c.month} ${c.year}`;
             const sBadge = c.status==="paid" ? "badge-paid" : c.status==="due" ? "badge-due" : "badge-pending";
             const sLabel = c.status==="paid" ? "✅ Paid" : c.status==="due" ? "❌ Due" : "⏳ Pending";
@@ -3085,17 +3271,62 @@ window.loadApprovals = async function() {
           </div>`;
         }).join("")}`;
     }
+
+    // ── Pending Email Requests ──
+    if(!pendingEmails.length) {
+      $("pendingEmailList").innerHTML = `<div class="empty-state"><div class="empty-state-icon">✅</div><div class="empty-state-text">কোনো অপেক্ষমান ইমেইল অনুরোধ নেই</div></div>`;
+    } else {
+      $("pendingEmailList").innerHTML = `
+        <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>#</th><th>সদস্য</th><th>Member ID</th><th>ইমেইল</th><th>Action</th></tr></thead>
+          <tbody>
+          ${pendingEmails.map((r,i) => `
+            <tr>
+              <td>${i+1}</td>
+              <td>${r.memberName||"—"}</td>
+              <td><span class="member-id-badge">${r.memberCode||"—"}</span></td>
+              <td>${r.email||"—"}</td>
+              <td style="white-space:nowrap">
+                <button class="btn-sm" style="background:#D1FAE5;color:#065F46;border:none;padding:4px 9px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600" onclick="approveEmailReq('${r.id}','${r.memberId}','${r.email}')">✅ Approve</button>
+                <button class="btn-sm" style="background:#FEE2E2;color:#991B1B;border:none;padding:4px 9px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;margin-left:4px" onclick="rejectEmailReq('${r.id}')">❌ Reject</button>
+              </td>
+            </tr>
+          `).join("")}
+          </tbody>
+        </table></div>`;
+    }
   } catch(e) { console.error(e); }
+};
+
+window.approveEmailReq = async function(reqId, memberId, email) {
+  try {
+    await updateDoc(doc(db,"members",memberId), { email });
+    await updateDoc(doc(db,"emailRequests",reqId), { status:"approved" });
+    showToast("✅ ইমেইল অনুমোদিত হয়ে সদস্যের প্রোফাইলে যুক্ত হয়েছে।");
+    loadApprovals();
+    updatePendingBadge();
+  } catch(e) { showToast("ত্রুটি: "+e.message, "error"); }
+};
+
+window.rejectEmailReq = async function(reqId) {
+  try {
+    await updateDoc(doc(db,"emailRequests",reqId), { status:"rejected" });
+    showToast("ইমেইল অনুরোধ প্রত্যাখ্যান করা হয়েছে।", "error");
+    loadApprovals();
+    updatePendingBadge();
+  } catch(e) { showToast("ত্রুটি: "+e.message, "error"); }
 };
 
 async function updatePendingBadge() {
   if(currentUser?.role !== "admin") return;
   try {
-    const [cs, ks] = await Promise.all([
+    const [cs, ks, es] = await Promise.all([
       getDocs(query(collection(db,"chanda"), where("approvalStatus","==","pending"))),
-      getDocs(query(collection(db,"khoroc"), where("approvalStatus","==","pending")))
+      getDocs(query(collection(db,"khoroc"), where("approvalStatus","==","pending"))),
+      getDocs(query(collection(db,"emailRequests"), where("status","==","pending")))
     ]);
-    const total = cs.size + ks.size;
+    const total = cs.size + ks.size + es.size;
     const badge = $("pendingApprovalBadge");
     if(badge) {
       if(total > 0) { badge.textContent = total; badge.style.display = "inline"; }
