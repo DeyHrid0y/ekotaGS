@@ -934,28 +934,29 @@ body {
   <div class="login-bg">
     <div class="login-blob login-blob-1"></div>
     <div class="login-blob login-blob-2"></div>
+    <button id="langToggleBtn" onclick="toggleLoginLanguage()"
+      style="position:absolute;top:16px;right:16px;z-index:10;background:rgba(255,255,255,0.18);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.35);color:white;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🌐 EN</button>
     <div class="login-card">
       <div class="login-header">
         <div class="logo-circle">🪷</div>
         <h1 class="login-title"><span class="login-title-band">একতা যুব সংঘ</span></h1>
-        <p class="login-subtitle">মাসিক প্রণামী সংগ্রহ ব্যবস্থাপনা</p>
-        <p class="login-sub2">Monthly Subscription Management</p>
+        <p class="login-subtitle" data-bn="মাসিক প্রণামী সংগ্রহ ব্যবস্থাপনা" data-en="Monthly Subscription Management">মাসিক প্রণামী সংগ্রহ ব্যবস্থাপনা</p>
       </div>
 
       <div class="login-tabs">
         <button class="tab-btn active" onclick="switchLoginTab('admin')" id="tabAdmin">Admin / Officer</button>
-        <button class="tab-btn" onclick="switchLoginTab('member')" id="tabMember">Member Search</button>
+        <button class="tab-btn" onclick="switchLoginTab('member')" id="tabMember" data-bn="সদস্য অনুসন্ধান" data-en="Member Search">Member Search</button>
       </div>
 
       <!-- Admin/Officer Login -->
       <div id="loginForm" class="tab-content active">
         <div class="form-group">
           <label>Username</label>
-          <input type="text" id="loginUsername" placeholder="email অথবা username" />
+          <input type="text" id="loginUsername" data-bn-ph="ইমেইল অথবা ইউজারনেম" data-en-ph="email or username" placeholder="email অথবা username" />
         </div>
         <div class="form-group">
           <label>Password</label>
-          <input type="password" id="loginPassword" placeholder="password" />
+          <input type="password" id="loginPassword" data-bn-ph="পাসওয়ার্ড" data-en-ph="password" placeholder="password" />
         </div>
         <div id="loginError" class="error-msg hidden"></div>
         <button class="btn-primary full-width" onclick="doLogin()">Login</button>
@@ -964,14 +965,55 @@ body {
       <!-- Member Search -->
       <div id="memberSearchForm" class="tab-content hidden">
         <div class="form-group">
-          <label>আপনার নাম লিখুন / Enter Your Name</label>
-          <input type="text" id="memberSearchInput" placeholder="নাম দিয়ে খুঁজুন..." oninput="searchMemberPublic()" />
+          <label data-bn="আপনার নাম লিখুন / Enter Your Name" data-en="Enter Your Name">আপনার নাম লিখুন / Enter Your Name</label>
+          <input type="text" id="memberSearchInput" data-bn-ph="নাম দিয়ে খুঁজুন..." data-en-ph="Search by name..." placeholder="নাম দিয়ে খুঁজুন..." oninput="searchMemberPublic()" />
         </div>
         <div id="memberPublicResults"></div>
       </div>
 
+      <button class="btn-secondary full-width" style="margin-top:14px" onclick="openPublicSummaryPin()" data-bn="📊 আয়-ব্যয়ের সারসংক্ষেপ দেখুন" data-en="📊 View Income-Expense Summary">📊 আয়-ব্যয়ের সারসংক্ষেপ দেখুন</button>
+
       <div class="login-footer">Developed by <span>HRIDOOY DEY</span></div>
     </div>
+  </div>
+</div>
+
+<!-- Public Summary: PIN Entry Modal -->
+<div id="publicPinModal" class="modal-overlay hidden">
+  <div class="modal-card" style="max-width:340px">
+    <div class="modal-header">
+      <h3>🔒 পিন লিখুন</h3>
+      <button class="modal-close" onclick="closeModal('publicPinModal')">✕</button>
+    </div>
+    <div class="form-group">
+      <label>পিন</label>
+      <input type="password" inputmode="numeric" id="publicPinInput" placeholder="••••" onkeydown="if(event.key==='Enter') verifyPublicPin()" />
+    </div>
+    <div id="publicPinError" class="error-msg hidden"></div>
+    <button class="btn-primary full-width" onclick="verifyPublicPin()">দেখুন</button>
+  </div>
+</div>
+
+<!-- Public Summary: Result Modal -->
+<div id="publicSummaryModal" class="modal-overlay hidden">
+  <div class="modal-card" style="max-width:480px">
+    <div class="modal-header">
+      <h3>📊 আয়-ব্যয়ের সারসংক্ষেপ</h3>
+      <button class="modal-close" onclick="closeModal('publicSummaryModal')">✕</button>
+    </div>
+    <div class="form-group">
+      <label>বছর</label>
+      <select id="publicSummaryYear" onchange="loadPublicSummary()"
+        style="width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;cursor:pointer">
+        <option value="2025">২০২৫</option>
+        <option value="2026">২০২৬</option>
+        <option value="2027">২০২৭</option>
+        <option value="2028">২০২৮</option>
+        <option value="2029">২০২৯</option>
+        <option value="2030">২০৩০</option>
+      </select>
+    </div>
+    <div id="publicSummaryContent"></div>
   </div>
 </div>
 
@@ -1173,6 +1215,17 @@ body {
           <!-- ══ PUJA PRONAMI FIELDS ══ -->
           <div id="pujaFields" class="hidden">
             <div class="form-group">
+              <label>পূজার বছর / Puja Year * <span style="font-size:11px;color:var(--text-muted);font-weight:400">(যে বছর পূজা অনুষ্ঠিত হবে — যেমন ডিসেম্বরে সংগ্রহ করা চাঁদা দিয়ে জানুয়ারিতে সরস্বতী পূজা হলে পরের বছরটা সিলেক্ট করুন)</span></label>
+              <select id="entryPujaYear">
+                <option value="2025">২০২৫</option>
+                <option value="2026" selected>২০২৬</option>
+                <option value="2027">২০২৭</option>
+                <option value="2028">২০২৮</option>
+                <option value="2029">২০২৯</option>
+                <option value="2030">২০৩০</option>
+              </select>
+            </div>
+            <div class="form-group">
               <label>লেবেল / Label *</label>
               <div style="display:flex;gap:8px;flex-wrap:wrap">
                 <label class="label-radio-btn" id="lbl-somossho">
@@ -1271,6 +1324,35 @@ body {
           <h3>পাসওয়ার্ড পরিবর্তনের অনুরোধ</h3>
         </div>
         <div id="pwdRequestsList"></div>
+      </section>
+
+      <!-- Public Summary Settings (Admin only) -->
+      <section id="page-public-settings" class="page hidden">
+        <div class="card max-600">
+          <h3 class="card-title">🔒 পাবলিক পিন পরিবর্তন</h3>
+          <p class="info-text">এই পিন দিয়ে যে কেউ (লগইন ছাড়াই) মোট আয়-ব্যয়ের সারসংক্ষেপ দেখতে পারবে। নিরাপত্তার জন্য মাঝে মাঝে পিন পরিবর্তন করুন।</p>
+          <div class="form-group">
+            <label>নতুন পিন</label>
+            <input type="text" id="newPublicPinInput" placeholder="যেমন: 1234" />
+          </div>
+          <div id="publicPinSaveMsg" style="margin-bottom:10px"></div>
+          <button class="btn-primary" onclick="savePublicPin()">💾 পিন সংরক্ষণ করুন</button>
+        </div>
+
+        <div class="card max-600" style="margin-top:20px">
+          <h3 class="card-title">👛 উদ্বৃত্ত টাকার বণ্টন — কার কাছে কত আছে</h3>
+          <p class="info-text">এখানে ম্যানুয়ালি লিখে রাখুন উদ্বৃত্ত টাকা এই মুহূর্তে কার কাছে / কোথায় কত পরিমাণ আছে (যেমন: ক্যাশ বক্স, কোষাধ্যক্ষ, ব্যাংক অ্যাকাউন্ট)।</p>
+          <div class="form-group">
+            <label>নাম</label>
+            <input type="text" id="newHolderName" placeholder="যেমন: কোষাধ্যক্ষ - রহিম" />
+          </div>
+          <div class="form-group">
+            <label>পরিমাণ (৳)</label>
+            <input type="number" id="newHolderAmount" placeholder="0" />
+          </div>
+          <button class="btn-primary" onclick="addCashHolder()">+ যোগ করুন</button>
+          <div id="cashHoldersList" style="margin-top:16px"></div>
+        </div>
       </section>
 
       <!-- Officer: Request Password Change -->
@@ -1780,6 +1862,7 @@ function buildNav() {
     <div class="nav-item" onclick="navigateTo('final-report')"><span class="nav-icon">📊</span> চূড়ান্ত রিপোর্ট</div>
     <div class="nav-item" onclick="navigateTo('officers')"><span class="nav-icon">🛡️</span> Officers</div>
     <div class="nav-item" onclick="navigateTo('password-requests')"><span class="nav-icon">🔑</span> Password Change Request</div>
+    <div class="nav-item" onclick="navigateTo('public-settings')"><span class="nav-icon">🔐</span> পাবলিক সারসংক্ষেপ সেটিংস</div>
     ` : `
     <div class="nav-section">অ্যাকাউন্ট</div>
     <div class="nav-item" onclick="navigateTo('change-password')"><span class="nav-icon">🔑</span> Change Password</div>
@@ -1797,7 +1880,8 @@ window.navigateTo = function(page) {
     "dashboard":"Dashboard","members":"সদস্য তালিকা","collection":"প্রণামী সংগ্রহ",
     "add-collection":"নতুন প্রণামী","officers":"অফিসার","password-requests":"পাসওয়ার্ড অনুরোধ",
     "change-password":"পাসওয়ার্ড পরিবর্তন","reports":"রিপোর্ট","my-collections":"আমার সংগ্রহ",
-    "khoroc":"💸 খরচ","final-report":"📊 চূড়ান্ত রিপোর্ট","approvals":"✅ অনুমোদন"
+    "khoroc":"💸 খরচ","final-report":"📊 চূড়ান্ত রিপোর্ট","approvals":"✅ অনুমোদন",
+    "public-settings":"🔐 পাবলিক সারসংক্ষেপ সেটিংস"
   }[page] || page;
   document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
   const active = [...document.querySelectorAll(".nav-item")].find(n => n.onclick && n.onclick.toString().includes(`'${page}'`));
@@ -1814,6 +1898,7 @@ window.navigateTo = function(page) {
   else if(page==="khoroc") loadKhorocList();
   else if(page==="final-report") loadFinalReport();
   else if(page==="approvals") loadApprovals();
+  else if(page==="public-settings") loadPublicSettingsPage();
   // close sidebar on mobile
   $("sidebar").classList.remove("open");
 };
@@ -2216,6 +2301,8 @@ window.submitChandaEntry = async function() {
       // ── Puja pronami ──
       const label = document.querySelector('input[name="pujaLabel"]:checked')?.value;
       if(!label) { setErr("entryError","লেবেল নির্বাচন করুন (সদস্য / গ্রাম / অন্যান্য)।"); return; }
+      const pujaYear = parseInt($("entryPujaYear").value);
+      if(!pujaYear) { setErr("entryError","পূজার বছর নির্বাচন করুন।"); return; }
       let donorName = "";
       let gramName = "";
       let memberId = "";
@@ -2236,7 +2323,7 @@ window.submitChandaEntry = async function() {
       await addDoc(collection(db,"chanda"), {
         entryType:"puja", pujaLabel:label,
         memberId, donorName, gramName,
-        month: now.getMonth()+1, year: now.getFullYear(),
+        month: now.getMonth()+1, year: pujaYear,
         amount, status, note, entryDate,
         collectedBy:currentUser.name, collectorId:currentUser.id,
         approvalStatus: currentUser.role==="admin" ? "approved" : "pending",
@@ -3315,6 +3402,177 @@ window.rejectEmailReq = async function(reqId) {
     showToast("ইমেইল অনুরোধ প্রত্যাখ্যান করা হয়েছে।", "error");
     loadApprovals();
     updatePendingBadge();
+  } catch(e) { showToast("ত্রুটি: "+e.message, "error"); }
+};
+
+// ─── Public Financial Summary (PIN-gated, no login required) ───
+window.openPublicSummaryPin = function() {
+  $("publicPinInput").value = "";
+  setErr("publicPinError","");
+  showEl("publicPinModal");
+};
+
+window.verifyPublicPin = async function() {
+  const pin = $("publicPinInput").value.trim();
+  if(!pin) { setErr("publicPinError","পিন লিখুন।"); return; }
+  try {
+    const snap = await getDoc(doc(db,"settings","publicPin"));
+    const correctPin = snap.exists() && snap.data().pin ? snap.data().pin : "1234";
+    if(pin !== correctPin) { setErr("publicPinError","ভুল পিন।"); return; }
+    closeModal("publicPinModal");
+    showEl("publicSummaryModal");
+    const prevYear = new Date().getFullYear() - 1;
+    if($("publicSummaryYear").querySelector(`option[value="${prevYear}"]`)) {
+      $("publicSummaryYear").value = String(prevYear);
+    }
+    await loadPublicSummary();
+  } catch(e) { setErr("publicPinError","ত্রুটি: "+e.message); }
+};
+
+window.loadPublicSummary = async function() {
+  const year = parseInt($("publicSummaryYear").value);
+  $("publicSummaryContent").innerHTML = `<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">লোড হচ্ছে...</div>`;
+  try {
+    const [chandaSnap, khorocSnap, holdersSnap] = await Promise.all([
+      getDocs(query(collection(db,"chanda"), where("year","==",year), where("approvalStatus","==","approved"))),
+      getDocs(query(collection(db,"khoroc"), where("approvalStatus","==","approved"))),
+      getDocs(collection(db,"cashHolders"))
+    ]);
+    const totalIncome  = chandaSnap.docs.reduce((s,d)=>{ const c=d.data(); return s+(c.status==="paid"?(c.amount||0):0); },0);
+    const totalExpense = khorocSnap.docs
+      .filter(d => { const e=d.data(); return e.date && new Date(e.date).getFullYear() === year; })
+      .reduce((s,d)=>s+(d.data().totalAmount||0),0);
+    const netBalance = totalIncome - totalExpense;
+    const surplus = netBalance >= 0;
+    const holders = holdersSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const holdersTotal = holders.reduce((s,h)=>s+(h.amount||0),0);
+
+    $("publicSummaryContent").innerHTML = `
+      <div class="net-balance-card" style="background:${surplus?"linear-gradient(135deg,#065F46,#10B981)":"linear-gradient(135deg,#7F1D1D,#EF4444)"};color:white;margin-bottom:16px">
+        <div class="net-balance-icon">${surplus?"📈":"📉"}</div>
+        <div>
+          <div class="net-balance-label">${surplus?"নিট উদ্বৃত্ত (Surplus)":"নিট ঘাটতি (Deficit)"} — ${year}</div>
+          <div class="net-balance-value">৳${Math.abs(netBalance).toLocaleString()}</div>
+          <div style="font-size:11px;opacity:0.8;margin-top:3px">আয় ৳${totalIncome.toLocaleString()} − খরচ ৳${totalExpense.toLocaleString()}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap">
+        <div class="stat-card" style="flex:1;min-width:140px;border-left:4px solid var(--green)">
+          <div class="stat-icon" style="background:#D1FAE5">💰</div>
+          <div><div class="stat-value" style="color:var(--green)">৳${totalIncome.toLocaleString()}</div><div class="stat-label">মোট প্রণামী আয়</div></div>
+        </div>
+        <div class="stat-card" style="flex:1;min-width:140px;border-left:4px solid var(--red)">
+          <div class="stat-icon" style="background:#FEE2E2">💸</div>
+          <div><div class="stat-value" style="color:var(--red)">৳${totalExpense.toLocaleString()}</div><div class="stat-label">মোট ব্যয়</div></div>
+        </div>
+      </div>
+      <h4 style="font-size:14px;margin:6px 0 10px">👛 উদ্বৃত্ত টাকা কার কাছে কত আছে</h4>
+      ${holders.length ? `
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th>নাম</th><th>পরিমাণ</th></tr></thead>
+          <tbody>
+            ${holders.map(h=>`<tr><td>${h.name}</td><td>৳${(h.amount||0).toLocaleString()}</td></tr>`).join("")}
+          </tbody>
+          <tfoot><tr><th>মোট</th><th>৳${holdersTotal.toLocaleString()}</th></tr></tfoot>
+        </table></div>
+      ` : `<div class="empty-state"><div class="empty-state-text">এখনো কোনো তথ্য যোগ করা হয়নি।</div></div>`}
+    `;
+  } catch(e) {
+    $("publicSummaryContent").innerHTML = `<div style="color:var(--red);padding:10px;font-size:13px">ত্রুটি: ${e.message}</div>`;
+  }
+}
+
+// ─── Admin: Public Summary Settings (PIN + Cash Holders) ───
+window.loadPublicSettingsPage = async function() {
+  if(currentUser.role !== "admin") return;
+  try {
+    const snap = await getDoc(doc(db,"settings","publicPin"));
+    $("newPublicPinInput").value = snap.exists() && snap.data().pin ? snap.data().pin : "1234";
+  } catch(e) {}
+  loadCashHolders();
+};
+
+window.savePublicPin = async function() {
+  const pin = $("newPublicPinInput").value.trim();
+  const msgEl = $("publicPinSaveMsg");
+  if(!pin) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">পিন লিখুন।</span>`; return; }
+  try {
+    await setDoc(doc(db,"settings","publicPin"), { pin, updatedBy: currentUser.name, updatedAt: serverTimestamp() });
+    msgEl.innerHTML = `<span style="color:var(--green);font-size:12px">✅ পিন সংরক্ষিত হয়েছে।</span>`;
+    showToast("✅ পাবলিক পিন আপডেট হয়েছে।");
+  } catch(e) {
+    msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">ত্রুটি: ${e.message}</span>`;
+  }
+};
+
+async function loadCashHolders() {
+  $("cashHoldersList").innerHTML = `<div style="padding:10px;color:var(--text-muted);font-size:13px">লোড হচ্ছে...</div>`;
+  try {
+    const snap = await getDocs(collection(db,"cashHolders"));
+    const holders = snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(!holders.length) {
+      $("cashHoldersList").innerHTML = `<div class="empty-state"><div class="empty-state-text">কোনো তথ্য নেই। উপরের ফর্ম থেকে যোগ করুন।</div></div>`;
+      return;
+    }
+    const total = holders.reduce((s,h)=>s+(h.amount||0),0);
+    $("cashHoldersList").innerHTML = `
+      <div class="table-wrap"><table class="data-table">
+        <thead><tr><th>নাম</th><th>পরিমাণ (৳)</th><th>Action</th></tr></thead>
+        <tbody>
+          ${holders.map(h=>`
+            <tr id="holderRow-${h.id}">
+              <td>
+                <input type="text" id="holderName-${h.id}" value="${(h.name||"").replace(/"/g,"&quot;")}"
+                  style="width:100%;min-width:120px;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit" />
+              </td>
+              <td>
+                <input type="number" id="holderAmount-${h.id}" value="${h.amount||0}"
+                  style="width:100%;min-width:90px;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit" />
+              </td>
+              <td style="white-space:nowrap">
+                <button class="btn-sm btn-edit" onclick="saveCashHolder('${h.id}')">💾 Save</button>
+                <button class="btn-sm btn-delete" onclick="deleteCashHolder('${h.id}')">🗑️</button>
+              </td>
+            </tr>
+          `).join("")}
+        </tbody>
+        <tfoot><tr><th>মোট</th><th colspan="2">৳${total.toLocaleString()}</th></tr></tfoot>
+      </table></div>
+    `;
+  } catch(e) {
+    $("cashHoldersList").innerHTML = `<div style="color:var(--red);font-size:13px">ত্রুটি: ${e.message}</div>`;
+  }
+}
+
+window.addCashHolder = async function() {
+  const name = $("newHolderName").value.trim();
+  const amount = parseFloat($("newHolderAmount").value) || 0;
+  if(!name) { showToast("নাম লিখুন।", "error"); return; }
+  try {
+    await addDoc(collection(db,"cashHolders"), { name, amount, createdAt: serverTimestamp() });
+    $("newHolderName").value=""; $("newHolderAmount").value="";
+    showToast("✅ যোগ করা হয়েছে।");
+    loadCashHolders();
+  } catch(e) { showToast("ত্রুটি: "+e.message, "error"); }
+};
+
+window.saveCashHolder = async function(id) {
+  const name = $(`holderName-${id}`).value.trim();
+  const amount = parseFloat($(`holderAmount-${id}`).value) || 0;
+  if(!name) { showToast("নাম লিখুন।", "error"); return; }
+  try {
+    await updateDoc(doc(db,"cashHolders",id), { name, amount });
+    showToast("✅ আপডেট হয়েছে।");
+    loadCashHolders();
+  } catch(e) { showToast("ত্রুটি: "+e.message, "error"); }
+};
+
+window.deleteCashHolder = async function(id) {
+  if(!confirm("এই তথ্যটি মুছে ফেলবেন?")) return;
+  try {
+    await deleteDoc(doc(db,"cashHolders",id));
+    showToast("মুছে ফেলা হয়েছে।");
+    loadCashHolders();
   } catch(e) { showToast("ত্রুটি: "+e.message, "error"); }
 };
 
