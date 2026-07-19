@@ -1011,6 +1011,11 @@ body {
         <option value="2028">২০২৮</option>
         <option value="2029">২০২৯</option>
         <option value="2030">২০৩০</option>
+        <option value="2031">২০৩১</option>
+        <option value="2032">২০৩২</option>
+        <option value="2033">২০৩৩</option>
+        <option value="2034">২০৩৪</option>
+        <option value="2035">২০৩৫</option>
       </select>
     </div>
     <div id="publicSummaryContent"></div>
@@ -1123,6 +1128,11 @@ body {
               <option value="2028">২০২৮ / 2028</option>
               <option value="2029">২০২৯ / 2029</option>
               <option value="2030">২০৩০ / 2030</option>
+              <option value="2031">২০৩১ / 2031</option>
+              <option value="2032">২০৩২ / 2032</option>
+              <option value="2033">২০৩৩ / 2033</option>
+              <option value="2034">২০৩৪ / 2034</option>
+              <option value="2035">২০৩৫ / 2035</option>
             </select>
             <select id="filterMonth" onchange="loadCollectionPage()">
               <option value="">সব মাস / All Months</option>
@@ -1209,6 +1219,11 @@ body {
                   <option value="2028">২০২৮</option>
                   <option value="2029">২০২৯</option>
                   <option value="2030">২০৩০</option>
+                  <option value="2031">২০৩১</option>
+                  <option value="2032">২০৩২</option>
+                  <option value="2033">২০৩৩</option>
+                  <option value="2034">২০৩৪</option>
+                  <option value="2035">২০৩৫</option>
                 </select>
               </div>
             </div>
@@ -1225,6 +1240,11 @@ body {
                 <option value="2028">২০২৮</option>
                 <option value="2029">২০২৯</option>
                 <option value="2030">২০৩০</option>
+                <option value="2031">২০৩১</option>
+                <option value="2032">২০৩২</option>
+                <option value="2033">২০৩৩</option>
+                <option value="2034">২০৩৪</option>
+                <option value="2035">২০৩৫</option>
               </select>
             </div>
             <div class="form-group">
@@ -1343,7 +1363,23 @@ body {
 
         <div class="card max-600" style="margin-top:20px">
           <h3 class="card-title">👛 উদ্বৃত্ত টাকার বণ্টন — কার কাছে কত আছে</h3>
-          <p class="info-text">এখানে ম্যানুয়ালি লিখে রাখুন উদ্বৃত্ত টাকা এই মুহূর্তে কার কাছে / কোথায় কত পরিমাণ আছে (যেমন: ক্যাশ বক্স, কোষাধ্যক্ষ, ব্যাংক অ্যাকাউন্ট)।</p>
+          <p class="info-text">প্রতি বছরের (পূজার হিসাব) উদ্বৃত্ত টাকা আলাদাভাবে লিখে রাখুন কার কাছে / কোথায় কত আছে (যেমন: ক্যাশ বক্স, কোষাধ্যক্ষ, ব্যাংক অ্যাকাউন্ট)।</p>
+          <div class="form-group">
+            <label>বছর</label>
+            <select id="newHolderYear">
+              <option value="2025">২০২৫</option>
+              <option value="2026" selected>২০২৬</option>
+              <option value="2027">২০২৭</option>
+              <option value="2028">২০২৮</option>
+              <option value="2029">২০২৯</option>
+              <option value="2030">২০৩০</option>
+              <option value="2031">২০৩১</option>
+              <option value="2032">২০৩২</option>
+              <option value="2033">২০৩৩</option>
+              <option value="2034">২০৩৪</option>
+              <option value="2035">২০৩৫</option>
+            </select>
+          </div>
           <div class="form-group">
             <label>নাম</label>
             <input type="text" id="newHolderName" placeholder="যেমন: কোষাধ্যক্ষ - রহিম" />
@@ -1353,7 +1389,24 @@ body {
             <input type="number" id="newHolderAmount" placeholder="0" />
           </div>
           <button class="btn-primary" onclick="addCashHolder()">+ যোগ করুন</button>
-          <div id="cashHoldersList" style="margin-top:16px"></div>
+
+          <div class="form-group" style="margin-top:20px">
+            <label>তালিকা দেখুন — বছর</label>
+            <select id="holderListYear" onchange="loadCashHolders()">
+              <option value="2025">২০২৫</option>
+              <option value="2026" selected>২০২৬</option>
+              <option value="2027">২০২৭</option>
+              <option value="2028">২০২৮</option>
+              <option value="2029">২০২৯</option>
+              <option value="2030">২০৩০</option>
+              <option value="2031">২০৩১</option>
+              <option value="2032">২০৩২</option>
+              <option value="2033">২০৩৩</option>
+              <option value="2034">২০৩৪</option>
+              <option value="2035">২০৩৫</option>
+            </select>
+          </div>
+          <div id="cashHoldersList" style="margin-top:10px"></div>
         </div>
       </section>
 
@@ -1388,6 +1441,11 @@ body {
                 <option value="2028">২০২৮</option>
                 <option value="2029">২০২৯</option>
                 <option value="2030">২০৩০</option>
+                <option value="2031">২০৩১</option>
+                <option value="2032">২০৩২</option>
+                <option value="2033">২০৩৩</option>
+                <option value="2034">২০৩৪</option>
+                <option value="2035">২০৩৫</option>
             </select>
             <button class="btn-primary" onclick="downloadReportPDF()" style="margin-left:auto">📄 PDF Download</button>
           </div>
@@ -1406,6 +1464,11 @@ body {
                 <option value="2028">২০২৮</option>
                 <option value="2029">২০২৯</option>
                 <option value="2030">২০৩০</option>
+                <option value="2031">২০৩১</option>
+                <option value="2032">২০৩২</option>
+                <option value="2033">২০৩৩</option>
+                <option value="2034">২০৩৪</option>
+                <option value="2035">২০৩৫</option>
             </select>
           </div>
           <div id="myCollectionSummary" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px"></div>
@@ -1426,6 +1489,11 @@ body {
               <option value="2028">২০২৮</option>
               <option value="2029">২০২৯</option>
               <option value="2030">২০৩০</option>
+              <option value="2031">২০৩১</option>
+              <option value="2032">২০৩২</option>
+              <option value="2033">২০৩৩</option>
+              <option value="2034">২০৩৪</option>
+              <option value="2035">২০৩৫</option>
             </select>
             <button id="khorocPdfBtn" class="btn-secondary" onclick="downloadKhorocPDF()"
               style="display:none;gap:6px;align-items:center">📄 PDF Report</button>
@@ -1533,6 +1601,11 @@ body {
               <option value="2028">২০২৮</option>
               <option value="2029">২০২৯</option>
               <option value="2030">২০৩০</option>
+              <option value="2031">২০৩১</option>
+              <option value="2032">২০৩২</option>
+              <option value="2033">২০৩৩</option>
+              <option value="2034">২০৩৪</option>
+              <option value="2035">২০৩৫</option>
             </select>
             <button class="btn-primary" onclick="downloadFinalReportPDF()">📄 PDF Download</button>
           </div>
@@ -3453,9 +3526,9 @@ window.verifyPublicPin = async function() {
     if(pin !== correctPin) { setErr("publicPinError","ভুল পিন।"); return; }
     closeModal("publicPinModal");
     showEl("publicSummaryModal");
-    const prevYear = new Date().getFullYear() - 1;
-    if($("publicSummaryYear").querySelector(`option[value="${prevYear}"]`)) {
-      $("publicSummaryYear").value = String(prevYear);
+    const curYear = new Date().getFullYear();
+    if($("publicSummaryYear").querySelector(`option[value="${curYear}"]`)) {
+      $("publicSummaryYear").value = String(curYear);
     }
     await loadPublicSummary();
   } catch(e) { setErr("publicPinError","ত্রুটি: "+e.message); }
@@ -3465,12 +3538,14 @@ window.loadPublicSummary = async function() {
   const year = parseInt($("publicSummaryYear").value);
   $("publicSummaryContent").innerHTML = `<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">লোড হচ্ছে...</div>`;
   try {
-    const [chandaSnap, khorocSnap, holdersSnap] = await Promise.all([
-      getDocs(query(collection(db,"chanda"), where("year","==",year), where("approvalStatus","==","approved"))),
+    const [monthlySnap, pujaSnap, khorocSnap, holdersSnap] = await Promise.all([
+      getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"), where("approvalStatus","==","approved"))),
+      getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"), where("approvalStatus","==","approved"))),
       getDocs(query(collection(db,"khoroc"), where("approvalStatus","==","approved"))),
-      getDocs(collection(db,"cashHolders"))
+      getDocs(query(collection(db,"cashHolders"), where("year","==",year)))
     ]);
-    const totalIncome  = chandaSnap.docs.reduce((s,d)=>{ const c=d.data(); return s+(c.status==="paid"?(c.amount||0):0); },0);
+    const totalIncome  = [...monthlySnap.docs, ...pujaSnap.docs]
+      .reduce((s,d)=>{ const c=d.data(); return s+(c.status==="paid"?(c.amount||0):0); },0);
     const totalExpense = khorocSnap.docs
       .filter(d => { const e=d.data(); return e.date && new Date(e.date).getFullYear() === year; })
       .reduce((s,d)=>s+(d.data().totalAmount||0),0);
@@ -3483,22 +3558,22 @@ window.loadPublicSummary = async function() {
       <div class="net-balance-card" style="background:${surplus?"linear-gradient(135deg,#065F46,#10B981)":"linear-gradient(135deg,#7F1D1D,#EF4444)"};color:white;margin-bottom:16px">
         <div class="net-balance-icon">${surplus?"📈":"📉"}</div>
         <div>
-          <div class="net-balance-label">${surplus?"নিট উদ্বৃত্ত (Surplus)":"নিট ঘাটতি (Deficit)"} — ${year}</div>
+          <div class="net-balance-label">${surplus?"নিট উদ্বৃত্ত (Surplus)":"নিট ঘাটতি (Deficit)"} — ${year} সালের পূজা</div>
           <div class="net-balance-value">৳${Math.abs(netBalance).toLocaleString()}</div>
-          <div style="font-size:11px;opacity:0.8;margin-top:3px">আয় ৳${totalIncome.toLocaleString()} − খরচ ৳${totalExpense.toLocaleString()}</div>
+          <div style="font-size:11px;opacity:0.8;margin-top:3px">আয় ৳${totalIncome.toLocaleString()} (মাসিক ${year-1} + পূজা ${year}) − খরচ ৳${totalExpense.toLocaleString()}</div>
         </div>
       </div>
       <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap">
         <div class="stat-card" style="flex:1;min-width:140px;border-left:4px solid var(--green)">
           <div class="stat-icon" style="background:#D1FAE5">💰</div>
-          <div><div class="stat-value" style="color:var(--green)">৳${totalIncome.toLocaleString()}</div><div class="stat-label">মোট প্রণামী আয়</div></div>
+          <div><div class="stat-value" style="color:var(--green)">৳${totalIncome.toLocaleString()}</div><div class="stat-label">মোট প্রণামী আয় (মাসিক ${year-1} + পূজা ${year})</div></div>
         </div>
         <div class="stat-card" style="flex:1;min-width:140px;border-left:4px solid var(--red)">
           <div class="stat-icon" style="background:#FEE2E2">💸</div>
-          <div><div class="stat-value" style="color:var(--red)">৳${totalExpense.toLocaleString()}</div><div class="stat-label">মোট ব্যয়</div></div>
+          <div><div class="stat-value" style="color:var(--red)">৳${totalExpense.toLocaleString()}</div><div class="stat-label">মোট ব্যয় (${year})</div></div>
         </div>
       </div>
-      <h4 style="font-size:14px;margin:6px 0 10px">👛 উদ্বৃত্ত টাকা কার কাছে কত আছে</h4>
+      <h4 style="font-size:14px;margin:6px 0 10px">👛 ${year} সালের উদ্বৃত্ত টাকা কার কাছে কত আছে</h4>
       ${holders.length ? `
         <div class="table-wrap"><table class="data-table">
           <thead><tr><th>নাম</th><th>পরিমাণ</th></tr></thead>
@@ -3507,7 +3582,7 @@ window.loadPublicSummary = async function() {
           </tbody>
           <tfoot><tr><th>মোট</th><th>৳${holdersTotal.toLocaleString()}</th></tr></tfoot>
         </table></div>
-      ` : `<div class="empty-state"><div class="empty-state-text">এখনো কোনো তথ্য যোগ করা হয়নি।</div></div>`}
+      ` : `<div class="empty-state"><div class="empty-state-text">${year} সালের কোনো তথ্য যোগ করা হয়নি।</div></div>`}
     `;
   } catch(e) {
     $("publicSummaryContent").innerHTML = `<div style="color:var(--red);padding:10px;font-size:13px">ত্রুটি: ${e.message}</div>`;
@@ -3537,13 +3612,14 @@ window.savePublicPin = async function() {
   }
 };
 
-async function loadCashHolders() {
+window.loadCashHolders = async function() {
+  const year = parseInt($("holderListYear")?.value) || new Date().getFullYear();
   $("cashHoldersList").innerHTML = `<div style="padding:10px;color:var(--text-muted);font-size:13px">লোড হচ্ছে...</div>`;
   try {
-    const snap = await getDocs(collection(db,"cashHolders"));
+    const snap = await getDocs(query(collection(db,"cashHolders"), where("year","==",year)));
     const holders = snap.docs.map(d=>({id:d.id,...d.data()}));
     if(!holders.length) {
-      $("cashHoldersList").innerHTML = `<div class="empty-state"><div class="empty-state-text">কোনো তথ্য নেই। উপরের ফর্ম থেকে যোগ করুন।</div></div>`;
+      $("cashHoldersList").innerHTML = `<div class="empty-state"><div class="empty-state-text">${year} সালের কোনো তথ্য নেই। উপরের ফর্ম থেকে যোগ করুন।</div></div>`;
       return;
     }
     const total = holders.reduce((s,h)=>s+(h.amount||0),0);
@@ -3577,12 +3653,14 @@ async function loadCashHolders() {
 }
 
 window.addCashHolder = async function() {
+  const year = parseInt($("newHolderYear").value);
   const name = $("newHolderName").value.trim();
   const amount = parseFloat($("newHolderAmount").value) || 0;
   if(!name) { showToast("নাম লিখুন।", "error"); return; }
   try {
-    await addDoc(collection(db,"cashHolders"), { name, amount, createdAt: serverTimestamp() });
+    await addDoc(collection(db,"cashHolders"), { year, name, amount, createdAt: serverTimestamp() });
     $("newHolderName").value=""; $("newHolderAmount").value="";
+    if($("holderListYear")) $("holderListYear").value = String(year);
     showToast("✅ যোগ করা হয়েছে।");
     loadCashHolders();
   } catch(e) { showToast("ত্রুটি: "+e.message, "error"); }
@@ -3635,16 +3713,17 @@ window.loadFinalReport = async function() {
   $("finalExpenseSection").innerHTML = "";
 
   try {
-    const [chandaSnap, khorocSnap] = await Promise.all([
-      getDocs(query(collection(db,"chanda"), where("year","==",year))),
+    const [monthlySnap, pujaSnap, khorocSnap] = await Promise.all([
+      getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"))),
+      getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"))),
       getDocs(collection(db,"khoroc"))
     ]);
 
-    const chandas = chandaSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const chandas = [...monthlySnap.docs, ...pujaSnap.docs].map(d=>({id:d.id,...d.data()}));
     const khorocs = khorocSnap.docs.map(d=>({id:d.id,...d.data()}))
       .filter(e => e.date && new Date(e.date).getFullYear() === year);
 
-    // ── Income breakdown ──
+    // ── Income breakdown ── (মাসিক ${year-1} + পূজা ${year} = ${year}-এর পূজার হিসাব)
     const monthly   = chandas.filter(c => c.entryType === "monthly");
     const puja      = chandas.filter(c => c.entryType === "puja");
 
@@ -3669,9 +3748,9 @@ window.loadFinalReport = async function() {
       <div class="net-balance-card" style="background:${surplus?"linear-gradient(135deg,#065F46,#10B981)":"linear-gradient(135deg,#7F1D1D,#EF4444)"};color:white;flex:2;min-width:260px">
         <div class="net-balance-icon">${surplus?"📈":"📉"}</div>
         <div>
-          <div class="net-balance-label">${surplus?"নিট উদ্বৃত্ত (Surplus)":"নিট ঘাটতি (Deficit)"} — ${year}</div>
+          <div class="net-balance-label">${surplus?"নিট উদ্বৃত্ত (Surplus)":"নিট ঘাটতি (Deficit)"} — ${year} সালের পূজা</div>
           <div class="net-balance-value">৳${Math.abs(netBalance).toLocaleString()}</div>
-          <div style="font-size:11px;opacity:0.8;margin-top:3px">আয় ৳${totalIncome.toLocaleString()} − খরচ ৳${totalExpense.toLocaleString()}</div>
+          <div style="font-size:11px;opacity:0.8;margin-top:3px">আয় ৳${totalIncome.toLocaleString()} (মাসিক ${year-1} + পূজা ${year}) − খরচ ৳${totalExpense.toLocaleString()}</div>
         </div>
       </div>
       <div class="stat-card" style="flex:1;min-width:140px;border-left:4px solid var(--green)">
@@ -3707,14 +3786,14 @@ window.loadFinalReport = async function() {
     $("finalIncomeSection").innerHTML = `
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px">
         <div class="fin-source-card" style="background:#F0FDF4;border-color:#BBF7D0">
-          <div class="fin-source-label" style="color:#166534">📅 মাসিক প্রণামী</div>
+          <div class="fin-source-label" style="color:#166534">📅 মাসিক প্রণামী (${year-1})</div>
           <div class="fin-source-value" style="color:#166534">৳${mPaid.toLocaleString()}</div>
           <div class="fin-source-sub">${monthly.filter(c=>c.status==="paid").length} এন্ট্রি পরিশোধিত
           ${mDue>0?` · বকেয়া: ৳${mDue.toLocaleString()}`:""}
           ${mPending>0?` · অপেক্ষমান: ৳${mPending.toLocaleString()}`:""}</div>
         </div>
         <div class="fin-source-card" style="background:#FFFBEB;border-color:#FDE68A">
-          <div class="fin-source-label" style="color:#92400E">🪷 পূজার প্রণামী</div>
+          <div class="fin-source-label" style="color:#92400E">🪷 পূজার প্রণামী (${year})</div>
           <div class="fin-source-value" style="color:#92400E">৳${pPaid.toLocaleString()}</div>
           <div class="fin-source-sub">${puja.filter(c=>c.status==="paid").length} এন্ট্রি পরিশোধিত
           ${pDue>0?` · বকেয়া: ৳${pDue.toLocaleString()}`:""}
@@ -3728,7 +3807,7 @@ window.loadFinalReport = async function() {
           ${totalPending>0?` · অপেক্ষমান: ৳${totalPending.toLocaleString()}`:""}</div>
         </div>
       </div>
-      <p style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:8px">মাস ভিত্তিক আয় — ${year}</p>
+      <p style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:8px">মাস ভিত্তিক আয় — মাসিক ${year-1} + পূজা ${year}</p>
       <div class="table-wrap" style="margin-bottom:0">
         <table class="data-table">
           <thead><tr>
@@ -3800,11 +3879,12 @@ window.downloadFinalReportPDF = async function() {
   if(currentUser.role !== "admin") return;
   const year = parseInt($("finalReportYear").value);
   try {
-    const [chandaSnap, khorocSnap] = await Promise.all([
-      getDocs(query(collection(db,"chanda"), where("year","==",year))),
+    const [monthlySnap, pujaSnap, khorocSnap] = await Promise.all([
+      getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"))),
+      getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"))),
       getDocs(collection(db,"khoroc"))
     ]);
-    const chandas = chandaSnap.docs.map(d=>({id:d.id,...d.data()}));
+    const chandas = [...monthlySnap.docs, ...pujaSnap.docs].map(d=>({id:d.id,...d.data()}));
     const khorocs = khorocSnap.docs.map(d=>({id:d.id,...d.data()}))
       .filter(e => e.date && new Date(e.date).getFullYear() === year);
 
