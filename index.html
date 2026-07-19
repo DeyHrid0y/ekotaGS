@@ -944,22 +944,22 @@ body {
       </div>
 
       <div class="login-tabs">
-        <button class="tab-btn active" onclick="switchLoginTab('admin')" id="tabAdmin">Admin / Officer</button>
+        <button class="tab-btn active" onclick="switchLoginTab('admin')" id="tabAdmin" data-bn="অ্যাডমিন / অফিসার" data-en="Admin / Officer">Admin / Officer</button>
         <button class="tab-btn" onclick="switchLoginTab('member')" id="tabMember" data-bn="সদস্য অনুসন্ধান" data-en="Member Search">Member Search</button>
       </div>
 
       <!-- Admin/Officer Login -->
       <div id="loginForm" class="tab-content active">
         <div class="form-group">
-          <label>Username</label>
+          <label data-bn="ইউজারনেম" data-en="Username">Username</label>
           <input type="text" id="loginUsername" data-bn-ph="ইমেইল অথবা ইউজারনেম" data-en-ph="email or username" placeholder="email অথবা username" />
         </div>
         <div class="form-group">
-          <label>Password</label>
+          <label data-bn="পাসওয়ার্ড" data-en="Password">Password</label>
           <input type="password" id="loginPassword" data-bn-ph="পাসওয়ার্ড" data-en-ph="password" placeholder="password" />
         </div>
         <div id="loginError" class="error-msg hidden"></div>
-        <button class="btn-primary full-width" onclick="doLogin()">Login</button>
+        <button class="btn-primary full-width" onclick="doLogin()" data-bn="লগইন" data-en="Login">Login</button>
       </div>
 
       <!-- Member Search -->
@@ -1047,6 +1047,8 @@ body {
       <button class="hamburger" onclick="toggleSidebar()">☰</button>
       <h2 class="page-title" id="pageTitle">Dashboard</h2>
       <div class="topbar-right">
+        <button id="appLangToggleBtn" onclick="toggleLoginLanguage()"
+          style="background:var(--primary-light);border:1px solid var(--border);color:var(--primary);padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;margin-right:6px">🌐 EN</button>
         <span id="topbarRole" class="role-badge"></span>
         <span id="topbarUser" class="topbar-username"></span>
       </div>
@@ -1787,6 +1789,42 @@ window.switchLoginTab = function(tab) {
   }
 };
 
+// ─── Login Screen Language Toggle (EN / BN) ───
+const PAGE_TITLES = {
+  "dashboard":{bn:"ড্যাশবোর্ড",en:"Dashboard"}, "members":{bn:"সদস্য তালিকা",en:"Members"}, "collection":{bn:"প্রণামী সংগ্রহ",en:"Collection"},
+  "add-collection":{bn:"নতুন প্রণামী",en:"New Entry"}, "officers":{bn:"অফিসার",en:"Officers"}, "password-requests":{bn:"পাসওয়ার্ড অনুরোধ",en:"Password Requests"},
+  "change-password":{bn:"পাসওয়ার্ড পরিবর্তন",en:"Change Password"}, "reports":{bn:"রিপোর্ট",en:"Report"}, "my-collections":{bn:"আমার সংগ্রহ",en:"My Collection"},
+  "khoroc":{bn:"💸 খরচ",en:"💸 Expense"}, "final-report":{bn:"📊 চূড়ান্ত রিপোর্ট",en:"📊 Final Report"}, "approvals":{bn:"✅ অনুমোদন",en:"✅ Approvals"},
+  "public-settings":{bn:"🔐 পাবলিক সারসংক্ষেপ সেটিংস",en:"🔐 Public Summary Settings"}
+};
+function updatePageTitle(page, lang) {
+  const t = PAGE_TITLES[page];
+  $("pageTitle").textContent = t ? (lang==="en" ? t.en : t.bn) : page;
+}
+
+function applyLoginLanguage(lang) {
+  document.querySelectorAll("[data-bn][data-en]").forEach(el => {
+    el.textContent = lang === "en" ? el.getAttribute("data-en") : el.getAttribute("data-bn");
+  });
+  document.querySelectorAll("[data-bn-ph][data-en-ph]").forEach(el => {
+    el.placeholder = lang === "en" ? el.getAttribute("data-en-ph") : el.getAttribute("data-bn-ph");
+  });
+  const btn = $("langToggleBtn");
+  if(btn) btn.textContent = lang === "en" ? "🌐 বাং" : "🌐 EN";
+  const appBtn = $("appLangToggleBtn");
+  if(appBtn) appBtn.textContent = lang === "en" ? "🌐 বাং" : "🌐 EN";
+  const currentPage = localStorage.getItem("sessionPage");
+  if(currentUser && currentPage && $("pageTitle")) updatePageTitle(currentPage, lang);
+  try { localStorage.setItem("loginLang", lang); } catch(e) {}
+}
+
+window.toggleLoginLanguage = function() {
+  const current = (localStorage.getItem("loginLang")) || "bn";
+  applyLoginLanguage(current === "bn" ? "en" : "bn");
+};
+
+try { applyLoginLanguage(localStorage.getItem("loginLang") || "bn"); } catch(e) {}
+
 window.doLogin = async function() {
   const u = $("loginUsername").value.trim();
   const p = $("loginPassword").value.trim();
@@ -1845,29 +1883,29 @@ function buildNav() {
   const nav = $("sidebarNav");
   const isAdmin = currentUser.role==="admin";
   nav.innerHTML = `
-    <div class="nav-section">প্রধান</div>
-    <div class="nav-item" onclick="navigateTo('dashboard')"><span class="nav-icon">📊</span> Dashboard</div>
-    <div class="nav-item" onclick="navigateTo('members')"><span class="nav-icon">👥</span> সদস্য তালিকা</div>
-    <div class="nav-item" onclick="navigateTo('collection')"><span class="nav-icon">💰</span> প্রণামী সংগ্রহ</div>
-    <div class="nav-item" onclick="navigateTo('add-collection')"><span class="nav-icon">➕</span> নতুন মাসিক প্রণামী এন্ট্রি</div>
-     <div class="nav-item" onclick="navigateTo(' add-collection')"><span class="nav-icon">➕</span>  প্রণামী এন্ট্রি</div>
-    <div class="nav-section">Report</div>
-    ${!isAdmin ? `<div class="nav-item" onclick="navigateTo('my-collections')"><span class="nav-icon">🧾</span> My Collection</div>` : ""}
-    <div class="nav-item" onclick="navigateTo('reports')"><span class="nav-icon">📋</span> Report</div>
-    <div class="nav-section">খরচ</div>
-    <div class="nav-item" onclick="navigateTo('khoroc')"><span class="nav-icon">💸</span> খরচ এন্ট্রি</div>
+    <div class="nav-section" data-bn="প্রধান" data-en="Main">প্রধান</div>
+    <div class="nav-item" onclick="navigateTo('dashboard')"><span class="nav-icon">📊</span> <span data-bn="ড্যাশবোর্ড" data-en="Dashboard">Dashboard</span></div>
+    <div class="nav-item" onclick="navigateTo('members')"><span class="nav-icon">👥</span> <span data-bn="সদস্য তালিকা" data-en="Members">সদস্য তালিকা</span></div>
+    <div class="nav-item" onclick="navigateTo('collection')"><span class="nav-icon">💰</span> <span data-bn="প্রণামী সংগ্রহ" data-en="Collection">প্রণামী সংগ্রহ</span></div>
+    <div class="nav-item" onclick="navigateTo('add-collection')"><span class="nav-icon">➕</span> <span data-bn="নতুন প্রণামী এন্ট্রি" data-en="New Pronami Entry">নতুন প্রণামী এন্ট্রি</span></div>
+    <div class="nav-section" data-bn="রিপোর্ট" data-en="Report">Report</div>
+    ${!isAdmin ? `<div class="nav-item" onclick="navigateTo('my-collections')"><span class="nav-icon">🧾</span> <span data-bn="আমার সংগ্রহ" data-en="My Collection">My Collection</span></div>` : ""}
+    <div class="nav-item" onclick="navigateTo('reports')"><span class="nav-icon">📋</span> <span data-bn="রিপোর্ট" data-en="Report">Report</span></div>
+    <div class="nav-section" data-bn="খরচ" data-en="Expense">খরচ</div>
+    <div class="nav-item" onclick="navigateTo('khoroc')"><span class="nav-icon">💸</span> <span data-bn="খরচ এন্ট্রি" data-en="Expense Entry">খরচ এন্ট্রি</span></div>
     ${isAdmin ? `
-    <div class="nav-section">Admin</div>
-    <div class="nav-item" onclick="navigateTo('approvals')"><span class="nav-icon">✅</span> অনুমোদন <span id="pendingApprovalBadge" style="background:var(--red);color:white;border-radius:20px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:4px;display:none">0</span></div>
-    <div class="nav-item" onclick="navigateTo('final-report')"><span class="nav-icon">📊</span> চূড়ান্ত রিপোর্ট</div>
-    <div class="nav-item" onclick="navigateTo('officers')"><span class="nav-icon">🛡️</span> Officers</div>
-    <div class="nav-item" onclick="navigateTo('password-requests')"><span class="nav-icon">🔑</span> Password Change Request</div>
-    <div class="nav-item" onclick="navigateTo('public-settings')"><span class="nav-icon">🔐</span> পাবলিক সারসংক্ষেপ সেটিংস</div>
+    <div class="nav-section" data-bn="অ্যাডমিন" data-en="Admin">Admin</div>
+    <div class="nav-item" onclick="navigateTo('approvals')"><span class="nav-icon">✅</span> <span data-bn="অনুমোদন" data-en="Approvals">অনুমোদন</span> <span id="pendingApprovalBadge" style="background:var(--red);color:white;border-radius:20px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:4px;display:none">0</span></div>
+    <div class="nav-item" onclick="navigateTo('final-report')"><span class="nav-icon">📊</span> <span data-bn="চূড়ান্ত রিপোর্ট" data-en="Final Report">চূড়ান্ত রিপোর্ট</span></div>
+    <div class="nav-item" onclick="navigateTo('officers')"><span class="nav-icon">🛡️</span> <span data-bn="অফিসার" data-en="Officers">Officers</span></div>
+    <div class="nav-item" onclick="navigateTo('password-requests')"><span class="nav-icon">🔑</span> <span data-bn="পাসওয়ার্ড অনুরোধ" data-en="Password Change Request">Password Change Request</span></div>
+    <div class="nav-item" onclick="navigateTo('public-settings')"><span class="nav-icon">🔐</span> <span data-bn="পাবলিক সারসংক্ষেপ সেটিংস" data-en="Public Summary Settings">পাবলিক সারসংক্ষেপ সেটিংস</span></div>
     ` : `
-    <div class="nav-section">অ্যাকাউন্ট</div>
-    <div class="nav-item" onclick="navigateTo('change-password')"><span class="nav-icon">🔑</span> Change Password</div>
+    <div class="nav-section" data-bn="অ্যাকাউন্ট" data-en="Account">অ্যাকাউন্ট</div>
+    <div class="nav-item" onclick="navigateTo('change-password')"><span class="nav-icon">🔑</span> <span data-bn="পাসওয়ার্ড পরিবর্তন" data-en="Change Password">Change Password</span></div>
     `}
   `;
+  applyLoginLanguage(localStorage.getItem("loginLang") || "bn");
 }
 
 // ─── Navigation ───
@@ -1876,13 +1914,7 @@ window.navigateTo = function(page) {
   document.querySelectorAll(".page").forEach(p => { p.classList.add("hidden"); p.classList.remove("active"); });
   const el = $(`page-${page}`);
   if(el) { el.classList.remove("hidden"); el.classList.add("active"); }
-  $("pageTitle").textContent = {
-    "dashboard":"Dashboard","members":"সদস্য তালিকা","collection":"প্রণামী সংগ্রহ",
-    "add-collection":"নতুন প্রণামী","officers":"অফিসার","password-requests":"পাসওয়ার্ড অনুরোধ",
-    "change-password":"পাসওয়ার্ড পরিবর্তন","reports":"রিপোর্ট","my-collections":"আমার সংগ্রহ",
-    "khoroc":"💸 খরচ","final-report":"📊 চূড়ান্ত রিপোর্ট","approvals":"✅ অনুমোদন",
-    "public-settings":"🔐 পাবলিক সারসংক্ষেপ সেটিংস"
-  }[page] || page;
+  updatePageTitle(page, localStorage.getItem("loginLang") || "bn");
   document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
   const active = [...document.querySelectorAll(".nav-item")].find(n => n.onclick && n.onclick.toString().includes(`'${page}'`));
   if(active) active.classList.add("active");
