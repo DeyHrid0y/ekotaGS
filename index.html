@@ -2023,7 +2023,7 @@ async function loadDashboard() {
     const now = new Date();
     const thisMonth = now.getMonth()+1;
     const thisYear = now.getFullYear();
-    const thisMonthChandas = chandas.filter(c => c.month==thisMonth && c.year==thisYear);
+    const thisMonthChandas = chandas.filter(c => c.month==thisMonth && c.year==thisYear && c.entryType==="monthly");
     const totalCollected = thisMonthChandas.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
     const totalDue = thisMonthChandas.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
     const totalPending = thisMonthChandas.filter(c=>c.status==="pending").reduce((s,c)=>s+(c.amount||0),0);
@@ -2200,7 +2200,9 @@ window.viewMemberDetail = async function(id) {
   try {
     const q = query(collection(db,"chanda"), where("memberId","==",id));
     const snap = await getDocs(q);
-    const chandas = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.year-a.year||b.month-a.month);
+    const allEntries = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.year-a.year||b.month-a.month);
+    const chandas = allEntries.filter(c => c.entryType === "monthly");
+    const pujaEntries = allEntries.filter(c => c.entryType === "puja");
     const years = [...new Set(chandas.map(c=>c.year))].sort((a,b)=>b-a);
     let html = `<div class="member-detail-header">
       <div class="member-avatar">${m.name.charAt(0)}</div>
@@ -2209,16 +2211,31 @@ window.viewMemberDetail = async function(id) {
       <div class="member-detail-sub">📞 ${m.phone||"-"} | 📍 ${m.address||"-"}</div>
       <div class="member-detail-sub">Monthly: ৳${(m.monthlyAmount||0).toLocaleString()}</div></div>
     </div>`;
-    if(!chandas.length) { html+='<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">কোনো প্রণামীর রেকর্ড নেই</div></div>'; }
+    if(!chandas.length) { html+='<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">কোনো মাসিক প্রণামীর রেকর্ড নেই</div></div>'; }
     else {
       years.forEach(yr => {
         const yc = chandas.filter(c=>c.year==yr);
-        html += `<h4 style="margin:16px 0 8px;font-size:14px">${yr} সালের প্রণামী</h4>`;
+        html += `<h4 style="margin:16px 0 8px;font-size:14px">📅 ${yr} সালের মাসিক প্রণামী</h4>`;
         html += `<div class="table-wrap"><table class="data-table"><thead><tr><th>মাস</th><th>পরিমাণ</th><th>Status</th><th>মন্তব্য</th></tr></thead><tbody>`;
         yc.forEach(c => {
           const badge = c.status==="paid" ? "badge-paid" : c.status==="due" ? "badge-due" : "badge-pending";
           const label = c.status==="paid" ? "✅ পরিশোধিত" : c.status==="due" ? "❌ বকেয়া" : "⏳ অপেক্ষমান";
           html += `<tr><td>${MONTHS_BN[c.month]||c.month}</td><td>৳${(c.amount||0).toLocaleString()}</td><td><span class="badge ${badge}">${label}</span></td><td>${c.note||"-"}</td></tr>`;
+        });
+        html += `</tbody></table></div>`;
+      });
+    }
+    if(pujaEntries.length) {
+      const pujaYears = [...new Set(pujaEntries.map(c=>c.year))].sort((a,b)=>b-a);
+      html += `<h4 style="margin:20px 0 8px;font-size:14px">🪷 পূজার প্রণামী</h4>`;
+      pujaYears.forEach(yr => {
+        const yc = pujaEntries.filter(c=>c.year==yr);
+        html += `<p style="font-size:12px;color:var(--text-muted);margin-bottom:6px">${yr} সালের পূজা</p>`;
+        html += `<div class="table-wrap" style="margin-bottom:14px"><table class="data-table"><thead><tr><th>পরিমাণ</th><th>Status</th><th>মন্তব্য</th></tr></thead><tbody>`;
+        yc.forEach(c => {
+          const badge = c.status==="paid" ? "badge-paid" : c.status==="due" ? "badge-due" : "badge-pending";
+          const label = c.status==="paid" ? "✅ পরিশোধিত" : c.status==="due" ? "❌ বকেয়া" : "⏳ অপেক্ষমান";
+          html += `<tr><td>৳${(c.amount||0).toLocaleString()}</td><td><span class="badge ${badge}">${label}</span></td><td>${c.note||"-"}</td></tr>`;
         });
         html += `</tbody></table></div>`;
       });
@@ -2581,7 +2598,7 @@ window.submitPasswordRequest = async function() {
 window.generateReport = async function() {
   const year = parseInt($("reportYear").value);
   try {
-    const [memberSnap, chandaSnap] = await Promise.all([getDocs(collection(db,"members")), getDocs(query(collection(db,"chanda"),where("year","==",year)))]);
+    const [memberSnap, chandaSnap] = await Promise.all([getDocs(collection(db,"members")), getDocs(query(collection(db,"chanda"),where("year","==",year),where("entryType","==","monthly")))]);
     const members = memberSnap.docs.map(d=>({id:d.id,...d.data()}));
     const chandas = chandaSnap.docs.map(d=>({id:d.id,...d.data()}));
     let html = `<div class="month-grid">`;
@@ -2634,7 +2651,9 @@ window.showPublicMemberDetail = async function(id) {
     const m = {id:mDoc.id,...mDoc.data()};
     const q = query(collection(db,"chanda"), where("memberId","==",id));
     const snap = await getDocs(q);
-    const chandas = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.year-a.year||b.month-a.month);
+    const allEntries = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.year-a.year||b.month-a.month);
+    const chandas = allEntries.filter(c => c.entryType === "monthly"); // মাসিক প্রণামী শুধু
+    const pujaEntries = allEntries.filter(c => c.entryType === "puja"); // পূজার প্রণামী (সদস্য লেবেল) — আলাদা
     $("memberDetailName").textContent = m.name;
 
     // ── Check for an existing pending email request ──
@@ -2725,12 +2744,12 @@ window.showPublicMemberDetail = async function(id) {
     </div>`;
 
     if(!chandas.length) {
-      html += `<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">কোনো প্রণামীর রেকর্ড নেই</div></div>`;
+      html += `<div class="empty-state"><div class="empty-state-icon">📭</div><div class="empty-state-text">কোনো মাসিক প্রণামীর রেকর্ড নেই</div></div>`;
     } else {
       const years = [...new Set(chandas.map(c=>c.year))].sort((a,b)=>b-a);
       years.forEach(yr => {
         const yc = chandas.filter(c=>c.year==yr);
-        html += `<h4 style="margin:16px 0 8px;font-size:14px;font-weight:600">${yr} সালের সম্পূর্ণ বিবরণ</h4>
+        html += `<h4 style="margin:16px 0 8px;font-size:14px;font-weight:600">📅 ${yr} সালের মাসিক প্রণামী</h4>
         <div class="table-wrap"><table class="data-table">
         <thead><tr><th>মাস</th><th>পরিমাণ</th><th>Status</th><th>সংগ্রহকারী</th><th>তারিখ</th></tr></thead><tbody>`;
         yc.forEach(c => {
@@ -2738,6 +2757,25 @@ window.showPublicMemberDetail = async function(id) {
           const label = c.status==="paid" ? "✅ পরিশোধিত" : c.status==="due" ? "❌ বকেয়া" : "⏳ অপেক্ষমান";
           const collDate = c.entryDate || (c.createdAt?.toDate ? c.createdAt.toDate().toLocaleDateString("bn-BD") : "-");
           html += `<tr><td>${MONTHS_BN[c.month]||c.month}</td><td>৳${(c.amount||0).toLocaleString()}</td><td><span class="badge ${badge}">${label}</span></td><td>${c.collectedBy||"-"}</td><td>${collDate}</td></tr>`;
+        });
+        html += `</tbody></table></div>`;
+      });
+    }
+
+    // ── পূজার প্রণামী (সদস্য লেবেল) — সম্পূর্ণ আলাদাভাবে দেখানো হয়, মাসিকের হিসাবে যোগ হয় না ──
+    if(pujaEntries.length) {
+      const pujaYears = [...new Set(pujaEntries.map(c=>c.year))].sort((a,b)=>b-a);
+      html += `<h4 style="margin:20px 0 8px;font-size:14px;font-weight:600">🪷 পূজার প্রণামী</h4>`;
+      pujaYears.forEach(yr => {
+        const yc = pujaEntries.filter(c=>c.year==yr);
+        html += `<p style="font-size:12px;color:var(--text-muted);margin-bottom:6px">${yr} সালের পূজা</p>
+        <div class="table-wrap" style="margin-bottom:14px"><table class="data-table">
+        <thead><tr><th>পরিমাণ</th><th>Status</th><th>সংগ্রহকারী</th><th>তারিখ</th></tr></thead><tbody>`;
+        yc.forEach(c => {
+          const badge = c.status==="paid" ? "badge-paid" : c.status==="due" ? "badge-due" : "badge-pending";
+          const label = c.status==="paid" ? "✅ পরিশোধিত" : c.status==="due" ? "❌ বকেয়া" : "⏳ অপেক্ষমান";
+          const collDate = c.entryDate || (c.createdAt?.toDate ? c.createdAt.toDate().toLocaleDateString("bn-BD") : "-");
+          html += `<tr><td>৳${(c.amount||0).toLocaleString()}</td><td><span class="badge ${badge}">${label}</span></td><td>${c.collectedBy||"-"}</td><td>${collDate}</td></tr>`;
         });
         html += `</tbody></table></div>`;
       });
@@ -2823,7 +2861,7 @@ window.downloadReportPDF = async function() {
   try {
     const [memberSnap, chandaSnap] = await Promise.all([
       getDocs(collection(db,"members")),
-      getDocs(query(collection(db,"chanda"), where("year","==",year)))
+      getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","monthly")))
     ]);
     const members = memberSnap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.memberId||"").localeCompare(b.memberId||""));
     const chandas = chandaSnap.docs.map(d=>({id:d.id,...d.data()}));
