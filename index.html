@@ -914,14 +914,8 @@ body {
     d.textContent = msg;
     document.body.appendChild(d);
   }
-  if(location.protocol === 'file:') {
-    showDiag('⚠️ সমস্যা পাওয়া গেছে: ফাইলটা সরাসরি file:// দিয়ে খোলা হয়েছে (ঠিকানা বার দেখুন)। এই কারণে Firebase লোড হচ্ছে না, তাই Login/Search কাজ করছে না। সমাধান: ফাইলটা কোনো ওয়েব হোস্টিং-এ (Firebase Hosting / Netlify) আপলোড করে https:// দিয়ে খুলুন।', '#B91C1C');
-    return;
-  }
-  setTimeout(function() {
-    if(typeof window.doLogin !== 'function') {
-      showDiag('⚠️ অ্যাপের মূল কোড লোড হয়নি (window.doLogin পাওয়া যায়নি)। সম্ভবত ইন্টারনেট/নেটওয়ার্ক ব্লক করছে Firebase-এর ফাইল লোড হওয়া, অথবা ব্রাউজার কনসোলে একটা এরর আছে। ব্রাউজারের F12 → Console ট্যাব চেক করুন, অথবা অন্য ব্রাউজার/নেটওয়ার্কে চেষ্টা করুন।', '#B45309');
-    }
+  
+
   }, 4000);
   window.addEventListener('error', function(e) {
     showDiag('❌ JS Error: ' + (e.message || e.error) + '\n(লাইন: ' + e.lineno + ', ফাইল: ' + (e.filename||'').split('/').pop() + ')', '#7C2D12');
@@ -971,7 +965,7 @@ body {
         <div id="memberPublicResults"></div>
       </div>
 
-      <button class="btn-secondary full-width" style="margin-top:14px" onclick="openPublicSummaryPin()" data-bn="📊 আয়-ব্যয়ের সারসংক্ষেপ দেখুন" data-en="📊 View Income-Expense Summary">📊 আয়-ব্যয়ের সারসংক্ষেপ দেখুন</button>
+      <button class="btn-secondary full-width" style="margin-top:14px" onclick="openPublicSummaryPin()" data-bn="📊 আয়-ব্যয়ের সারসংক্ষেপ দেখুন" data-en="📊 View Income-Expense Summary">data-bn="📊 আয়-ব্যয়ের সারসংক্ষেপ দেখুন" data-en="📊 View Income-Expense Summary</button>
 
       <div class="login-footer">Developed by <span>HRIDOOY DEY</span></div>
     </div>
@@ -990,7 +984,7 @@ body {
       <input type="password" inputmode="numeric" id="publicPinInput" placeholder="••••" onkeydown="if(event.key==='Enter') verifyPublicPin()" />
     </div>
     <div id="publicPinError" class="error-msg hidden"></div>
-    <button class="btn-primary full-width" onclick="verifyPublicPin()">দেখুন</button>
+    <button class="btn-primary full-width" onclick="verifyPublicPin()">View</button>
   </div>
 </div>
 
