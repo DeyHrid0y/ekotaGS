@@ -982,11 +982,11 @@ body {
 <div id="publicPinModal" class="modal-overlay hidden">
   <div class="modal-card" style="max-width:340px">
     <div class="modal-header">
-      <h3>🔒 পিন লিখুন</h3>
+      <h3>🔒 Enter PIN</h3>
       <button class="modal-close" onclick="closeModal('publicPinModal')">✕</button>
     </div>
     <div class="form-group">
-      <label>পিন</label>
+      <label>PIN</label>
       <input type="password" inputmode="numeric" id="publicPinInput" placeholder="••••" onkeydown="if(event.key==='Enter') verifyPublicPin()" />
     </div>
     <div id="publicPinError" class="error-msg hidden"></div>
@@ -1232,7 +1232,7 @@ body {
           <!-- ══ PUJA PRONAMI FIELDS ══ -->
           <div id="pujaFields" class="hidden">
             <div class="form-group">
-              <label>পূজার বছর / Puja Year * <span style="font-size:11px;color:var(--text-muted);font-weight:400">(যে বছর পূজা অনুষ্ঠিত হবে — যেমন ডিসেম্বরে সংগ্রহ করা চাঁদা দিয়ে জানুয়ারিতে সরস্বতী পূজা হলে পরের বছরটা সিলেক্ট করুন)</span></label>
+              <label>পূজার বছর / Puja Year * <span style="font-size:11px;color:var(--text-muted);font-weight:400">(যে বছর পূজা অনুষ্ঠিত হবে সে বছর সিলেক্ট করুন)</span></label>
               <select id="entryPujaYear">
                 <option value="2025">২০২৫</option>
                 <option value="2026" selected>২০২৬</option>
@@ -1351,76 +1351,60 @@ body {
       <!-- Public Summary Settings (Admin only) -->
       <section id="page-public-settings" class="page hidden">
         <div class="card max-600">
-          <h3 class="card-title">🔒 পাবলিক পিন পরিবর্তন</h3>
-          <p class="info-text">এই পিন দিয়ে যে কেউ (লগইন ছাড়াই) মোট আয়-ব্যয়ের সারসংক্ষেপ দেখতে পারবে। নিরাপত্তার জন্য মাঝে মাঝে পিন পরিবর্তন করুন।</p>
-          <div class="form-group">
-            <label>নতুন পিন</label>
-            <input type="text" id="newPublicPinInput" placeholder="যেমন: 1234" />
-          </div>
-          <div id="publicPinSaveMsg" style="margin-bottom:10px"></div>
-          <button class="btn-primary" onclick="savePublicPin()">💾 পিন সংরক্ষণ করুন</button>
+          <h3 class="card-title">🌐 Turn Public Summary On/Off</h3>
+          <p class="info-text">When turned off, the Income & Expense Summary cannot be viewed from the login page, even with the correct PIN.</p>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:10px">
+            <input type="checkbox" id="publicSummaryPublishedToggle" onchange="togglePublicSummaryPublish()" style="width:18px;height:18px;cursor:pointer" />
+            <span style="font-size:14px;font-weight:600">Public Summary is Published ✅</span>
+          </label>
+          <div id="publicPublishMsg"></div>
         </div>
 
         <div class="card max-600" style="margin-top:20px">
-          <h3 class="card-title">👛 উদ্বৃত্ত টাকার বণ্টন — কার কাছে কত আছে</h3>
-          <p class="info-text">প্রতি বছরের (পূজার হিসাব) উদ্বৃত্ত টাকা আলাদাভাবে লিখে রাখুন কার কাছে / কোথায় কত আছে (যেমন: ক্যাশ বক্স, কোষাধ্যক্ষ, ব্যাংক অ্যাকাউন্ট)।</p>
+          <h3 class="card-title">🔒 Change the public PIN</h3>
+          <p class="info-text">Anyone with this PIN can view the Income & Expense Summary without logging in. For security, change the PIN regularly</p>
           <div class="form-group">
-            <label>বছর</label>
-            <select id="newHolderYear">
-              <option value="2025">২০২৫</option>
-              <option value="2026" selected>২০২৬</option>
-              <option value="2027">২০২৭</option>
-              <option value="2028">২০২৮</option>
-              <option value="2029">২০২৯</option>
-              <option value="2030">২০৩০</option>
-              <option value="2031">২০৩১</option>
-              <option value="2032">২০৩২</option>
-              <option value="2033">২০৩৩</option>
-              <option value="2034">২০৩৪</option>
-              <option value="2035">২০৩৫</option>
+            <label>New PIN</label>
+            <input type="text" id="newPublicPinInput" placeholder="যেমন: 1234" />
+          </div>
+          <div id="publicPinSaveMsg" style="margin-bottom:10px"></div>
+          <button class="btn-primary" onclick="savePublicPin()">💾 Save PIN</button>
+        </div>
+
+        <div class="card max-600" style="margin-top:20px">
+          <h3 class="card-title">👛 উদ্বৃত্ত টাকার বণ্টন — বর্তমানে কার কাছে কত আছে</h3>
+          <p class="info-text">বর্তমানে উদ্বৃত্ত টাকা কার কাছে / কোথায় কত পরিমাণ আছে তা লিখে রাখুন (যেমন: ক্যাশ বক্স, কোষাধ্যক্ষ, ব্যাংক অ্যাকাউন্ট)। অফিসাররা যখন প্রণামী সংগ্রহ (পরিশোধিত) করবেন, তাদের নামের ব্যালেন্স স্বয়ংক্রিয়ভাবে বেড়ে যাবে।</p>
+          <div class="form-group">
+            <label>অফিসারের সাথে যুক্ত করুন (ঐচ্ছিক)</label>
+            <select id="newHolderOfficer" onchange="onHolderOfficerChange()">
+              <option value="">— না, ম্যানুয়াল এন্ট্রি —</option>
             </select>
+            <p style="font-size:11px;color:var(--text-muted);margin-top:4px">অফিসার সিলেক্ট করলে তার নতুন সংগ্রহ করা (পরিশোধিত) প্রণামী স্বয়ংক্রিয়ভাবে এই ব্যালেন্সে যোগ হবে।</p>
           </div>
           <div class="form-group">
             <label>নাম</label>
-            <input type="text" id="newHolderName" placeholder="যেমন: কোষাধ্যক্ষ - রহিম" />
+            <input type="text" id="newHolderName" placeholder="যেমন: কোষাধ্যক্ষ - Hridoy Dey" />
           </div>
           <div class="form-group">
             <label>পরিমাণ (৳)</label>
             <input type="number" id="newHolderAmount" placeholder="0" />
           </div>
-          <button class="btn-primary" onclick="addCashHolder()">+ যোগ করুন</button>
-
-          <div class="form-group" style="margin-top:20px">
-            <label>তালিকা দেখুন — বছর</label>
-            <select id="holderListYear" onchange="loadCashHolders()">
-              <option value="2025">২০২৫</option>
-              <option value="2026" selected>২০২৬</option>
-              <option value="2027">২০২৭</option>
-              <option value="2028">২০২৮</option>
-              <option value="2029">২০২৯</option>
-              <option value="2030">২০৩০</option>
-              <option value="2031">২০৩১</option>
-              <option value="2032">২০৩২</option>
-              <option value="2033">২০৩৩</option>
-              <option value="2034">২০৩৪</option>
-              <option value="2035">২০৩৫</option>
-            </select>
-          </div>
-          <div id="cashHoldersList" style="margin-top:10px"></div>
+          <button class="btn-primary" onclick="addCashHolder()">+ Add</button>
+          <div id="cashHoldersList" style="margin-top:16px"></div>
         </div>
       </section>
 
       <!-- Officer: Request Password Change -->
       <section id="page-change-password" class="page hidden">
         <div class="card max-600">
-          <h3 class="card-title">পাসওয়ার্ড পরিবর্তনের অনুরোধ</h3>
+          <h3 class="card-title">Request to Change Password</h3>
           <p class="info-text">আপনার নতুন পাসওয়ার্ড প্রস্তাব করুন। Admin অনুমোদন করলে পরিবর্তন হবে।</p>
           <div class="form-group">
-            <label>নতুন পাসওয়ার্ড / New Password</label>
+            <label>New Password</label>
             <input type="password" id="newPwdInput" placeholder="নতুন পাসওয়ার্ড" />
           </div>
           <div class="form-group">
-            <label>পাসওয়ার্ড নিশ্চিত করুন / Confirm</label>
+            <label> Confirm</label>
             <input type="password" id="confirmPwdInput" placeholder="আবার লিখুন" />
           </div>
           <div id="pwdReqError" class="error-msg hidden"></div>
@@ -1794,7 +1778,7 @@ body {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
 import {
   getFirestore, collection, doc, getDocs, getDoc,
-  addDoc, setDoc, updateDoc, deleteDoc, query, where, orderBy, serverTimestamp
+  addDoc, setDoc, updateDoc, deleteDoc, query, where, orderBy, serverTimestamp, increment
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 import {
   getAuth, signInWithEmailAndPassword, signOut
@@ -2454,6 +2438,9 @@ window.submitChandaEntry = async function() {
     }
 
     showToast("প্রণামী এন্ট্রি সংরক্ষিত হয়েছে। ✅");
+    if(status === "paid" && amount > 0) {
+      addToCashHolder(currentUser.id, currentUser.name, amount);
+    }
     $("entryAmount").value=""; $("entryNote").value=""; $("entryDate").value="";
     $("entryMember").value=""; $("entryPujaMember").value=""; $("entryPujaDonorName").value=""; $("entryPujaGramDonorName").value="";
     document.querySelectorAll('input[name="pujaLabel"]').forEach(r=>r.checked=false);
@@ -2463,6 +2450,27 @@ window.submitChandaEntry = async function() {
     navigateTo("collection");
   } catch(e) { setErr("entryError","ত্রুটি: "+e.message); }
 };
+
+// ─── Auto-add collected cash to the officer/admin's holding balance ───
+async function addToCashHolder(officerId, name, amount) {
+  try {
+    // Prefer an explicit officer link (works even if the holder's display name differs)
+    let holderDoc = null;
+    if(officerId) {
+      const linkedSnap = await getDocs(query(collection(db,"cashHolders"), where("linkedOfficerId","==",officerId)));
+      if(!linkedSnap.empty) holderDoc = linkedSnap.docs[0];
+    }
+    if(!holderDoc) {
+      const nameSnap = await getDocs(query(collection(db,"cashHolders"), where("name","==",name)));
+      if(!nameSnap.empty) holderDoc = nameSnap.docs[0];
+    }
+    if(holderDoc) {
+      await updateDoc(doc(db,"cashHolders",holderDoc.id), { amount: increment(amount) });
+    } else {
+      await addDoc(collection(db,"cashHolders"), { name, amount, linkedOfficerId: officerId || null, createdAt: serverTimestamp() });
+    }
+  } catch(e) { console.error("Cash holder auto-update failed:", e); }
+}
 
 // ─── Officers ───
 async function loadOfficers() {
@@ -3549,9 +3557,16 @@ window.rejectEmailReq = async function(reqId) {
 };
 
 // ─── Public Financial Summary (PIN-gated, no login required) ───
-window.openPublicSummaryPin = function() {
+window.openPublicSummaryPin = async function() {
   $("publicPinInput").value = "";
   setErr("publicPinError","");
+  try {
+    const snap = await getDoc(doc(db,"settings","publicPin"));
+    if(snap.exists() && snap.data().published === false) {
+      showToast("এই মুহূর্তে আয়-ব্যয়ের সারসংক্ষেপ প্রকাশিত নেই।", "error");
+      return;
+    }
+  } catch(e) {}
   showEl("publicPinModal");
 };
 
@@ -3560,6 +3575,10 @@ window.verifyPublicPin = async function() {
   if(!pin) { setErr("publicPinError","পিন লিখুন।"); return; }
   try {
     const snap = await getDoc(doc(db,"settings","publicPin"));
+    if(snap.exists() && snap.data().published === false) {
+      setErr("publicPinError","এই মুহূর্তে সারসংক্ষেপ প্রকাশিত নেই।");
+      return;
+    }
     const correctPin = snap.exists() && snap.data().pin ? snap.data().pin : "1234";
     if(pin !== correctPin) { setErr("publicPinError","ভুল পিন।"); return; }
     closeModal("publicPinModal");
@@ -3580,7 +3599,7 @@ window.loadPublicSummary = async function() {
       getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"), where("approvalStatus","==","approved"))),
       getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"), where("approvalStatus","==","approved"))),
       getDocs(query(collection(db,"khoroc"), where("approvalStatus","==","approved"))),
-      getDocs(query(collection(db,"cashHolders"), where("year","==",year)))
+      getDocs(collection(db,"cashHolders"))
     ]);
     const totalIncome  = [...monthlySnap.docs, ...pujaSnap.docs]
       .reduce((s,d)=>{ const c=d.data(); return s+(c.status==="paid"?(c.amount||0):0); },0);
@@ -3592,13 +3611,18 @@ window.loadPublicSummary = async function() {
     const holders = holdersSnap.docs.map(d=>({id:d.id,...d.data()}));
     const holdersTotal = holders.reduce((s,h)=>s+(h.amount||0),0);
 
+    // ── Carry forward from previous years ──
+    const carriedForward = await computeCarriedForward(year);
+    const cumulativeBalance = carriedForward + netBalance;
+    const cumSurplus = cumulativeBalance >= 0;
+
     $("publicSummaryContent").innerHTML = `
-      <div class="net-balance-card" style="background:${surplus?"linear-gradient(135deg,#065F46,#10B981)":"linear-gradient(135deg,#7F1D1D,#EF4444)"};color:white;margin-bottom:16px">
-        <div class="net-balance-icon">${surplus?"📈":"📉"}</div>
+      <div class="net-balance-card" style="background:${cumSurplus?"linear-gradient(135deg,#065F46,#10B981)":"linear-gradient(135deg,#7F1D1D,#EF4444)"};color:white;margin-bottom:16px">
+        <div class="net-balance-icon">${cumSurplus?"📈":"📉"}</div>
         <div>
-          <div class="net-balance-label">${surplus?"নিট উদ্বৃত্ত (Surplus)":"নিট ঘাটতি (Deficit)"} — ${year} সালের পূজা</div>
-          <div class="net-balance-value">৳${Math.abs(netBalance).toLocaleString()}</div>
-          <div style="font-size:11px;opacity:0.8;margin-top:3px">আয় ৳${totalIncome.toLocaleString()} (মাসিক ${year-1} + পূজা ${year}) − খরচ ৳${totalExpense.toLocaleString()}</div>
+          <div class="net-balance-label">${cumSurplus?"সর্বমোট উদ্বৃত্ত (Total Surplus)":"সর্বমোট ঘাটতি (Total Deficit)"} — ${year} সালের পূজা শেষে</div>
+          <div class="net-balance-value">৳${Math.abs(cumulativeBalance).toLocaleString()}</div>
+          <div style="font-size:11px;opacity:0.8;margin-top:3px">পূর্ববর্তী বছরসমূহ থেকে জমা ৳${carriedForward.toLocaleString()} + এই বছরের ${surplus?"উদ্বৃত্ত":"ঘাটতি"} ৳${Math.abs(netBalance).toLocaleString()}</div>
         </div>
       </div>
       <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap">
@@ -3611,7 +3635,7 @@ window.loadPublicSummary = async function() {
           <div><div class="stat-value" style="color:var(--red)">৳${totalExpense.toLocaleString()}</div><div class="stat-label">মোট ব্যয় (${year})</div></div>
         </div>
       </div>
-      <h4 style="font-size:14px;margin:6px 0 10px">👛 ${year} সালের উদ্বৃত্ত টাকা কার কাছে কত আছে</h4>
+      <h4 style="font-size:14px;margin:6px 0 10px">👛 বর্তমানে উদ্বৃত্ত টাকা কার কাছে কত আছে</h4>
       ${holders.length ? `
         <div class="table-wrap"><table class="data-table">
           <thead><tr><th>নাম</th><th>পরিমাণ</th></tr></thead>
@@ -3620,21 +3644,50 @@ window.loadPublicSummary = async function() {
           </tbody>
           <tfoot><tr><th>মোট</th><th>৳${holdersTotal.toLocaleString()}</th></tr></tfoot>
         </table></div>
-      ` : `<div class="empty-state"><div class="empty-state-text">${year} সালের কোনো তথ্য যোগ করা হয়নি।</div></div>`}
+      ` : `<div class="empty-state"><div class="empty-state-text">এখনো কোনো তথ্য যোগ করা হয়নি।</div></div>`}
     `;
   } catch(e) {
     $("publicSummaryContent").innerHTML = `<div style="color:var(--red);padding:10px;font-size:13px">ত্রুটি: ${e.message}</div>`;
   }
 }
 
-// ─── Admin: Public Summary Settings (PIN + Cash Holders) ───
+// ─── Admin: Public Summary Settings (Publish toggle + PIN + Cash Holders) ───
 window.loadPublicSettingsPage = async function() {
   if(currentUser.role !== "admin") return;
   try {
     const snap = await getDoc(doc(db,"settings","publicPin"));
-    $("newPublicPinInput").value = snap.exists() && snap.data().pin ? snap.data().pin : "1234";
+    const data = snap.exists() ? snap.data() : {};
+    $("newPublicPinInput").value = data.pin || "1234";
+    $("publicSummaryPublishedToggle").checked = data.published !== false; // default: published
+  } catch(e) {}
+  try {
+    const offSnap = await getDocs(collection(db,"officers"));
+    const officers = offSnap.docs.map(d=>({id:d.id,...d.data()}));
+    $("newHolderOfficer").innerHTML = `<option value="">— না, ম্যানুয়াল এন্ট্রি —</option>` +
+      officers.map(o=>`<option value="${o.id}" data-name="${(o.name||"").replace(/"/g,"&quot;")}">${o.name}</option>`).join("");
   } catch(e) {}
   loadCashHolders();
+};
+
+window.togglePublicSummaryPublish = async function() {
+  const published = $("publicSummaryPublishedToggle").checked;
+  const msgEl = $("publicPublishMsg");
+  try {
+    await setDoc(doc(db,"settings","publicPin"), { published, updatedBy: currentUser.name, updatedAt: serverTimestamp() }, { merge: true });
+    msgEl.innerHTML = published
+      ? `<span style="color:var(--green);font-size:12px">✅ প্রকাশিত — লগইন পেজ থেকে সবাই দেখতে পারবে।</span>`
+      : `<span style="color:var(--red);font-size:12px">⛔ বন্ধ করা হয়েছে — লগইন পেজ থেকে এখন আর দেখা যাবে না।</span>`;
+    showToast(published ? "✅ পাবলিক সারসংক্ষেপ প্রকাশিত হয়েছে।" : "⛔ পাবলিক সারসংক্ষেপ বন্ধ করা হয়েছে।");
+  } catch(e) {
+    msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">ত্রুটি: ${e.message}</span>`;
+    $("publicSummaryPublishedToggle").checked = !published; // revert on failure
+  }
+};
+
+window.onHolderOfficerChange = function() {
+  const sel = $("newHolderOfficer");
+  const opt = sel.options[sel.selectedIndex];
+  if(sel.value) $("newHolderName").value = opt.getAttribute("data-name") || opt.textContent;
 };
 
 window.savePublicPin = async function() {
@@ -3642,7 +3695,7 @@ window.savePublicPin = async function() {
   const msgEl = $("publicPinSaveMsg");
   if(!pin) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">পিন লিখুন।</span>`; return; }
   try {
-    await setDoc(doc(db,"settings","publicPin"), { pin, updatedBy: currentUser.name, updatedAt: serverTimestamp() });
+    await setDoc(doc(db,"settings","publicPin"), { pin, updatedBy: currentUser.name, updatedAt: serverTimestamp() }, { merge: true });
     msgEl.innerHTML = `<span style="color:var(--green);font-size:12px">✅ পিন সংরক্ষিত হয়েছে।</span>`;
     showToast("✅ পাবলিক পিন আপডেট হয়েছে।");
   } catch(e) {
@@ -3651,13 +3704,12 @@ window.savePublicPin = async function() {
 };
 
 window.loadCashHolders = async function() {
-  const year = parseInt($("holderListYear")?.value) || new Date().getFullYear();
   $("cashHoldersList").innerHTML = `<div style="padding:10px;color:var(--text-muted);font-size:13px">লোড হচ্ছে...</div>`;
   try {
-    const snap = await getDocs(query(collection(db,"cashHolders"), where("year","==",year)));
+    const snap = await getDocs(collection(db,"cashHolders"));
     const holders = snap.docs.map(d=>({id:d.id,...d.data()}));
     if(!holders.length) {
-      $("cashHoldersList").innerHTML = `<div class="empty-state"><div class="empty-state-text">${year} সালের কোনো তথ্য নেই। উপরের ফর্ম থেকে যোগ করুন।</div></div>`;
+      $("cashHoldersList").innerHTML = `<div class="empty-state"><div class="empty-state-text">কোনো তথ্য নেই। উপরের ফর্ম থেকে যোগ করুন।</div></div>`;
       return;
     }
     const total = holders.reduce((s,h)=>s+(h.amount||0),0);
@@ -3670,6 +3722,7 @@ window.loadCashHolders = async function() {
               <td>
                 <input type="text" id="holderName-${h.id}" value="${(h.name||"").replace(/"/g,"&quot;")}"
                   style="width:100%;min-width:120px;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit" />
+                ${h.linkedOfficerId ? `<div style="font-size:10px;color:var(--primary);margin-top:3px">🔗 অফিসার — স্বয়ংক্রিয় আপডেট হয়</div>` : ""}
               </td>
               <td>
                 <input type="number" id="holderAmount-${h.id}" value="${h.amount||0}"
@@ -3691,14 +3744,14 @@ window.loadCashHolders = async function() {
 }
 
 window.addCashHolder = async function() {
-  const year = parseInt($("newHolderYear").value);
   const name = $("newHolderName").value.trim();
   const amount = parseFloat($("newHolderAmount").value) || 0;
+  const officerSel = $("newHolderOfficer");
+  const linkedOfficerId = officerSel.value || null;
   if(!name) { showToast("নাম লিখুন।", "error"); return; }
   try {
-    await addDoc(collection(db,"cashHolders"), { year, name, amount, createdAt: serverTimestamp() });
-    $("newHolderName").value=""; $("newHolderAmount").value="";
-    if($("holderListYear")) $("holderListYear").value = String(year);
+    await addDoc(collection(db,"cashHolders"), { name, amount, linkedOfficerId, createdAt: serverTimestamp() });
+    $("newHolderName").value=""; $("newHolderAmount").value=""; officerSel.value="";
     showToast("✅ যোগ করা হয়েছে।");
     loadCashHolders();
   } catch(e) { showToast("ত্রুটি: "+e.message, "error"); }
@@ -3723,6 +3776,29 @@ window.deleteCashHolder = async function(id) {
     loadCashHolders();
   } catch(e) { showToast("ত্রুটি: "+e.message, "error"); }
 };
+
+// ─── Fiscal-year net & carry-forward (previous years' surplus rolls into next year) ───
+const FISCAL_START_YEAR = 2025;
+async function computeYearNet(year) {
+  const [monthlySnap, pujaSnap, khorocSnap] = await Promise.all([
+    getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"), where("approvalStatus","==","approved"))),
+    getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"), where("approvalStatus","==","approved"))),
+    getDocs(query(collection(db,"khoroc"), where("approvalStatus","==","approved")))
+  ]);
+  const income = [...monthlySnap.docs, ...pujaSnap.docs].reduce((s,d)=>{ const c=d.data(); return s+(c.status==="paid"?(c.amount||0):0); },0);
+  const expense = khorocSnap.docs
+    .filter(d=>{ const e=d.data(); return e.date && new Date(e.date).getFullYear()===year; })
+    .reduce((s,d)=>s+(d.data().totalAmount||0),0);
+  return { income, expense, net: income-expense };
+}
+async function computeCarriedForward(year) {
+  let carried = 0;
+  for(let y = FISCAL_START_YEAR; y < year; y++) {
+    const { net } = await computeYearNet(y);
+    carried += net;
+  }
+  return carried;
+}
 
 async function updatePendingBadge() {
   if(currentUser?.role !== "admin") return;
@@ -3752,9 +3828,9 @@ window.loadFinalReport = async function() {
 
   try {
     const [monthlySnap, pujaSnap, khorocSnap] = await Promise.all([
-      getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"))),
-      getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"))),
-      getDocs(collection(db,"khoroc"))
+      getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"), where("approvalStatus","==","approved"))),
+      getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"), where("approvalStatus","==","approved"))),
+      getDocs(query(collection(db,"khoroc"), where("approvalStatus","==","approved")))
     ]);
 
     const chandas = [...monthlySnap.docs, ...pujaSnap.docs].map(d=>({id:d.id,...d.data()}));
@@ -3781,14 +3857,20 @@ window.loadFinalReport = async function() {
     const netBalance   = totalIncome - totalExpense;
     const surplus      = netBalance >= 0;
 
+    // ── Carry forward from previous years ──
+    const carriedForward = await computeCarriedForward(year);
+    const cumulativeBalance = carriedForward + netBalance;
+    const cumSurplus = cumulativeBalance >= 0;
+
     // ── Net Summary ──
     $("finalReportSummary").innerHTML = `
-      <div class="net-balance-card" style="background:${surplus?"linear-gradient(135deg,#065F46,#10B981)":"linear-gradient(135deg,#7F1D1D,#EF4444)"};color:white;flex:2;min-width:260px">
-        <div class="net-balance-icon">${surplus?"📈":"📉"}</div>
+      <div class="net-balance-card" style="background:${cumSurplus?"linear-gradient(135deg,#065F46,#10B981)":"linear-gradient(135deg,#7F1D1D,#EF4444)"};color:white;flex:2;min-width:260px">
+        <div class="net-balance-icon">${cumSurplus?"📈":"📉"}</div>
         <div>
-          <div class="net-balance-label">${surplus?"নিট উদ্বৃত্ত (Surplus)":"নিট ঘাটতি (Deficit)"} — ${year} সালের পূজা</div>
-          <div class="net-balance-value">৳${Math.abs(netBalance).toLocaleString()}</div>
-          <div style="font-size:11px;opacity:0.8;margin-top:3px">আয় ৳${totalIncome.toLocaleString()} (মাসিক ${year-1} + পূজা ${year}) − খরচ ৳${totalExpense.toLocaleString()}</div>
+          <div class="net-balance-label">${cumSurplus?"সর্বমোট উদ্বৃত্ত (Total Surplus)":"সর্বমোট ঘাটতি (Total Deficit)"} — ${year} সালের পূজা শেষে</div>
+          <div class="net-balance-value">৳${Math.abs(cumulativeBalance).toLocaleString()}</div>
+          <div style="font-size:11px;opacity:0.8;margin-top:3px">পূর্ববর্তী বছরসমূহ থেকে জমা ৳${carriedForward.toLocaleString()} + এই বছরের ${surplus?"উদ্বৃত্ত":"ঘাটতি"} ৳${Math.abs(netBalance).toLocaleString()}</div>
+          <div style="font-size:11px;opacity:0.8;margin-top:1px">এই বছরের আয় ৳${totalIncome.toLocaleString()} (মাসিক ${year-1} + পূজা ${year}) − খরচ ৳${totalExpense.toLocaleString()}</div>
         </div>
       </div>
       <div class="stat-card" style="flex:1;min-width:140px;border-left:4px solid var(--green)">
@@ -3918,9 +4000,9 @@ window.downloadFinalReportPDF = async function() {
   const year = parseInt($("finalReportYear").value);
   try {
     const [monthlySnap, pujaSnap, khorocSnap] = await Promise.all([
-      getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"))),
-      getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"))),
-      getDocs(collection(db,"khoroc"))
+      getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"), where("approvalStatus","==","approved"))),
+      getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"), where("approvalStatus","==","approved"))),
+      getDocs(query(collection(db,"khoroc"), where("approvalStatus","==","approved")))
     ]);
     const chandas = [...monthlySnap.docs, ...pujaSnap.docs].map(d=>({id:d.id,...d.data()}));
     const khorocs = khorocSnap.docs.map(d=>({id:d.id,...d.data()}))
