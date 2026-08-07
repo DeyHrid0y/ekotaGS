@@ -3978,7 +3978,43 @@ window.loadFinalReport = async function() {
         </table>
       </div>`;
 
-    // ── Expense Details ──
+    // ── Itemized donor-level breakdown: সদস্য / গ্রাম / অন্যান্য ──
+    function donorRows(list, cols) {
+      return list.slice().sort((a,b)=>(b.entryDate||"").localeCompare(a.entryDate||"")).map(c => {
+        const badge = c.status==="paid" ? "badge-paid" : c.status==="due" ? "badge-due" : "badge-pending";
+        const label = c.status==="paid" ? "✅ পরিশোধিত" : c.status==="due" ? "❌ বকেয়া" : "⏳ অপেক্ষমান";
+        return cols(c, badge, label);
+      }).join("");
+    }
+
+    $("finalIncomeSection").innerHTML += `
+      <p style="font-size:13px;font-weight:600;color:#5B21B6;margin:22px 0 8px">🪪 সদস্য প্রণামী — কে কত দিয়েছে (${year})</p>
+      ${memberPuja.length ? `<div class="table-wrap" style="margin-bottom:0">
+        <table class="data-table">
+          <thead><tr><th>নাম</th><th>পরিমাণ</th><th>Status</th><th>সংগ্রহকারী</th><th>তারিখ</th></tr></thead>
+          <tbody>${donorRows(memberPuja, (c,badge,label)=>`<tr><td>${c.donorName||"—"}</td><td>৳${(c.amount||0).toLocaleString()}</td><td><span class="badge ${badge}">${label}</span></td><td>${c.collectedBy||"-"}</td><td>${c.entryDate||"-"}</td></tr>`)}</tbody>
+          <tfoot><tr style="background:#EDE9FE;font-weight:700"><td>মোট</td><td>৳${smPaid.toLocaleString()}</td><td colspan="3">${smDue>0?`বকেয়া: ৳${smDue.toLocaleString()}`:""}</td></tr></tfoot>
+        </table>
+      </div>` : `<div class="empty-state"><div class="empty-state-text">${year} সালে কোনো সদস্য প্রণামী নেই</div></div>`}
+
+      <p style="font-size:13px;font-weight:600;color:#065F46;margin:22px 0 8px">🏘️ গ্রামের প্রণামী — কোন গ্রাম কত দিয়েছে (${year})</p>
+      ${gramPuja.length ? `<div class="table-wrap" style="margin-bottom:0">
+        <table class="data-table">
+          <thead><tr><th>দাতার নাম</th><th>গ্রামের নাম</th><th>পরিমাণ</th><th>Status</th><th>সংগ্রহকারী</th><th>তারিখ</th></tr></thead>
+          <tbody>${donorRows(gramPuja, (c,badge,label)=>`<tr><td>${c.donorName||"—"}</td><td>${c.gramName||"—"}</td><td>৳${(c.amount||0).toLocaleString()}</td><td><span class="badge ${badge}">${label}</span></td><td>${c.collectedBy||"-"}</td><td>${c.entryDate||"-"}</td></tr>`)}</tbody>
+          <tfoot><tr style="background:#D1FAE5;font-weight:700"><td colspan="2">মোট</td><td>৳${grPaid.toLocaleString()}</td><td colspan="3">${grDue>0?`বকেয়া: ৳${grDue.toLocaleString()}`:""}</td></tr></tfoot>
+        </table>
+      </div>` : `<div class="empty-state"><div class="empty-state-text">${year} সালে কোনো গ্রামের প্রণামী নেই</div></div>`}
+
+      <p style="font-size:13px;font-weight:600;color:#92400E;margin:22px 0 8px">🎗️ অন্যান্য প্রণামী — নাম/খাত অনুযায়ী কত দিয়েছে (${year})</p>
+      ${otherPuja.length ? `<div class="table-wrap" style="margin-bottom:0">
+        <table class="data-table">
+          <thead><tr><th>নাম / খাত</th><th>পরিমাণ</th><th>Status</th><th>সংগ্রহকারী</th><th>তারিখ</th></tr></thead>
+          <tbody>${donorRows(otherPuja, (c,badge,label)=>`<tr><td>${c.donorName||"—"}</td><td>৳${(c.amount||0).toLocaleString()}</td><td><span class="badge ${badge}">${label}</span></td><td>${c.collectedBy||"-"}</td><td>${c.entryDate||"-"}</td></tr>`)}</tbody>
+          <tfoot><tr style="background:#FFFBEB;font-weight:700"><td>মোট</td><td>৳${otPaid.toLocaleString()}</td><td colspan="3">${otDue>0?`বকেয়া: ৳${otDue.toLocaleString()}`:""}</td></tr></tfoot>
+        </table>
+      </div>` : `<div class="empty-state"><div class="empty-state-text">${year} সালে কোনো অন্যান্য প্রণামী নেই</div></div>`}
+    `;
     const expGrouped = {};
     khorocs.forEach(e=>{
       const k = e.addedBy||"Unknown";
