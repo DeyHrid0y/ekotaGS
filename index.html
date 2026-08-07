@@ -4107,6 +4107,19 @@ window.downloadFinalReportPDF = async function() {
       return `<tr${!mc.length?' style="color:#9CA3AF"':''}><td>${MONTHS_BN[m]}</td><td>৳${mp.toLocaleString()}</td><td>৳${pp.toLocaleString()}</td><td><b>৳${(mp+pp).toLocaleString()}</b></td><td>${md>0?`৳${md.toLocaleString()}`:"-"}</td></tr>`;
     }).join("");
 
+    // donor-level rows: সদস্য / গ্রাম / অন্যান্য
+    function pdfStatusLabel(c) { return c.status==="paid"?"✅ পরিশোধিত":c.status==="due"?"❌ বকেয়া":"⏳ অপেক্ষমান"; }
+    const sortByDate = (a,b)=>(b.entryDate||"").localeCompare(a.entryDate||"");
+    const memberPujaRows = memberPuja.slice().sort(sortByDate).map(c=>
+      `<tr><td>${c.donorName||"—"}</td><td>৳${(c.amount||0).toLocaleString()}</td><td>${pdfStatusLabel(c)}</td><td>${c.collectedBy||"-"}</td><td>${c.entryDate||"-"}</td></tr>`
+    ).join("");
+    const gramPujaRows = gramPuja.slice().sort(sortByDate).map(c=>
+      `<tr><td>${c.donorName||"—"}</td><td>${c.gramName||"—"}</td><td>৳${(c.amount||0).toLocaleString()}</td><td>${pdfStatusLabel(c)}</td><td>${c.collectedBy||"-"}</td><td>${c.entryDate||"-"}</td></tr>`
+    ).join("");
+    const otherPujaRows = otherPuja.slice().sort(sortByDate).map(c=>
+      `<tr><td>${c.donorName||"—"}</td><td>৳${(c.amount||0).toLocaleString()}</td><td>${pdfStatusLabel(c)}</td><td>${c.collectedBy||"-"}</td><td>${c.entryDate||"-"}</td></tr>`
+    ).join("");
+
     // expense rows
     const expGrouped = {};
     khorocs.forEach(e=>{const k=e.addedBy||"Unknown";if(!expGrouped[k])expGrouped[k]=[];expGrouped[k].push(e);});
@@ -4222,6 +4235,30 @@ window.downloadFinalReportPDF = async function() {
         <td>${totalDue>0?`৳${totalDue.toLocaleString()}`:"-"}</td>
       </tr></tfoot>
     </table>
+
+    <!-- সদস্য প্রণামী -->
+    <h2 style="background:#EDE9FE;color:#5B21B6">🪪 সদস্য প্রণামী — কে কত দিয়েছে</h2>
+    ${memberPujaRows ? `<table>
+      <thead><tr><th style="background:#5B21B6;color:white">নাম</th><th style="background:#5B21B6;color:white">পরিমাণ</th><th style="background:#5B21B6;color:white">Status</th><th style="background:#5B21B6;color:white">সংগ্রহকারী</th><th style="background:#5B21B6;color:white">তারিখ</th></tr></thead>
+      <tbody>${memberPujaRows}</tbody>
+      <tfoot><tr style="background:#EDE9FE"><td>মোট</td><td><b>৳${smPaid.toLocaleString()}</b></td><td colspan="3">${smDue>0?`বকেয়া: ৳${smDue.toLocaleString()}`:""}</td></tr></tfoot>
+    </table>` : `<p style="color:#9CA3AF;margin-bottom:16px">কোনো এন্ট্রি নেই</p>`}
+
+    <!-- গ্রামের প্রণামী -->
+    <h2 style="background:#D1FAE5;color:#065F46">🏘️ গ্রামের প্রণামী — কোন গ্রাম কত দিয়েছে</h2>
+    ${gramPujaRows ? `<table>
+      <thead><tr><th style="background:#065F46;color:white">দাতার নাম</th><th style="background:#065F46;color:white">গ্রামের নাম</th><th style="background:#065F46;color:white">পরিমাণ</th><th style="background:#065F46;color:white">Status</th><th style="background:#065F46;color:white">সংগ্রহকারী</th><th style="background:#065F46;color:white">তারিখ</th></tr></thead>
+      <tbody>${gramPujaRows}</tbody>
+      <tfoot><tr style="background:#D1FAE5"><td colspan="2">মোট</td><td><b>৳${grPaid.toLocaleString()}</b></td><td colspan="3">${grDue>0?`বকেয়া: ৳${grDue.toLocaleString()}`:""}</td></tr></tfoot>
+    </table>` : `<p style="color:#9CA3AF;margin-bottom:16px">কোনো এন্ট্রি নেই</p>`}
+
+    <!-- অন্যান্য প্রণামী -->
+    <h2 style="background:#FFFBEB;color:#92400E">🎗️ অন্যান্য প্রণামী — নাম/খাত অনুযায়ী</h2>
+    ${otherPujaRows ? `<table>
+      <thead><tr><th style="background:#92400E;color:white">নাম / খাত</th><th style="background:#92400E;color:white">পরিমাণ</th><th style="background:#92400E;color:white">Status</th><th style="background:#92400E;color:white">সংগ্রহকারী</th><th style="background:#92400E;color:white">তারিখ</th></tr></thead>
+      <tbody>${otherPujaRows}</tbody>
+      <tfoot><tr style="background:#FFFBEB"><td>মোট</td><td><b>৳${otPaid.toLocaleString()}</b></td><td colspan="3">${otDue>0?`বকেয়া: ৳${otDue.toLocaleString()}`:""}</td></tr></tfoot>
+    </table>` : `<p style="color:#9CA3AF;margin-bottom:16px">কোনো এন্ট্রি নেই</p>`}
 
     <!-- Expense Table -->
     <h2 class="exp-h">💸 খরচের বিবরণ — অফিসার ভিত্তিক</h2>
