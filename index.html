@@ -914,8 +914,14 @@ body {
     d.textContent = msg;
     document.body.appendChild(d);
   }
-  
-
+  if(location.protocol === 'file:') {
+    showDiag('⚠️ সমস্যা পাওয়া গেছে: ফাইলটা সরাসরি file:// দিয়ে খোলা হয়েছে (ঠিকানা বার দেখুন)। এই কারণে Firebase লোড হচ্ছে না, তাই Login/Search কাজ করছে না। সমাধান: ফাইলটা কোনো ওয়েব হোস্টিং-এ (Firebase Hosting / Netlify) আপলোড করে https:// দিয়ে খুলুন।', '#B91C1C');
+    return;
+  }
+  setTimeout(function() {
+    if(typeof window.doLogin !== 'function') {
+      showDiag('⚠️ অ্যাপের মূল কোড লোড হয়নি (window.doLogin পাওয়া যায়নি)। সম্ভবত ইন্টারনেট/নেটওয়ার্ক ব্লক করছে Firebase-এর ফাইল লোড হওয়া, অথবা ব্রাউজার কনসোলে একটা এরর আছে। ব্রাউজারের F12 → Console ট্যাব চেক করুন, অথবা অন্য ব্রাউজার/নেটওয়ার্কে চেষ্টা করুন।', '#B45309');
+    }
   }, 4000);
   window.addEventListener('error', function(e) {
     showDiag('❌ JS Error: ' + (e.message || e.error) + '\n(লাইন: ' + e.lineno + ', ফাইল: ' + (e.filename||'').split('/').pop() + ')', '#7C2D12');
@@ -965,7 +971,7 @@ body {
         <div id="memberPublicResults"></div>
       </div>
 
-      <button class="btn-secondary full-width" style="margin-top:14px" onclick="openPublicSummaryPin()" data-bn="📊 আয়-ব্যয়ের সারসংক্ষেপ দেখুন" data-en="📊 View Income-Expense Summary">data-bn="📊 আয়-ব্যয়ের সারসংক্ষেপ দেখুন" data-en="📊 View Income-Expense Summary</button>
+      <button class="btn-secondary full-width" style="margin-top:14px" onclick="openPublicSummaryPin()" data-bn="📊 আয়-ব্যয়ের সারসংক্ষেপ দেখুন" data-en="📊 View Income-Expense Summary">📊 আয়-ব্যয়ের সারসংক্ষেপ দেখুন</button>
 
       <div class="login-footer">Developed by <span>HRIDOOY DEY</span></div>
     </div>
@@ -976,15 +982,15 @@ body {
 <div id="publicPinModal" class="modal-overlay hidden">
   <div class="modal-card" style="max-width:340px">
     <div class="modal-header">
-      <h3>🔒 Enter PIN</h3>
+      <h3>🔒 পিন লিখুন</h3>
       <button class="modal-close" onclick="closeModal('publicPinModal')">✕</button>
     </div>
     <div class="form-group">
-      <label>PIN</label>
+      <label>পিন</label>
       <input type="password" inputmode="numeric" id="publicPinInput" placeholder="••••" onkeydown="if(event.key==='Enter') verifyPublicPin()" />
     </div>
     <div id="publicPinError" class="error-msg hidden"></div>
-    <button class="btn-primary full-width" onclick="verifyPublicPin()">View</button>
+    <button class="btn-primary full-width" onclick="verifyPublicPin()">দেখুন</button>
   </div>
 </div>
 
@@ -1226,7 +1232,7 @@ body {
           <!-- ══ PUJA PRONAMI FIELDS ══ -->
           <div id="pujaFields" class="hidden">
             <div class="form-group">
-              <label>পূজার বছর / Puja Year * <span style="font-size:11px;color:var(--text-muted);font-weight:400">(যে বছর পূজা অনুষ্ঠিত হবে সে বছর সিলেক্ট করুন)</span></label>
+              <label>পূজার বছর / Puja Year * <span style="font-size:11px;color:var(--text-muted);font-weight:400">(যে বছর পূজা অনুষ্ঠিত হবে — যেমন ডিসেম্বরে সংগ্রহ করা চাঁদা দিয়ে জানুয়ারিতে সরস্বতী পূজা হলে পরের বছরটা সিলেক্ট করুন)</span></label>
               <select id="entryPujaYear">
                 <option value="2025">২০২৫</option>
                 <option value="2026" selected>২০২৬</option>
@@ -1345,24 +1351,24 @@ body {
       <!-- Public Summary Settings (Admin only) -->
       <section id="page-public-settings" class="page hidden">
         <div class="card max-600">
-          <h3 class="card-title">🌐 Turn Public Summary On/Off</h3>
-          <p class="info-text">When turned off, the Income & Expense Summary cannot be viewed from the login page, even with the correct PIN.</p>
+          <h3 class="card-title">🌐 পাবলিক সারসংক্ষেপ চালু/বন্ধ</h3>
+          <p class="info-text">বন্ধ করলে লগইন পেজ থেকে কেউ "আয়-ব্যয়ের সারসংক্ষেপ" আর দেখতে পারবে না — পিন সঠিক হলেও না।</p>
           <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:10px">
             <input type="checkbox" id="publicSummaryPublishedToggle" onchange="togglePublicSummaryPublish()" style="width:18px;height:18px;cursor:pointer" />
-            <span style="font-size:14px;font-weight:600">Public Summary is Published ✅</span>
+            <span style="font-size:14px;font-weight:600">সারসংক্ষেপ প্রকাশিত আছে (Published)</span>
           </label>
           <div id="publicPublishMsg"></div>
         </div>
 
         <div class="card max-600" style="margin-top:20px">
-          <h3 class="card-title">🔒 Change the public PIN</h3>
-          <p class="info-text">Anyone with this PIN can view the Income & Expense Summary without logging in. For security, change the PIN regularly</p>
+          <h3 class="card-title">🔒 পাবলিক পিন পরিবর্তন</h3>
+          <p class="info-text">এই পিন দিয়ে যে কেউ (লগইন ছাড়াই) মোট আয়-ব্যয়ের সারসংক্ষেপ দেখতে পারবে। নিরাপত্তার জন্য মাঝে মাঝে পিন পরিবর্তন করুন।</p>
           <div class="form-group">
-            <label>New PIN</label>
+            <label>নতুন পিন</label>
             <input type="text" id="newPublicPinInput" placeholder="যেমন: 1234" />
           </div>
           <div id="publicPinSaveMsg" style="margin-bottom:10px"></div>
-          <button class="btn-primary" onclick="savePublicPin()">💾 Save PIN</button>
+          <button class="btn-primary" onclick="savePublicPin()">💾 পিন সংরক্ষণ করুন</button>
         </div>
 
         <div class="card max-600" style="margin-top:20px">
@@ -1377,13 +1383,13 @@ body {
           </div>
           <div class="form-group">
             <label>নাম</label>
-            <input type="text" id="newHolderName" placeholder="যেমন: কোষাধ্যক্ষ - Hridoy Dey" />
+            <input type="text" id="newHolderName" placeholder="যেমন: কোষাধ্যক্ষ - রহিম" />
           </div>
           <div class="form-group">
             <label>পরিমাণ (৳)</label>
             <input type="number" id="newHolderAmount" placeholder="0" />
           </div>
-          <button class="btn-primary" onclick="addCashHolder()">+ Add</button>
+          <button class="btn-primary" onclick="addCashHolder()">+ যোগ করুন</button>
           <div id="cashHoldersList" style="margin-top:16px"></div>
         </div>
       </section>
@@ -1391,14 +1397,14 @@ body {
       <!-- Officer: Request Password Change -->
       <section id="page-change-password" class="page hidden">
         <div class="card max-600">
-          <h3 class="card-title">Request to Change Password</h3>
+          <h3 class="card-title">পাসওয়ার্ড পরিবর্তনের অনুরোধ</h3>
           <p class="info-text">আপনার নতুন পাসওয়ার্ড প্রস্তাব করুন। Admin অনুমোদন করলে পরিবর্তন হবে।</p>
           <div class="form-group">
-            <label>New Password</label>
+            <label>নতুন পাসওয়ার্ড / New Password</label>
             <input type="password" id="newPwdInput" placeholder="নতুন পাসওয়ার্ড" />
           </div>
           <div class="form-group">
-            <label> Confirm</label>
+            <label>পাসওয়ার্ড নিশ্চিত করুন / Confirm</label>
             <input type="password" id="confirmPwdInput" placeholder="আবার লিখুন" />
           </div>
           <div id="pwdReqError" class="error-msg hidden"></div>
@@ -3590,14 +3596,16 @@ window.loadPublicSummary = async function() {
   $("publicSummaryContent").innerHTML = `<div style="padding:24px;text-align:center;color:var(--text-muted);font-size:13px">লোড হচ্ছে...</div>`;
   try {
     const [monthlySnap, pujaSnap, khorocSnap, holdersSnap] = await Promise.all([
-      getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"), where("approvalStatus","==","approved"))),
-      getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"), where("approvalStatus","==","approved"))),
-      getDocs(query(collection(db,"khoroc"), where("approvalStatus","==","approved"))),
+      getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"))),
+      getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"))),
+      getDocs(collection(db,"khoroc")),
       getDocs(collection(db,"cashHolders"))
     ]);
     const totalIncome  = [...monthlySnap.docs, ...pujaSnap.docs]
+      .filter(isCountedEntry)
       .reduce((s,d)=>{ const c=d.data(); return s+(c.status==="paid"?(c.amount||0):0); },0);
     const totalExpense = khorocSnap.docs
+      .filter(isCountedEntry)
       .filter(d => { const e=d.data(); return e.date && new Date(e.date).getFullYear() === year; })
       .reduce((s,d)=>s+(d.data().totalAmount||0),0);
     const netBalance = totalIncome - totalExpense;
@@ -3773,14 +3781,24 @@ window.deleteCashHolder = async function(id) {
 
 // ─── Fiscal-year net & carry-forward (previous years' surplus rolls into next year) ───
 const FISCAL_START_YEAR = 2025;
+// Entries created before the approval workflow existed have no approvalStatus field —
+// treat those as approved (legacy data) instead of silently excluding them. Only explicit
+// "pending" or "rejected" entries are excluded.
+function isCountedEntry(docSnap) {
+  const status = docSnap.data().approvalStatus;
+  return status !== "pending" && status !== "rejected";
+}
 async function computeYearNet(year) {
   const [monthlySnap, pujaSnap, khorocSnap] = await Promise.all([
-    getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"), where("approvalStatus","==","approved"))),
-    getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"), where("approvalStatus","==","approved"))),
-    getDocs(query(collection(db,"khoroc"), where("approvalStatus","==","approved")))
+    getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"))),
+    getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"))),
+    getDocs(collection(db,"khoroc"))
   ]);
-  const income = [...monthlySnap.docs, ...pujaSnap.docs].reduce((s,d)=>{ const c=d.data(); return s+(c.status==="paid"?(c.amount||0):0); },0);
+  const income = [...monthlySnap.docs, ...pujaSnap.docs]
+    .filter(isCountedEntry)
+    .reduce((s,d)=>{ const c=d.data(); return s+(c.status==="paid"?(c.amount||0):0); },0);
   const expense = khorocSnap.docs
+    .filter(isCountedEntry)
     .filter(d=>{ const e=d.data(); return e.date && new Date(e.date).getFullYear()===year; })
     .reduce((s,d)=>s+(d.data().totalAmount||0),0);
   return { income, expense, net: income-expense };
@@ -3822,18 +3840,21 @@ window.loadFinalReport = async function() {
 
   try {
     const [monthlySnap, pujaSnap, khorocSnap] = await Promise.all([
-      getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"), where("approvalStatus","==","approved"))),
-      getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"), where("approvalStatus","==","approved"))),
-      getDocs(query(collection(db,"khoroc"), where("approvalStatus","==","approved")))
+      getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"))),
+      getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"))),
+      getDocs(collection(db,"khoroc"))
     ]);
 
-    const chandas = [...monthlySnap.docs, ...pujaSnap.docs].map(d=>({id:d.id,...d.data()}));
-    const khorocs = khorocSnap.docs.map(d=>({id:d.id,...d.data()}))
+    const chandas = [...monthlySnap.docs, ...pujaSnap.docs].filter(isCountedEntry).map(d=>({id:d.id,...d.data()}));
+    const khorocs = khorocSnap.docs.filter(isCountedEntry).map(d=>({id:d.id,...d.data()}))
       .filter(e => e.date && new Date(e.date).getFullYear() === year);
 
     // ── Income breakdown ── (মাসিক ${year-1} + পূজা ${year} = ${year}-এর পূজার হিসাব)
     const monthly   = chandas.filter(c => c.entryType === "monthly");
     const puja      = chandas.filter(c => c.entryType === "puja");
+    const memberPuja = puja.filter(c => c.pujaLabel === "সদস্য");
+    const gramPuja   = puja.filter(c => c.pujaLabel === "গ্রাম");
+    const otherPuja  = puja.filter(c => c.pujaLabel === "অন্যান্য" || !c.pujaLabel);
 
     const mPaid    = monthly.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
     const mDue     = monthly.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
@@ -3841,6 +3862,13 @@ window.loadFinalReport = async function() {
     const pPaid    = puja.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
     const pDue     = puja.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
     const pPending = puja.filter(c=>c.status==="pending").reduce((s,c)=>s+(c.amount||0),0);
+
+    const smPaid = memberPuja.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+    const smDue  = memberPuja.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+    const grPaid = gramPuja.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+    const grDue  = gramPuja.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+    const otPaid = otherPuja.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+    const otDue  = otherPuja.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
 
     const totalIncome  = mPaid + pPaid;
     const totalDue     = mDue + pDue;
@@ -3906,12 +3934,23 @@ window.loadFinalReport = async function() {
           ${mDue>0?` · বকেয়া: ৳${mDue.toLocaleString()}`:""}
           ${mPending>0?` · অপেক্ষমান: ৳${mPending.toLocaleString()}`:""}</div>
         </div>
+        <div class="fin-source-card" style="background:#EDE9FE;border-color:#C4B5FD">
+          <div class="fin-source-label" style="color:#5B21B6">🪪 সদস্য প্রণামী (${year})</div>
+          <div class="fin-source-value" style="color:#5B21B6">৳${smPaid.toLocaleString()}</div>
+          <div class="fin-source-sub">${memberPuja.filter(c=>c.status==="paid").length} এন্ট্রি পরিশোধিত
+          ${smDue>0?` · বকেয়া: ৳${smDue.toLocaleString()}`:""}</div>
+        </div>
+        <div class="fin-source-card" style="background:#D1FAE5;border-color:#6EE7B7">
+          <div class="fin-source-label" style="color:#065F46">🏘️ গ্রামের প্রণামী (${year})</div>
+          <div class="fin-source-value" style="color:#065F46">৳${grPaid.toLocaleString()}</div>
+          <div class="fin-source-sub">${gramPuja.filter(c=>c.status==="paid").length} এন্ট্রি পরিশোধিত
+          ${grDue>0?` · বকেয়া: ৳${grDue.toLocaleString()}`:""}</div>
+        </div>
         <div class="fin-source-card" style="background:#FFFBEB;border-color:#FDE68A">
-          <div class="fin-source-label" style="color:#92400E">🪷 পূজার প্রণামী (${year})</div>
-          <div class="fin-source-value" style="color:#92400E">৳${pPaid.toLocaleString()}</div>
-          <div class="fin-source-sub">${puja.filter(c=>c.status==="paid").length} এন্ট্রি পরিশোধিত
-          ${pDue>0?` · বকেয়া: ৳${pDue.toLocaleString()}`:""}
-          ${pPending>0?` · অপেক্ষমান: ৳${pPending.toLocaleString()}`:""}</div>
+          <div class="fin-source-label" style="color:#92400E">🎗️ অন্যান্য প্রণামী (${year})</div>
+          <div class="fin-source-value" style="color:#92400E">৳${otPaid.toLocaleString()}</div>
+          <div class="fin-source-sub">${otherPuja.filter(c=>c.status==="paid").length} এন্ট্রি পরিশোধিত
+          ${otDue>0?` · বকেয়া: ৳${otDue.toLocaleString()}`:""}</div>
         </div>
         <div class="fin-source-card" style="background:#F5F3FF;border-color:#DDD6FE">
           <div class="fin-source-label" style="color:var(--primary-dark)">💰 মোট আয়</div>
@@ -3994,20 +4033,29 @@ window.downloadFinalReportPDF = async function() {
   const year = parseInt($("finalReportYear").value);
   try {
     const [monthlySnap, pujaSnap, khorocSnap] = await Promise.all([
-      getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"), where("approvalStatus","==","approved"))),
-      getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"), where("approvalStatus","==","approved"))),
-      getDocs(query(collection(db,"khoroc"), where("approvalStatus","==","approved")))
+      getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"))),
+      getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"))),
+      getDocs(collection(db,"khoroc"))
     ]);
-    const chandas = [...monthlySnap.docs, ...pujaSnap.docs].map(d=>({id:d.id,...d.data()}));
-    const khorocs = khorocSnap.docs.map(d=>({id:d.id,...d.data()}))
+    const chandas = [...monthlySnap.docs, ...pujaSnap.docs].filter(isCountedEntry).map(d=>({id:d.id,...d.data()}));
+    const khorocs = khorocSnap.docs.filter(isCountedEntry).map(d=>({id:d.id,...d.data()}))
       .filter(e => e.date && new Date(e.date).getFullYear() === year);
 
     const monthly  = chandas.filter(c=>c.entryType==="monthly");
     const puja     = chandas.filter(c=>c.entryType==="puja");
+    const memberPuja = puja.filter(c => c.pujaLabel === "সদস্য");
+    const gramPuja   = puja.filter(c => c.pujaLabel === "গ্রাম");
+    const otherPuja  = puja.filter(c => c.pujaLabel === "অন্যান্য" || !c.pujaLabel);
     const mPaid    = monthly.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
     const mDue     = monthly.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
     const pPaid    = puja.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
     const pDue     = puja.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+    const smPaid = memberPuja.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+    const smDue  = memberPuja.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+    const grPaid = gramPuja.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+    const grDue  = gramPuja.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
+    const otPaid = otherPuja.filter(c=>c.status==="paid").reduce((s,c)=>s+(c.amount||0),0);
+    const otDue  = otherPuja.filter(c=>c.status==="due").reduce((s,c)=>s+(c.amount||0),0);
     const totalIncome  = mPaid + pPaid;
     const totalDue     = mDue + pDue;
     const totalExpense = khorocs.reduce((s,e)=>s+(e.totalAmount||0),0);
@@ -4097,12 +4145,22 @@ window.downloadFinalReportPDF = async function() {
         <div class="sc-v" style="color:#166534">৳${mPaid.toLocaleString()}</div>
         ${mDue>0?`<div class="sc-l" style="color:#EF4444">বকেয়া: ৳${mDue.toLocaleString()}</div>`:""}
       </div>
-      <div class="sc" style="background:#FFFBEB;border-color:#FDE68A">
-        <div class="sc-l" style="color:#92400E">🪷 পূজার প্রণামী (Paid)</div>
-        <div class="sc-v" style="color:#92400E">৳${pPaid.toLocaleString()}</div>
-        ${pDue>0?`<div class="sc-l" style="color:#EF4444">বকেয়া: ৳${pDue.toLocaleString()}</div>`:""}
+      <div class="sc" style="background:#EDE9FE;border-color:#C4B5FD">
+        <div class="sc-l" style="color:#5B21B6">🪪 সদস্য প্রণামী (Paid)</div>
+        <div class="sc-v" style="color:#5B21B6">৳${smPaid.toLocaleString()}</div>
+        ${smDue>0?`<div class="sc-l" style="color:#EF4444">বকেয়া: ৳${smDue.toLocaleString()}</div>`:""}
       </div>
-      <div class="sc" style="background:#EDE9FE;border-color:#DDD6FE">
+      <div class="sc" style="background:#D1FAE5;border-color:#6EE7B7">
+        <div class="sc-l" style="color:#065F46">🏘️ গ্রামের প্রণামী (Paid)</div>
+        <div class="sc-v" style="color:#065F46">৳${grPaid.toLocaleString()}</div>
+        ${grDue>0?`<div class="sc-l" style="color:#EF4444">বকেয়া: ৳${grDue.toLocaleString()}</div>`:""}
+      </div>
+      <div class="sc" style="background:#FFFBEB;border-color:#FDE68A">
+        <div class="sc-l" style="color:#92400E">🎗️ অন্যান্য প্রণামী (Paid)</div>
+        <div class="sc-v" style="color:#92400E">৳${otPaid.toLocaleString()}</div>
+        ${otDue>0?`<div class="sc-l" style="color:#EF4444">বকেয়া: ৳${otDue.toLocaleString()}</div>`:""}
+      </div>
+      <div class="sc" style="background:#F5F3FF;border-color:#DDD6FE">
         <div class="sc-l" style="color:#5B21B6">💰 মোট আয়</div>
         <div class="sc-v" style="color:#5B21B6">৳${totalIncome.toLocaleString()}</div>
         ${totalDue>0?`<div class="sc-l" style="color:#EF4444">মোট বকেয়া: ৳${totalDue.toLocaleString()}</div>`:""}
