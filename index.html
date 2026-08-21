@@ -958,7 +958,7 @@ footer{background:#24140c;color:#d8c7b7;padding-top:60px}.footer-grid{display:gr
 </script>
 
 <!-- ───────────── PUBLIC HOMEPAGE ───────────── -->
-<div id="homeScreen">
+<div id="homeScreen" style="display:block">
 
 <header class="navbar">
 <div class="container nav-content">
@@ -1020,7 +1020,7 @@ footer{background:#24140c;color:#d8c7b7;padding-top:60px}.footer-grid{display:gr
 <div class="finance-card"><span>অবশিষ্ট অর্থ</span><strong>৳ ১৫,০০০</strong></div>
 <div class="finance-card"><span>মোট সদস্য</span><strong>৪৫ জন</strong></div>
 </div>
-<div class="finance-button"><a href="#" class="primary-btn">বিস্তারিত হিসাব দেখুন →</a></div>
+<div class="finance-button"><a href="javascript:void(0)" onclick="showSignIn()" class="primary-btn">বিস্তারিত হিসাব দেখুন →</a></div>
 </div>
 </section>
 
@@ -1081,6 +1081,22 @@ footer{background:#24140c;color:#d8c7b7;padding-top:60px}.footer-grid{display:gr
 </div>
 
 <script>
+(function(){
+  const btn=document.getElementById("menuBtn");
+  const nav=document.getElementById("navMenu");
+  if(btn && nav){
+    btn.addEventListener("click",()=>nav.classList.toggle("active"));
+    nav.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>nav.classList.remove("active")));
+  }
+  const target=new Date("February 1, 2027 08:00:00").getTime();
+  function tick(){
+    const el=document.getElementById("days");
+    if(!el)return;
+    const d=target-Date.now();
+    el.textContent=String(Math.max(0,Math.floor(d/86400000))).padStart(3,"0");
+  }
+  tick(); setInterval(tick,1000);
+})();
 function showSignIn(){
   const home=document.getElementById("homeScreen");
   const login=document.getElementById("loginScreen");
@@ -1097,7 +1113,7 @@ function showHome(){
 }
 </script>
 <!-- ───────────── LOGIN SCREEN ───────────── -->
-<div id="loginScreen" class="screen active">
+<div id="loginScreen" class="screen" style="display:none">
   <div class="login-bg">
     <div class="login-blob login-blob-1"></div>
     <div class="login-blob login-blob-2"></div>
