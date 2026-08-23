@@ -127,6 +127,207 @@ body {
 .login-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
 .login-sub2 { font-size: 11px; color: #9CA3AF; margin-top: 1px; }
 
+/* ─── Home / Landing Screen (cream / gold / deep-brown) ─── */
+:root{
+  --h-cream:#FAF6EC; --h-cream-card:#FFFFFF;
+  --h-gold:#C99A3E; --h-gold-dark:#A9791D; --h-gold-light:#E9C878;
+  --h-brown:#3B2A1D; --h-brown-soft:#8A7A68;
+  --h-coffee-1:#4A2E1A; --h-coffee-2:#2E1B0E; --h-coffee-3:#1C1108;
+  --h-tan:#D9C9AE;
+}
+#homeScreen.screen { display: none; }
+#homeScreen.screen.active { display: block; }
+.home-sections{background:var(--h-cream)}
+
+/* Header */
+.home-header{
+  position:sticky; top:0; z-index:20; display:flex; align-items:center; justify-content:space-between;
+  padding:16px clamp(20px,5vw,56px); background:var(--h-cream); border-bottom:1px solid rgba(59,42,29,.08);
+}
+.home-brand{display:flex;align-items:center;gap:11px}
+.home-om-circle{
+  width:44px;height:44px;border-radius:50%;background:linear-gradient(150deg,var(--h-gold),var(--h-gold-dark));
+  display:flex;align-items:center;justify-content:center;font-size:19px;color:#fff;flex-shrink:0;
+  box-shadow:0 4px 10px rgba(169,121,29,.35);
+}
+.home-brand-text{display:flex;flex-direction:column;line-height:1.25}
+.home-brand-title{font-size:16px;font-weight:800;color:var(--h-brown)}
+.home-brand-sub{font-size:11.5px;color:var(--h-brown-soft)}
+.home-hamburger{
+  background:none;border:none;font-size:22px;color:var(--h-brown);cursor:pointer;padding:6px;line-height:1;
+}
+.home-nav-menu{
+  position:absolute; top:100%; right:clamp(20px,5vw,56px); left:clamp(20px,5vw,56px);
+  background:var(--h-cream-card); border-radius:14px; box-shadow:0 20px 40px -12px rgba(59,42,29,.25);
+  border:1px solid rgba(59,42,29,.08); padding:10px; display:none; flex-direction:column; z-index:30;
+}
+.home-nav-menu.open{display:flex}
+.home-nav-menu a{
+  padding:13px 14px; border-radius:9px; text-decoration:none; color:var(--h-brown); font-weight:600; font-size:15px;
+}
+.home-nav-menu a:hover{background:var(--h-cream)}
+.home-nav-menu a.home-nav-login{color:var(--h-gold-dark); border-top:1px solid rgba(59,42,29,.08); margin-top:6px; padding-top:14px}
+
+/* Hero */
+.home-hero-wrap{
+  position:relative; overflow:hidden; padding:56px clamp(20px,5vw,56px) 44px;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(233,200,120,.18), transparent 45%),
+    linear-gradient(155deg, var(--h-coffee-2) 0%, var(--h-coffee-1) 55%, #6B4423 100%);
+}
+.home-hero-wrap::before{
+  content:""; position:absolute; inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.08) 1px, transparent 1px);
+  background-size:24px 24px; opacity:.6; pointer-events:none;
+}
+.home-hero-inner{position:relative;z-index:2;max-width:640px}
+.home-eyebrow-hero{
+  display:inline-flex; align-items:center; gap:8px; font-size:13.5px; font-weight:700; color:var(--h-gold-light);
+  margin-bottom:14px;
+}
+.home-hero-inner h1{font-size:clamp(32px,5vw,48px);font-weight:800;color:#fff;line-height:1.22;margin-bottom:16px}
+.home-hero-inner h1 span{color:var(--h-gold-light)}
+.home-hero-desc{font-size:15.5px;color:var(--h-tan);line-height:1.85;max-width:520px;margin-bottom:30px}
+.home-hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+.hbtn-primary,.hbtn-secondary{
+  font-family:inherit;font-weight:700;font-size:15px;padding:13px 26px;border-radius:9px;
+  text-decoration:none;display:inline-flex;align-items:center;gap:8px;cursor:pointer;border:none;
+  transition:transform .2s,box-shadow .2s,background .2s;
+}
+.hbtn-primary{background:linear-gradient(135deg,var(--h-gold-light),var(--h-gold-dark));color:#2E1B0E;box-shadow:0 10px 22px -8px rgba(169,121,29,.6)}
+.hbtn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 26px -8px rgba(169,121,29,.7)}
+.hbtn-secondary{background:transparent;color:#fff;border:1.6px solid rgba(255,255,255,.5)}
+.hbtn-secondary:hover{background:rgba(255,255,255,.1);border-color:#fff;transform:translateY(-2px)}
+
+/* Section shells */
+.home-section{padding:64px clamp(20px,5vw,56px)}
+.home-section-dark{
+  background:linear-gradient(160deg,var(--h-coffee-1),var(--h-coffee-2));color:var(--h-tan);
+}
+.home-section-inner{max-width:900px;margin:0 auto}
+.home-eyebrow{
+  font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--h-gold-dark);margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.home-section-dark .home-eyebrow{color:var(--h-gold-light)}
+.home-section-title{font-size:clamp(22px,3vw,30px);font-weight:800;color:var(--h-brown);margin-bottom:10px;text-align:center}
+.home-section-dark .home-section-title{color:#fff}
+.home-section-title span{color:var(--h-gold-dark)}
+.home-section-desc{font-size:15px;color:var(--h-brown-soft);text-align:center;max-width:520px;margin:0 auto 34px}
+.home-section-dark .home-section-desc{color:var(--h-tan)}
+
+/* Section 2: Quick info stacked cards */
+.qi-stack{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.qi-card{
+  background:var(--h-cream-card); border-radius:16px; padding:26px 18px; text-align:center;
+  box-shadow:0 12px 30px -14px rgba(59,42,29,.25); border:1px solid rgba(59,42,29,.06);
+}
+.qi-card-icon{font-size:24px;margin-bottom:10px}
+.qi-card-label{font-size:12.5px;color:var(--h-brown-soft);margin-bottom:6px}
+.qi-card-value{font-size:16.5px;font-weight:800;color:var(--h-brown)}
+.qi-card-value.gold{color:var(--h-gold-dark);font-size:24px}
+@media (max-width:760px){ .qi-stack{grid-template-columns:1fr} }
+
+/* Section 4: About */
+.home-about-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:40px;align-items:center}
+.about-deity-card{
+  aspect-ratio:1/.72;border-radius:20px;
+  background:linear-gradient(150deg,var(--h-gold-light),var(--h-gold-dark));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 20px 40px -16px rgba(169,121,29,.5);
+}
+.about-deity-card .emoji{font-size:44px}
+.about-deity-card .label{font-size:17px;font-weight:800;color:#3B2A1D}
+.about-text{text-align:left}
+.about-text .home-eyebrow{justify-content:flex-start}
+.about-text .home-section-title{text-align:left}
+.about-text .home-section-desc{text-align:left;margin:0 0 10px}
+@media (max-width:760px){ .home-about-grid{grid-template-columns:1fr} .about-text{text-align:center} .about-text .home-eyebrow{justify-content:center} .about-text .home-section-title,.about-text .home-section-desc{text-align:center;margin-left:auto;margin-right:auto} }
+
+/* Section 5: event cards */
+.event-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;margin-top:6px}
+.event-card{background:var(--h-cream-card);border-radius:16px;padding:30px 22px;text-align:center;box-shadow:0 12px 30px -14px rgba(59,42,29,.2);border:1px solid rgba(59,42,29,.06)}
+.event-icon{font-size:30px;margin-bottom:12px}
+.event-card h3{font-size:16.5px;font-weight:700;color:var(--h-brown);margin-bottom:6px}
+.event-card p{font-size:13.5px;color:var(--h-brown-soft);line-height:1.7}
+
+/* Section 3: Financial (dark) */
+.fin-cards{display:flex;flex-direction:column;gap:14px;margin-bottom:26px}
+.fin-card{
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:14px;
+  padding:22px 20px; text-align:center;
+}
+.fin-label{font-size:13px;color:var(--h-tan);margin-bottom:8px}
+.fin-value{font-size:27px;font-weight:800;color:var(--h-gold-light)}
+.home-link-more{
+  display:block; text-align:center; font-size:14.5px; font-weight:700; color:var(--h-brown);
+  text-decoration:none; cursor:pointer; background:linear-gradient(135deg,var(--h-gold-light),var(--h-gold-dark));
+  padding:13px; border-radius:10px; max-width:280px; margin:0 auto;
+}
+.home-link-more:hover{opacity:.92}
+
+/* Section 6: schedule */
+.sched-list{max-width:560px;margin:0 auto}
+.sched-item{padding:18px 0;border-bottom:1px solid rgba(59,42,29,.1)}
+.sched-item:last-child{border-bottom:none}
+.sched-time{font-size:13.5px;font-weight:800;color:var(--h-gold-dark);margin-bottom:4px}
+.sched-label{font-size:16px;font-weight:700;color:var(--h-brown);margin-bottom:3px}
+.sched-desc{font-size:13.5px;color:var(--h-brown-soft)}
+
+/* Section 7: Gallery */
+.gallery-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.gallery-card{
+  position:relative; aspect-ratio:4/3; border-radius:16px; overflow:hidden;
+  background:linear-gradient(150deg,var(--h-gold-light),var(--h-coffee-1));
+  display:flex; align-items:center; justify-content:center;
+}
+.gallery-card .emoji{font-size:44px}
+.gallery-card .cap{
+  position:absolute; left:0; right:0; bottom:0; padding:16px 14px 12px;
+  background:linear-gradient(to top, rgba(28,17,8,.85), transparent);
+  color:#fff; font-weight:700; font-size:14px;
+}
+
+/* Section 8: Notices (dark section, cream card) */
+.notice-card-wrap{background:var(--h-cream-card);border-radius:18px;padding:26px 24px;box-shadow:0 20px 40px -16px rgba(0,0,0,.35);max-width:600px;margin:0 auto}
+.notices-list{display:flex;flex-direction:column}
+.notice-item{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid rgba(59,42,29,.1)}
+.notice-item:last-child{border-bottom:none}
+.notice-bell{font-size:16px}
+.notice-text{font-size:14.5px;color:var(--h-brown);font-weight:600}
+.notice-date{font-size:11.5px;color:var(--h-brown-soft);margin-top:3px}
+.home-loading{color:var(--h-brown-soft);font-size:13.5px;padding:8px 0;text-align:center}
+.home-section-dark .home-loading{color:var(--h-tan)}
+
+/* Section 9: Committee */
+.committee-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:18px}
+.committee-card{background:var(--h-cream-card);border-radius:16px;padding:28px 18px;text-align:center;box-shadow:0 12px 30px -14px rgba(59,42,29,.2);border:1px solid rgba(59,42,29,.06)}
+.committee-avatar{
+  width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--h-gold-light),var(--h-gold-dark));
+  color:#3B2A1D;display:flex;align-items:center;justify-content:center;font-size:21px;margin:0 auto 12px;
+}
+.committee-role{font-size:12px;color:var(--h-gold-dark);font-weight:700;margin-bottom:4px}
+.committee-name{font-size:15px;font-weight:700;color:var(--h-brown)}
+
+/* Section 10: Final CTA */
+.home-final-cta{padding:76px clamp(20px,5vw,56px);text-align:center;background:linear-gradient(160deg,var(--h-coffee-1),var(--h-coffee-2))}
+.home-final-emoji{font-size:34px;margin-bottom:14px}
+.home-final-quote{font-size:clamp(19px,2.6vw,26px);font-weight:800;color:#fff;margin-bottom:12px;max-width:560px;margin-left:auto;margin-right:auto}
+.home-final-sub{font-size:14.5px;color:var(--h-tan);margin-bottom:28px}
+
+/* Footer */
+.home-footer{background:var(--h-coffee-3);color:var(--h-tan);padding:52px clamp(20px,5vw,56px) 22px}
+.home-footer-grid{display:grid;grid-template-columns:1.3fr 1fr 1.2fr;gap:32px;max-width:1000px;margin:0 auto 30px}
+.home-footer-brand h3{color:#fff;font-size:18px;font-weight:800;margin-bottom:10px}
+.home-footer-brand p{font-size:13px;line-height:1.8;color:var(--h-tan)}
+.home-footer h4{color:#fff;font-size:14.5px;font-weight:700;margin-bottom:14px}
+.home-footer-links{display:flex;flex-direction:column;gap:10px}
+.home-footer-links a{color:var(--h-tan);text-decoration:none;font-size:13.5px}
+.home-footer-links a:hover{color:var(--h-gold-light)}
+.home-footer-contact{display:flex;flex-direction:column;gap:10px;font-size:13.5px}
+.home-footer-copy{text-align:center;font-size:12px;color:rgba(217,201,174,.6);padding-top:20px;border-top:1px solid rgba(217,201,174,.15);max-width:1000px;margin:0 auto}
+@media (max-width:760px){ .home-footer-grid{grid-template-columns:1fr;text-align:center} .home-footer-links,.home-footer-contact{align-items:center} }
+
 .login-tabs {
   display: flex;
   background: var(--surface-soft);
@@ -932,8 +1133,217 @@ body {
 })();
 </script>
 
+<!-- ───────────── HOME / LANDING SCREEN ───────────── -->
+<div id="homeScreen" class="screen active">
+
+  <header class="home-header">
+    <div class="home-brand">
+      <div class="home-om-circle">ॐ</div>
+      <div class="home-brand-text">
+        <span class="home-brand-title">একতা যুব সংঘ</span>
+        <span class="home-brand-sub">শ্রী শ্রী সরস্বতী পূজা</span>
+      </div>
+    </div>
+    <button class="home-hamburger" onclick="toggleHomeMenu()">☰</button>
+    <nav class="home-nav-menu" id="homeNavMenu">
+      <a href="#top" onclick="closeHomeMenu()">হোম</a>
+      <a href="#about" onclick="closeHomeMenu()">আমাদের সম্পর্কে</a>
+      <a href="#events" onclick="closeHomeMenu()">পূজা</a>
+      <a href="#schedule" onclick="closeHomeMenu()">সময়সূচি</a>
+      <a href="#gallery" onclick="closeHomeMenu()">গ্যালারি</a>
+      <a href="#notices" onclick="closeHomeMenu()">নোটিশ</a>
+      <a href="#contact" onclick="closeHomeMenu()">যোগাযোগ</a>
+      <a class="home-nav-login" onclick="closeHomeMenu();showLoginScreen()">🔐 সদস্য / অ্যাডমিন লগইন</a>
+    </nav>
+  </header>
+
+  <div id="top"></div>
+
+  <!-- Section 1: Hero -->
+  <section class="home-hero-wrap">
+    <div class="home-hero-inner">
+      <p class="home-eyebrow-hero">🌺 একতা যুব সংঘের আয়োজনে</p>
+      <h1>শ্রী শ্রী <span>সরস্বতী</span> পূজা</h1>
+      <p class="home-hero-desc">বিদ্যার আলোয় আলোকিত হোক আমাদের আগামী। ঐতিহ্য, ভক্তি ও সম্প্রীতির এক সুন্দর আয়োজন।</p>
+      <div class="home-hero-cta">
+        <a class="hbtn-primary" href="#about">পূজার বিস্তারিত →</a>
+        <a class="hbtn-secondary" onclick="openPublicSummaryPin()">📊 আর্থিক হিসাব</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="home-sections">
+
+    <!-- Section 2: Quick Info + Countdown -->
+    <section id="quickinfo" class="home-section">
+      <div class="home-section-inner">
+        <p class="home-eyebrow">🙏 পূজার তথ্য</p>
+        <h2 class="home-section-title">শ্রী শ্রী সরস্বতী পূজা <span id="qiYear">২০২৭</span></h2>
+        <p class="home-section-desc">পূজা সম্পর্কিত গুরুত্বপূর্ণ তথ্য এক নজরে</p>
+        <div class="qi-stack">
+          <div class="qi-card">
+            <div class="qi-card-icon">📅</div>
+            <div class="qi-card-label">পূজার তারিখ</div>
+            <div class="qi-card-value" id="qiDate">শীঘ্রই জানানো হবে</div>
+          </div>
+          <div class="qi-card">
+            <div class="qi-card-icon">🕐</div>
+            <div class="qi-card-label">পূজার সময়</div>
+            <div class="qi-card-value" id="qiTime">শীঘ্রই জানানো হবে</div>
+          </div>
+          <div class="qi-card">
+            <div class="qi-card-icon">📍</div>
+            <div class="qi-card-label">পূজার স্থান</div>
+            <div class="qi-card-value" id="qiVenue">শীঘ্রই জানানো হবে</div>
+          </div>
+          <div class="qi-card">
+            <div class="qi-card-icon">⏳</div>
+            <div class="qi-card-label">পূজার বাকি</div>
+            <div class="qi-card-value gold"><span id="qiCountdownNum">—</span> দিন</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: About -->
+    <section id="about" class="home-section">
+      <div class="home-section-inner home-about-grid">
+        <div class="about-deity-card">
+          <span class="emoji">🙏</span>
+          <span class="label">মা সরস্বতী</span>
+        </div>
+        <div class="about-text">
+          <p class="home-eyebrow">আমাদের সম্পর্কে</p>
+          <h2 class="home-section-title">জ্ঞান ও আলোর পথে <span>একসাথে</span></h2>
+          <p class="home-section-desc">একতা যুব সংঘের উদ্যোগে প্রতি বছর ধর্মীয় ভাবগাম্ভীর্য, শৃঙ্খলা ও আনন্দঘন পরিবেশে শ্রী শ্রী সরস্বতী পূজার আয়োজন করা হয়।</p>
+          <p class="home-section-desc">সদস্যদের সম্মিলিত সহযোগিতা, ভালোবাসা ও অংশগ্রহণে এই আয়োজন সফলভাবে সম্পন্ন হয়।</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: পূজার আয়োজন -->
+    <section id="events" class="home-section">
+      <div class="home-section-inner">
+        <p class="home-eyebrow">🌸 আমাদের আয়োজন</p>
+        <h2 class="home-section-title">পূজার বিশেষ আয়োজন</h2>
+        <p class="home-section-desc">ভক্তি, আনন্দ ও সম্প্রীতির সঙ্গে আমাদের আয়োজন</p>
+        <div class="event-cards">
+          <div class="event-card"><div class="event-icon">🛕</div><h3>পূজা ও অঞ্জলি</h3><p>ভক্তি ও শ্রদ্ধার সঙ্গে মা সরস্বতীর আরাধনা।</p></div>
+          <div class="event-card"><div class="event-icon">🌼</div><h3>প্রসাদ বিতরণ</h3><p>সকলের মাঝে প্রসাদ বিতরণের সুন্দর আয়োজন।</p></div>
+          <div class="event-card"><div class="event-icon">🎵</div><h3>সাংস্কৃতিক অনুষ্ঠান</h3><p>শিক্ষার্থী ও সদস্যদের অংশগ্রহণে সাংস্কৃতিক আয়োজন।</p></div>
+          <div class="event-card"><div class="event-icon">📚</div><h3>বিদ্যার আরাধনা</h3><p>জ্ঞান, শিক্ষা ও আলোর জন্য দেবীর কাছে প্রার্থনা।</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Financial Transparency (dark, live data) -->
+    <section id="finance" class="home-section home-section-dark">
+      <div class="home-section-inner">
+        <p class="home-eyebrow">💰 আর্থিক স্বচ্ছতা</p>
+        <h2 class="home-section-title">পূজার আয়-ব্যয়ের হিসাব</h2>
+        <p class="home-section-desc">আমাদের পূজার আর্থিক কার্যক্রমে স্বচ্ছতা ও জবাবদিহিতা</p>
+        <div class="fin-cards">
+          <div class="fin-card"><div class="fin-label">মোট প্রণামী</div><div class="fin-value" id="finIncome">৳ —</div></div>
+          <div class="fin-card"><div class="fin-label">মোট ব্যয়</div><div class="fin-value" id="finExpense">৳ —</div></div>
+          <div class="fin-card"><div class="fin-label">অবশিষ্ট অর্থ</div><div class="fin-value" id="finSurplus">৳ —</div></div>
+          <div class="fin-card"><div class="fin-label">মোট সদস্য</div><div class="fin-value" id="finMembers">—</div></div>
+        </div>
+        <a class="home-link-more" onclick="openPublicSummaryPin()">বিস্তারিত হিসাব দেখুন →</a>
+      </div>
+    </section>
+
+    <!-- Section 6: সময়সূচি -->
+    <section id="schedule" class="home-section">
+      <div class="home-section-inner">
+        <p class="home-eyebrow">📜 সময়সূচি</p>
+        <h2 class="home-section-title">পূজার দিনের আয়োজন</h2>
+        <p class="home-section-desc">পূজার দিনের পূর্ণাঙ্গ সময়সূচি</p>
+        <div class="sched-list">
+          <div class="sched-item"><div class="sched-time">08:00 AM</div><div class="sched-label">পূজা শুরু</div><div class="sched-desc">শ্রী শ্রী সরস্বতী দেবীর পূজা আরম্ভ।</div></div>
+          <div class="sched-item"><div class="sched-time">10:30 AM</div><div class="sched-label">পুষ্পাঞ্জলি</div><div class="sched-desc">সকলের অংশগ্রহণে পুষ্পাঞ্জলি।</div></div>
+          <div class="sched-item"><div class="sched-time">12:30 PM</div><div class="sched-label">প্রসাদ বিতরণ</div><div class="sched-desc">সকলের মাঝে প্রসাদ বিতরণ।</div></div>
+          <div class="sched-item"><div class="sched-time">04:00 PM</div><div class="sched-label">সাংস্কৃতিক অনুষ্ঠান</div><div class="sched-desc">শিক্ষার্থী ও সদস্যদের পরিবেশনা।</div></div>
+          <div class="sched-item"><div class="sched-time">06:30 PM</div><div class="sched-label">সন্ধ্যা আরতি</div><div class="sched-desc">সন্ধ্যা আরতি ও সমাপনী আয়োজন।</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 7: গ্যালারি -->
+    <section id="gallery" class="home-section">
+      <div class="home-section-inner">
+        <p class="home-eyebrow">🖼️ স্মৃতিচারণ</p>
+        <h2 class="home-section-title">আমাদের পূজার কিছু স্মরণীয় মুহূর্ত</h2>
+        <p class="home-section-desc">এই বছরের পূজার আসল ছবি শীঘ্রই এখানে যুক্ত করা হবে</p>
+        <div class="gallery-cards">
+          <div class="gallery-card"><span class="emoji">🪷</span><div class="cap">সরস্বতী পূজা</div></div>
+          <div class="gallery-card"><span class="emoji">🙏</span><div class="cap">পুষ্পাঞ্জলি</div></div>
+          <div class="gallery-card"><span class="emoji">🌼</span><div class="cap">প্রসাদ বিতরণ</div></div>
+          <div class="gallery-card"><span class="emoji">🎵</span><div class="cap">সাংস্কৃতিক অনুষ্ঠান</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 8: নোটিশ বোর্ড (dark, live) -->
+    <section id="notices" class="home-section home-section-dark">
+      <div class="home-section-inner">
+        <p class="home-eyebrow">📢 সর্বশেষ আপডেট</p>
+        <h2 class="home-section-title">নোটিশ বোর্ড</h2>
+        <div class="notice-card-wrap">
+          <div id="homeNoticesList" class="notices-list"><div class="home-loading">লোড হচ্ছে...</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 9: পরিচালনা কমিটি -->
+    <section id="committee" class="home-section">
+      <div class="home-section-inner">
+        <p class="home-eyebrow">👥 পরিচালনা</p>
+        <h2 class="home-section-title">পরিচালনা কমিটি</h2>
+        <div id="homeCommitteeList" class="committee-cards"><div class="home-loading">লোড হচ্ছে...</div></div>
+      </div>
+    </section>
+
+    <!-- Section 10: Final CTA -->
+    <section class="home-final-cta">
+      <div class="home-final-emoji">🙏</div>
+      <p class="home-final-quote">“ঐক্যে আমাদের শক্তি, ভক্তিতে আমাদের পথচলা”</p>
+      <p class="home-final-sub">মা সরস্বতীর আশীর্বাদে জ্ঞান, শিক্ষা ও আলোর পথে এগিয়ে চলি।</p>
+      <a class="hbtn-primary" href="#contact">যোগাযোগ করুন →</a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="home-footer" id="contact">
+      <div class="home-footer-grid">
+        <div class="home-footer-brand">
+          <h3>একতা যুব সংঘ</h3>
+          <p>শ্রী শ্রী সরস্বতী পূজা উদযাপন কমিটি<br>ঐতিহ্য • ভক্তি • সম্প্রীতি</p>
+        </div>
+        <div>
+          <h4>দ্রুত লিংক</h4>
+          <div class="home-footer-links">
+            <a href="#about">আমাদের সম্পর্কে</a>
+            <a href="#events">পূজা</a>
+            <a href="#schedule">সময়সূচি</a>
+            <a href="#gallery">গ্যালারি</a>
+          </div>
+        </div>
+        <div>
+          <h4>যোগাযোগ</h4>
+          <div class="home-footer-contact">
+            <span id="footVenue">📍 পূজার স্থান</span>
+            <span>📞 +880 1XXXXXXXXX</span>
+            <span>✉️ info@example.com</span>
+          </div>
+        </div>
+      </div>
+      <p class="home-footer-copy">© <span id="footYear"></span> একতা যুব সংঘ — সর্বস্বত্ব সংরক্ষিত। · Developed by <b style="color:#fff">HRIDOOY DEY</b></p>
+    </footer>
+
+  </div>
+</div>
+
 <!-- ───────────── LOGIN SCREEN ───────────── -->
-<div id="loginScreen" class="screen active">
+<div id="loginScreen" class="screen hidden">
   <div class="login-bg">
     <div class="login-blob login-blob-1"></div>
     <div class="login-blob login-blob-2"></div>
@@ -1397,6 +1807,59 @@ body {
         </div>
       </section>
 
+      <!-- Home Page Content Settings (Admin only) -->
+      <section id="page-home-content" class="page hidden">
+        <div class="card max-600">
+          <h3 class="card-title">📅 পূজার তথ্য (Home page-এ দেখাবে)</h3>
+          <div class="form-group">
+            <label>পূজার সাল</label>
+            <input type="text" id="hcYear" placeholder="যেমন: ২০২৭" />
+          </div>
+          <div class="form-group">
+            <label>তারিখ</label>
+            <input type="date" id="hcDate" />
+          </div>
+          <div class="form-group">
+            <label>সময়</label>
+            <input type="text" id="hcTime" placeholder="যেমন: সকাল ৮:০০ থেকে" />
+          </div>
+          <div class="form-group">
+            <label>স্থান</label>
+            <input type="text" id="hcVenue" placeholder="যেমন: ক্লাব প্রাঙ্গণ, ...." />
+          </div>
+          <div id="hcInfoMsg" style="margin-bottom:10px"></div>
+          <button class="btn-primary" onclick="savePujaInfo()">💾 সংরক্ষণ করুন</button>
+        </div>
+
+        <div class="card max-600" style="margin-top:20px">
+          <h3 class="card-title">👥 পরিচালনা কমিটি</h3>
+          <div class="form-group">
+            <label>সভাপতির নাম</label>
+            <input type="text" id="hcPresident" placeholder="নাম লিখুন" />
+          </div>
+          <div class="form-group">
+            <label>সাধারণ সম্পাদকের নাম</label>
+            <input type="text" id="hcSecretary" placeholder="নাম লিখুন" />
+          </div>
+          <div class="form-group">
+            <label>কোষাধ্যক্ষের নাম</label>
+            <input type="text" id="hcTreasurer" placeholder="নাম লিখুন" />
+          </div>
+          <div id="hcCommitteeMsg" style="margin-bottom:10px"></div>
+          <button class="btn-primary" onclick="saveCommittee()">💾 সংরক্ষণ করুন</button>
+        </div>
+
+        <div class="card max-600" style="margin-top:20px">
+          <h3 class="card-title">📢 নোটিশ ম্যানেজমেন্ট</h3>
+          <div class="form-group">
+            <label>নতুন নোটিশ</label>
+            <input type="text" id="newNoticeText" placeholder="নোটিশের লেখা লিখুন..." />
+          </div>
+          <button class="btn-primary" onclick="addNotice()">+ যোগ করুন</button>
+          <div id="noticesAdminList" style="margin-top:16px"></div>
+        </div>
+      </section>
+
       <!-- Officer: Request Password Change -->
       <section id="page-change-password" class="page hidden">
         <div class="card max-600">
@@ -1837,6 +2300,18 @@ function hideEl(id) { const e=$(id); if(e) e.classList.add("hidden"); }
 function setErr(id, msg) { const e=$(id); if(!e) return; e.textContent=msg; msg ? e.classList.remove("hidden") : e.classList.add("hidden"); }
 
 // ─── Login ───
+window.showLoginScreen = function() {
+  $("homeScreen").classList.remove("active"); $("homeScreen").classList.add("hidden");
+  $("loginScreen").classList.remove("hidden"); $("loginScreen").classList.add("active");
+};
+
+window.toggleHomeMenu = function() {
+  $("homeNavMenu").classList.toggle("open");
+};
+window.closeHomeMenu = function() {
+  $("homeNavMenu").classList.remove("open");
+};
+
 window.switchLoginTab = function(tab) {
   if(tab==="admin") {
     $("tabAdmin").classList.add("active"); $("tabMember").classList.remove("active");
@@ -1855,7 +2330,8 @@ const PAGE_TITLES = {
   "add-collection":{bn:"নতুন প্রণামী",en:"New Entry"}, "officers":{bn:"অফিসার",en:"Officers"}, "password-requests":{bn:"পাসওয়ার্ড অনুরোধ",en:"Password Requests"},
   "change-password":{bn:"পাসওয়ার্ড পরিবর্তন",en:"Change Password"}, "reports":{bn:"রিপোর্ট",en:"Report"}, "my-collections":{bn:"আমার সংগ্রহ",en:"My Collection"},
   "khoroc":{bn:"💸 খরচ",en:"💸 Expense"}, "final-report":{bn:"📊 চূড়ান্ত রিপোর্ট",en:"📊 Final Report"}, "approvals":{bn:"✅ অনুমোদন",en:"✅ Approvals"},
-  "public-settings":{bn:"🔐 পাবলিক সারসংক্ষেপ সেটিংস",en:"🔐 Public Summary Settings"}
+  "public-settings":{bn:"🔐 পাবলিক সারসংক্ষেপ সেটিংস",en:"🔐 Public Summary Settings"},
+  "home-content":{bn:"🏠 হোমপেজ কনটেন্ট",en:"🏠 Home Page Content"}
 };
 function updatePageTitle(page, lang) {
   const t = PAGE_TITLES[page];
@@ -1917,6 +2393,8 @@ window.doLogin = async function() {
 };
 
 function enterApp(savedPage) {
+  const homeEl = $("homeScreen");
+  if(homeEl) { homeEl.classList.remove("active"); homeEl.classList.add("hidden"); homeEl.style.display="none"; }
   $("loginScreen").classList.remove("active"); $("loginScreen").style.display="none";
   $("appScreen").classList.remove("hidden"); $("appScreen").style.display="flex";
   $("sidebarUserInfo").textContent = `👤 ${currentUser.name} (${currentUser.role})`;
@@ -1960,6 +2438,7 @@ function buildNav() {
     <div class="nav-item" onclick="navigateTo('officers')"><span class="nav-icon">🛡️</span> <span data-bn="অফিসার" data-en="Officers">Officers</span></div>
     <div class="nav-item" onclick="navigateTo('password-requests')"><span class="nav-icon">🔑</span> <span data-bn="পাসওয়ার্ড অনুরোধ" data-en="Password Change Request">Password Change Request</span></div>
     <div class="nav-item" onclick="navigateTo('public-settings')"><span class="nav-icon">🔐</span> <span data-bn="পাবলিক সারসংক্ষেপ সেটিংস" data-en="Public Summary Settings">পাবলিক সারসংক্ষেপ সেটিংস</span></div>
+    <div class="nav-item" onclick="navigateTo('home-content')"><span class="nav-icon">🏠</span> <span data-bn="হোমপেজ কনটেন্ট" data-en="Home Page Content">হোমপেজ কনটেন্ট</span></div>
     ` : `
     <div class="nav-section" data-bn="অ্যাকাউন্ট" data-en="Account">অ্যাকাউন্ট</div>
     <div class="nav-item" onclick="navigateTo('change-password')"><span class="nav-icon">🔑</span> <span data-bn="পাসওয়ার্ড পরিবর্তন" data-en="Change Password">Change Password</span></div>
@@ -1991,6 +2470,7 @@ window.navigateTo = function(page) {
   else if(page==="final-report") loadFinalReport();
   else if(page==="approvals") loadApprovals();
   else if(page==="public-settings") loadPublicSettingsPage();
+  else if(page==="home-content") loadHomeContentAdminPage();
   // close sidebar on mobile
   $("sidebar").classList.remove("open");
 };
@@ -3781,6 +4261,195 @@ window.deleteCashHolder = async function(id) {
     loadCashHolders();
   } catch(e) { showToast("ত্রুটি: "+e.message, "error"); }
 };
+
+// ═══════════════════════════════════════════════════════
+//  HOME PAGE CONTENT — public loader + admin management
+// ═══════════════════════════════════════════════════════
+
+// ── Public: load everything the home screen shows (no login required) ──
+async function loadHomeContent() {
+  loadHomeQuickInfo();
+  loadHomeFinance();
+  loadHomeNotices();
+  loadHomeCommittee();
+  const fy = $("footYear"); if(fy) fy.textContent = new Date().getFullYear();
+}
+
+async function loadHomeQuickInfo() {
+  try {
+    const snap = await getDoc(doc(db,"settings","pujaInfo"));
+    const d = snap.exists() ? snap.data() : {};
+    if($("qiYear"))  $("qiYear").textContent  = d.year  || new Date().getFullYear();
+    if($("qiDate"))  $("qiDate").textContent  = d.date  ? new Date(d.date).toLocaleDateString("bn-BD",{year:"numeric",month:"long",day:"numeric"}) : "শীঘ্রই জানানো হবে";
+    if($("qiTime"))  $("qiTime").textContent  = d.time  || "শীঘ্রই জানানো হবে";
+    if($("qiVenue")) $("qiVenue").textContent = d.venue || "শীঘ্রই জানানো হবে";
+    if($("footVenue") && d.venue) $("footVenue").textContent = "📍 " + d.venue;
+    // countdown
+    if(d.date && $("qiCountdownNum")) {
+      const target = new Date(d.date + "T00:00:00");
+      const tick = () => {
+        const diff = Math.ceil((target - new Date()) / 86400000);
+        $("qiCountdownNum").textContent = diff > 0 ? diff : (diff === 0 ? "আজ! 🎉" : "সম্পন্ন হয়েছে");
+      };
+      tick();
+      setInterval(tick, 3600000);
+    }
+  } catch(e) { console.error("Quick info load failed:", e); }
+}
+
+async function loadHomeFinance() {
+  try {
+    const year = new Date().getFullYear();
+    const [monthlySnap, pujaSnap, khorocSnap, memberSnap] = await Promise.all([
+      getDocs(query(collection(db,"chanda"), where("year","==",year-1), where("entryType","==","monthly"))),
+      getDocs(query(collection(db,"chanda"), where("year","==",year), where("entryType","==","puja"))),
+      getDocs(collection(db,"khoroc")),
+      getDocs(collection(db,"members"))
+    ]);
+    const income = [...monthlySnap.docs, ...pujaSnap.docs].filter(isCountedEntry)
+      .reduce((s,d)=>{ const c=d.data(); return s+(c.status==="paid"?(c.amount||0):0); },0);
+    const expense = khorocSnap.docs.filter(isCountedEntry)
+      .filter(d=>{ const e=d.data(); return e.date && new Date(e.date).getFullYear()===year; })
+      .reduce((s,d)=>s+(d.data().totalAmount||0),0);
+    if($("finIncome"))  $("finIncome").textContent  = "৳" + income.toLocaleString();
+    if($("finExpense")) $("finExpense").textContent = "৳" + expense.toLocaleString();
+    if($("finSurplus")) $("finSurplus").textContent = "৳" + (income-expense).toLocaleString();
+    if($("finMembers")) $("finMembers").textContent = memberSnap.size;
+  } catch(e) { console.error("Home finance load failed:", e); }
+}
+
+async function loadHomeNotices() {
+  const el = $("homeNoticesList");
+  if(!el) return;
+  try {
+    const snap = await getDocs(query(collection(db,"notices"), orderBy("createdAt","desc")));
+    const notices = snap.docs.map(d=>({id:d.id,...d.data()})).slice(0,5);
+    if(!notices.length) { el.innerHTML = `<div class="home-loading">এই মুহূর্তে কোনো নোটিশ নেই।</div>`; return; }
+    el.innerHTML = notices.map(n => `
+      <div class="notice-item">
+        <span class="notice-bell">🔔</span>
+        <div>
+          <div class="notice-text">${n.text||""}</div>
+          <div class="notice-date">${n.createdAt?.toDate ? n.createdAt.toDate().toLocaleDateString("bn-BD") : ""}</div>
+        </div>
+      </div>
+    `).join("");
+  } catch(e) { el.innerHTML = `<div class="home-loading">নোটিশ লোড করা যায়নি।</div>`; }
+}
+
+async function loadHomeCommittee() {
+  const el = $("homeCommitteeList");
+  if(!el) return;
+  try {
+    const snap = await getDoc(doc(db,"settings","committee"));
+    const d = snap.exists() ? snap.data() : {};
+    const roles = [
+      { label:"সভাপতি", name:d.president, icon:"🙏" },
+      { label:"সাধারণ সম্পাদক", name:d.secretary, icon:"📝" },
+      { label:"কোষাধ্যক্ষ", name:d.treasurer, icon:"💰" },
+    ].filter(r => r.name);
+    if(!roles.length) { el.innerHTML = `<div class="home-loading">কমিটির তথ্য শীঘ্রই যুক্ত হবে।</div>`; return; }
+    el.innerHTML = roles.map(r => `
+      <div class="committee-card">
+        <div class="committee-avatar">${r.icon}</div>
+        <div class="committee-role">${r.label}</div>
+        <div class="committee-name">${r.name}</div>
+      </div>
+    `).join("");
+  } catch(e) { el.innerHTML = `<div class="home-loading">কমিটির তথ্য লোড করা যায়নি।</div>`; }
+}
+
+// ── Admin: manage puja info, committee, notices ──
+window.loadHomeContentAdminPage = async function() {
+  if(currentUser.role !== "admin") return;
+  try {
+    const snap = await getDoc(doc(db,"settings","pujaInfo"));
+    const d = snap.exists() ? snap.data() : {};
+    $("hcYear").value  = d.year  || "";
+    $("hcDate").value  = d.date  || "";
+    $("hcTime").value  = d.time  || "";
+    $("hcVenue").value = d.venue || "";
+  } catch(e) {}
+  try {
+    const snap = await getDoc(doc(db,"settings","committee"));
+    const d = snap.exists() ? snap.data() : {};
+    $("hcPresident").value = d.president || "";
+    $("hcSecretary").value = d.secretary || "";
+    $("hcTreasurer").value = d.treasurer || "";
+  } catch(e) {}
+  loadNoticesAdmin();
+};
+
+window.savePujaInfo = async function() {
+  const data = {
+    year:  $("hcYear").value.trim(),
+    date:  $("hcDate").value,
+    time:  $("hcTime").value.trim(),
+    venue: $("hcVenue").value.trim(),
+    updatedBy: currentUser.name, updatedAt: serverTimestamp()
+  };
+  try {
+    await setDoc(doc(db,"settings","pujaInfo"), data, { merge:true });
+    $("hcInfoMsg").innerHTML = `<span style="color:var(--green);font-size:12px">✅ সংরক্ষিত হয়েছে।</span>`;
+    showToast("✅ পূজার তথ্য আপডেট হয়েছে।");
+  } catch(e) { $("hcInfoMsg").innerHTML = `<span style="color:var(--red);font-size:12px">ত্রুটি: ${e.message}</span>`; }
+};
+
+window.saveCommittee = async function() {
+  const data = {
+    president: $("hcPresident").value.trim(),
+    secretary: $("hcSecretary").value.trim(),
+    treasurer: $("hcTreasurer").value.trim(),
+    updatedBy: currentUser.name, updatedAt: serverTimestamp()
+  };
+  try {
+    await setDoc(doc(db,"settings","committee"), data, { merge:true });
+    $("hcCommitteeMsg").innerHTML = `<span style="color:var(--green);font-size:12px">✅ সংরক্ষিত হয়েছে।</span>`;
+    showToast("✅ কমিটির তথ্য আপডেট হয়েছে।");
+  } catch(e) { $("hcCommitteeMsg").innerHTML = `<span style="color:var(--red);font-size:12px">ত্রুটি: ${e.message}</span>`; }
+};
+
+async function loadNoticesAdmin() {
+  const el = $("noticesAdminList");
+  try {
+    const snap = await getDocs(query(collection(db,"notices"), orderBy("createdAt","desc")));
+    const notices = snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(!notices.length) { el.innerHTML = `<div class="empty-state"><div class="empty-state-text">কোনো নোটিশ নেই।</div></div>`; return; }
+    el.innerHTML = `<div class="table-wrap"><table class="data-table">
+      <thead><tr><th>নোটিশ</th><th>তারিখ</th><th>Action</th></tr></thead>
+      <tbody>${notices.map(n => `
+        <tr>
+          <td>${n.text||""}</td>
+          <td>${n.createdAt?.toDate ? n.createdAt.toDate().toLocaleDateString("bn-BD") : "-"}</td>
+          <td><button class="btn-sm btn-delete" onclick="deleteNotice('${n.id}')">🗑️</button></td>
+        </tr>
+      `).join("")}</tbody>
+    </table></div>`;
+  } catch(e) { el.innerHTML = `<div style="color:var(--red)">ত্রুটি: ${e.message}</div>`; }
+}
+
+window.addNotice = async function() {
+  const text = $("newNoticeText").value.trim();
+  if(!text) { showToast("নোটিশের লেখা দিন।", "error"); return; }
+  try {
+    await addDoc(collection(db,"notices"), { text, createdAt: serverTimestamp() });
+    $("newNoticeText").value = "";
+    showToast("✅ নোটিশ যোগ করা হয়েছে।");
+    loadNoticesAdmin();
+  } catch(e) { showToast("ত্রুটি: "+e.message, "error"); }
+};
+
+window.deleteNotice = async function(id) {
+  if(!confirm("এই নোটিশটি মুছে ফেলবেন?")) return;
+  try {
+    await deleteDoc(doc(db,"notices",id));
+    showToast("মুছে ফেলা হয়েছে।");
+    loadNoticesAdmin();
+  } catch(e) { showToast("ত্রুটি: "+e.message, "error"); }
+};
+
+// Home screen is the default active screen — load its content right away.
+loadHomeContent();
 
 // ─── Fiscal-year net & carry-forward (previous years' surplus rolls into next year) ───
 const FISCAL_START_YEAR = 2025;
