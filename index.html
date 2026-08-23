@@ -1153,6 +1153,7 @@ body {
       <a href="#gallery" onclick="closeHomeMenu()">গ্যালারি</a>
       <a href="#notices" onclick="closeHomeMenu()">নোটিশ</a>
       <a href="#contact" onclick="closeHomeMenu()">যোগাযোগ</a>
+      <a onclick="closeHomeMenu();openPublicSummaryPin()">📊 আর্থিক হিসাব</a>
       <a class="home-nav-login" onclick="closeHomeMenu();showLoginScreen()">🔐 সদস্য / অ্যাডমিন লগইন</a>
     </nav>
   </header>
@@ -1167,7 +1168,6 @@ body {
       <p class="home-hero-desc">বিদ্যার আলোয় আলোকিত হোক আমাদের আগামী। ঐতিহ্য, ভক্তি ও সম্প্রীতির এক সুন্দর আয়োজন।</p>
       <div class="home-hero-cta">
         <a class="hbtn-primary" href="#about">পূজার বিস্তারিত →</a>
-        <a class="hbtn-secondary" onclick="openPublicSummaryPin()">📊 আর্থিক হিসাব</a>
       </div>
     </div>
   </section>
@@ -1367,8 +1367,6 @@ body {
         </div>
         <div id="memberPublicResults"></div>
       </div>
-
-      <button class="btn-secondary full-width" style="margin-top:14px" onclick="openPublicSummaryPin()" data-bn="📊 আয়-ব্যয়ের সারসংক্ষেপ দেখুন" data-en="📊 View Income-Expense Summary">📊 আয়-ব্যয়ের সারসংক্ষেপ দেখুন</button>
 
       <div class="login-footer">Developed by <span>HRIDOOY DEY</span></div>
     </div>
@@ -1856,7 +1854,27 @@ body {
           </div>
           <div id="galleryUploadMsg" style="margin-bottom:10px"></div>
           <button class="btn-primary" id="galleryUploadBtn" onclick="uploadGalleryPhoto()">⬆️ আপলোড করুন</button>
-          <div id="galleryAdminList" style="margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px"></div>
+
+          <div style="display:flex;align-items:center;gap:10px;margin:22px 0">
+            <div style="flex:1;height:1px;background:var(--border)"></div>
+            <span style="font-size:12px;color:var(--text-muted)">অথবা</span>
+            <div style="flex:1;height:1px;background:var(--border)"></div>
+          </div>
+
+          <h4 style="font-size:14px;margin-bottom:8px">🔗 Google Drive থেকে যোগ করুন</h4>
+          <p class="info-text">Drive-এ ছবিটার শেয়ার লিংক এখানে পেস্ট করুন। <strong>জরুরি:</strong> ছবিটার শেয়ার সেটিংস অবশ্যই "Anyone with the link" / "যেকোনো লিংকধারী দেখতে পারবে" করা থাকতে হবে, নাহলে ওয়েবসাইটে ছবি দেখা যাবে না।</p>
+          <div class="form-group">
+            <label>Google Drive লিংক</label>
+            <input type="text" id="driveGalleryLink" placeholder="https://drive.google.com/file/d/..." />
+          </div>
+          <div class="form-group">
+            <label>ক্যাপশন</label>
+            <input type="text" id="driveGalleryCaption" placeholder="যেমন: প্রসাদ বিতরণ ২০২৬" />
+          </div>
+          <div id="driveGalleryMsg" style="margin-bottom:10px"></div>
+          <button class="btn-primary" onclick="addDriveGalleryPhoto()">+ Drive লিংক যোগ করুন</button>
+
+          <div id="galleryAdminList" style="margin-top:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px"></div>
         </div>
       </section>
 
@@ -4479,6 +4497,37 @@ window.uploadGalleryPhoto = async function() {
     msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">ত্রুটি: ${e.message}</span>`;
   } finally {
     btn.disabled = false; btn.textContent = "⬆️ আপলোড করুন";
+  }
+};
+
+// ── Google Drive link -> direct-viewable image URL ──
+function extractDriveFileId(input) {
+  input = input.trim();
+  let m = input.match(/\/d\/([a-zA-Z0-9_-]{20,})/);      // .../file/d/FILE_ID/view
+  if(m) return m[1];
+  m = input.match(/[?&]id=([a-zA-Z0-9_-]{20,})/);         // ...?id=FILE_ID or open?id=FILE_ID
+  if(m) return m[1];
+  if(/^[a-zA-Z0-9_-]{20,}$/.test(input)) return input;     // pasted the raw file ID
+  return null;
+}
+
+window.addDriveGalleryPhoto = async function() {
+  const link = $("driveGalleryLink").value.trim();
+  const caption = $("driveGalleryCaption").value.trim();
+  const msgEl = $("driveGalleryMsg");
+  if(!link) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">Google Drive লিংক পেস্ট করুন।</span>`; return; }
+  if(!caption) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">ক্যাপশন লিখুন।</span>`; return; }
+  const fileId = extractDriveFileId(link);
+  if(!fileId) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">সঠিক Google Drive লিংক মনে হচ্ছে না। শেয়ার লিংকটা আবার চেক করুন।</span>`; return; }
+  const imageUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+  try {
+    await addDoc(collection(db,"gallery"), { imageUrl, driveFileId: fileId, caption, createdAt: serverTimestamp() });
+    $("driveGalleryLink").value = ""; $("driveGalleryCaption").value = "";
+    msgEl.innerHTML = `<span style="color:var(--green);font-size:12px">✅ যোগ করা হয়েছে। ছবিটা না দেখালে Drive-এ "Anyone with the link" শেয়ার সেটিংস চেক করুন।</span>`;
+    showToast("✅ Google Drive ছবি যোগ করা হয়েছে।");
+    loadGalleryAdmin();
+  } catch(e) {
+    msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">ত্রুটি: ${e.message}</span>`;
   }
 };
 
