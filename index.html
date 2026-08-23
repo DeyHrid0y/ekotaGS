@@ -1236,22 +1236,6 @@ body {
       </div>
     </section>
 
-    <!-- Section 3: Financial Transparency (dark, live data) -->
-    <section id="finance" class="home-section home-section-dark">
-      <div class="home-section-inner">
-        <p class="home-eyebrow">💰 আর্থিক স্বচ্ছতা</p>
-        <h2 class="home-section-title">পূজার আয়-ব্যয়ের হিসাব</h2>
-        <p class="home-section-desc">আমাদের পূজার আর্থিক কার্যক্রমে স্বচ্ছতা ও জবাবদিহিতা</p>
-        <div class="fin-cards">
-          <div class="fin-card"><div class="fin-label">মোট প্রণামী</div><div class="fin-value" id="finIncome">৳ —</div></div>
-          <div class="fin-card"><div class="fin-label">মোট ব্যয়</div><div class="fin-value" id="finExpense">৳ —</div></div>
-          <div class="fin-card"><div class="fin-label">অবশিষ্ট অর্থ</div><div class="fin-value" id="finSurplus">৳ —</div></div>
-          <div class="fin-card"><div class="fin-label">মোট সদস্য</div><div class="fin-value" id="finMembers">—</div></div>
-        </div>
-        <a class="home-link-more" onclick="openPublicSummaryPin()">বিস্তারিত হিসাব দেখুন →</a>
-      </div>
-    </section>
-
     <!-- Section 6: সময়সূচি -->
     <section id="schedule" class="home-section">
       <div class="home-section-inner">
@@ -1858,6 +1842,22 @@ body {
           <button class="btn-primary" onclick="addNotice()">+ যোগ করুন</button>
           <div id="noticesAdminList" style="margin-top:16px"></div>
         </div>
+
+        <div class="card max-600" style="margin-top:20px">
+          <h3 class="card-title">🖼️ গ্যালারি ছবি (স্মৃতিচারণ)</h3>
+          <p class="info-text">ফোন থেকে সরাসরি ছবি বেছে নিয়ে আপলোড করুন — Home page-এর "স্মৃতিচারণ" সেকশনে দেখাবে।</p>
+          <div class="form-group">
+            <label>ছবি বেছে নিন</label>
+            <input type="file" id="galleryFileInput" accept="image/*" />
+          </div>
+          <div class="form-group">
+            <label>ক্যাপশন</label>
+            <input type="text" id="galleryCaption" placeholder="যেমন: পুষ্পাঞ্জলি ২০২৬" />
+          </div>
+          <div id="galleryUploadMsg" style="margin-bottom:10px"></div>
+          <button class="btn-primary" id="galleryUploadBtn" onclick="uploadGalleryPhoto()">⬆️ আপলোড করুন</button>
+          <div id="galleryAdminList" style="margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px"></div>
+        </div>
       </section>
 
       <!-- Officer: Request Password Change -->
@@ -2249,6 +2249,9 @@ import {
 import {
   getAuth, signInWithEmailAndPassword, signOut
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+import {
+  getStorage, ref, uploadBytes, getDownloadURL, deleteObject
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyChTiNOIRv1w038c-O4w5aRzOiTY1mss28",
@@ -2262,6 +2265,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
+const storage = getStorage(app);
 
 // ─── EmailJS (auto-email on pronami approval) ───
 const EMAILJS_SERVICE_ID = "service_7e91pbg";
@@ -4269,9 +4273,9 @@ window.deleteCashHolder = async function(id) {
 // ── Public: load everything the home screen shows (no login required) ──
 async function loadHomeContent() {
   loadHomeQuickInfo();
-  loadHomeFinance();
   loadHomeNotices();
   loadHomeCommittee();
+  loadHomeGallery();
   const fy = $("footYear"); if(fy) fy.textContent = new Date().getFullYear();
 }
 
@@ -4378,6 +4382,7 @@ window.loadHomeContentAdminPage = async function() {
     $("hcTreasurer").value = d.treasurer || "";
   } catch(e) {}
   loadNoticesAdmin();
+  loadGalleryAdmin();
 };
 
 window.savePujaInfo = async function() {
@@ -4447,6 +4452,80 @@ window.deleteNotice = async function(id) {
     loadNoticesAdmin();
   } catch(e) { showToast("ত্রুটি: "+e.message, "error"); }
 };
+
+// ── Gallery photos (Firebase Storage + Firestore) ──
+window.uploadGalleryPhoto = async function() {
+  const fileInput = $("galleryFileInput");
+  const caption = $("galleryCaption").value.trim();
+  const msgEl = $("galleryUploadMsg");
+  const btn = $("galleryUploadBtn");
+  const file = fileInput.files[0];
+  if(!file) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">একটা ছবি বেছে নিন।</span>`; return; }
+  if(!caption) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">ক্যাপশন লিখুন।</span>`; return; }
+  if(file.size > 8*1024*1024) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">ছবির সাইজ ৮MB-এর কম হতে হবে।</span>`; return; }
+  btn.disabled = true; btn.textContent = "⏳ আপলোড হচ্ছে...";
+  msgEl.innerHTML = "";
+  try {
+    const path = `gallery/${Date.now()}_${file.name}`;
+    const storageRef = ref(storage, path);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    await addDoc(collection(db,"gallery"), { imageUrl: url, storagePath: path, caption, createdAt: serverTimestamp() });
+    fileInput.value = ""; $("galleryCaption").value = "";
+    msgEl.innerHTML = `<span style="color:var(--green);font-size:12px">✅ আপলোড সম্পন্ন হয়েছে।</span>`;
+    showToast("✅ ছবি যোগ করা হয়েছে।");
+    loadGalleryAdmin();
+  } catch(e) {
+    msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">ত্রুটি: ${e.message}</span>`;
+  } finally {
+    btn.disabled = false; btn.textContent = "⬆️ আপলোড করুন";
+  }
+};
+
+async function loadGalleryAdmin() {
+  const el = $("galleryAdminList");
+  if(!el) return;
+  try {
+    const snap = await getDocs(query(collection(db,"gallery"), orderBy("createdAt","desc")));
+    const photos = snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(!photos.length) { el.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-text">কোনো ছবি যোগ করা হয়নি।</div></div>`; return; }
+    el.innerHTML = photos.map(p => `
+      <div style="position:relative;border-radius:10px;overflow:hidden;aspect-ratio:1/1;background:var(--surface-soft)">
+        <img src="${p.imageUrl}" alt="${p.caption||""}" style="width:100%;height:100%;object-fit:cover" />
+        <button onclick="deleteGalleryPhoto('${p.id}','${(p.storagePath||"").replace(/'/g,"\\'")}')"
+          style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:6px;width:24px;height:24px;cursor:pointer;font-size:12px">🗑️</button>
+        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.7),transparent);color:#fff;font-size:10.5px;padding:4px 6px 3px">${p.caption||""}</div>
+      </div>
+    `).join("");
+  } catch(e) { el.innerHTML = `<div style="color:var(--red)">ত্রুটি: ${e.message}</div>`; }
+}
+
+window.deleteGalleryPhoto = async function(id, storagePath) {
+  if(!confirm("এই ছবিটি মুছে ফেলবেন?")) return;
+  try {
+    await deleteDoc(doc(db,"gallery",id));
+    if(storagePath) { try { await deleteObject(ref(storage, storagePath)); } catch(e) {} }
+    showToast("মুছে ফেলা হয়েছে।");
+    loadGalleryAdmin();
+  } catch(e) { showToast("ত্রুটি: "+e.message, "error"); }
+};
+
+// ── Public: show uploaded photos on the home page (falls back to the default cards if none yet) ──
+async function loadHomeGallery() {
+  const el = document.querySelector("#gallery .gallery-cards");
+  if(!el) return;
+  try {
+    const snap = await getDocs(query(collection(db,"gallery"), orderBy("createdAt","desc")));
+    const photos = snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(!photos.length) return; // keep the default emoji placeholder cards already in the HTML
+    el.innerHTML = photos.map(p => `
+      <div class="gallery-card" style="background:none">
+        <img src="${p.imageUrl}" alt="${p.caption||""}" style="width:100%;height:100%;object-fit:cover" />
+        <div class="cap">${p.caption||""}</div>
+      </div>
+    `).join("");
+  } catch(e) { console.error("Home gallery load failed:", e); }
+}
 
 // Home screen is the default active screen — load its content right away.
 loadHomeContent();
