@@ -1837,6 +1837,12 @@ body {
             <label>নতুন নোটিশ</label>
             <input type="text" id="newNoticeText" placeholder="নোটিশের লেখা লিখুন..." />
           </div>
+          <div class="form-group">
+            <label>Google Drive ছবির লিংক (ঐচ্ছিক)</label>
+            <input type="text" id="newNoticeImageLink" placeholder="https://drive.google.com/file/d/..." />
+            <p style="font-size:11px;color:var(--text-muted);margin-top:4px">ছবিটার শেয়ার সেটিংস "Anyone with the link" করা থাকতে হবে।</p>
+          </div>
+          <div id="noticeAddMsg" style="margin-bottom:10px"></div>
           <button class="btn-primary" onclick="addNotice()">+ যোগ করুন</button>
           <div id="noticesAdminList" style="margin-top:16px"></div>
         </div>
@@ -4350,9 +4356,10 @@ async function loadHomeNotices() {
     el.innerHTML = notices.map(n => `
       <div class="notice-item">
         <span class="notice-bell">🔔</span>
-        <div>
+        <div style="flex:1">
           <div class="notice-text">${n.text||""}</div>
           <div class="notice-date">${n.createdAt?.toDate ? n.createdAt.toDate().toLocaleDateString("bn-BD") : ""}</div>
+          ${n.imageUrl ? `<img src="${n.imageUrl}" alt="" style="max-width:100%;border-radius:8px;margin-top:8px;display:block" />` : ""}
         </div>
       </div>
     `).join("");
@@ -4439,9 +4446,10 @@ async function loadNoticesAdmin() {
     const notices = snap.docs.map(d=>({id:d.id,...d.data()}));
     if(!notices.length) { el.innerHTML = `<div class="empty-state"><div class="empty-state-text">কোনো নোটিশ নেই।</div></div>`; return; }
     el.innerHTML = `<div class="table-wrap"><table class="data-table">
-      <thead><tr><th>নোটিশ</th><th>তারিখ</th><th>Action</th></tr></thead>
+      <thead><tr><th>ছবি</th><th>নোটিশ</th><th>তারিখ</th><th>Action</th></tr></thead>
       <tbody>${notices.map(n => `
         <tr>
+          <td>${n.imageUrl ? `<img src="${n.imageUrl}" alt="" style="width:44px;height:44px;object-fit:cover;border-radius:6px" />` : "—"}</td>
           <td>${n.text||""}</td>
           <td>${n.createdAt?.toDate ? n.createdAt.toDate().toLocaleDateString("bn-BD") : "-"}</td>
           <td><button class="btn-sm btn-delete" onclick="deleteNotice('${n.id}')">🗑️</button></td>
@@ -4453,10 +4461,18 @@ async function loadNoticesAdmin() {
 
 window.addNotice = async function() {
   const text = $("newNoticeText").value.trim();
+  const imageLink = $("newNoticeImageLink").value.trim();
+  const msgEl = $("noticeAddMsg");
   if(!text) { showToast("নোটিশের লেখা দিন।", "error"); return; }
+  let imageUrl = null;
+  if(imageLink) {
+    const fileId = extractDriveFileId(imageLink);
+    if(!fileId) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">সঠিক Google Drive লিংক মনে হচ্ছে না।</span>`; return; }
+    imageUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+  }
   try {
-    await addDoc(collection(db,"notices"), { text, createdAt: serverTimestamp() });
-    $("newNoticeText").value = "";
+    await addDoc(collection(db,"notices"), { text, imageUrl, createdAt: serverTimestamp() });
+    $("newNoticeText").value = ""; $("newNoticeImageLink").value = ""; msgEl.innerHTML = "";
     showToast("✅ নোটিশ যোগ করা হয়েছে।");
     loadNoticesAdmin();
   } catch(e) { showToast("ত্রুটি: "+e.message, "error"); }
