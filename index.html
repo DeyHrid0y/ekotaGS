@@ -657,6 +657,33 @@ body {
 .data-table tr:last-child td { border-bottom: none; }
 .data-table tr:hover td { background: #FAFAFA; }
 
+/* ─── Responsive card view for tables on small screens ─── */
+@media (max-width: 700px) {
+  .table-wrap-cards { overflow-x: visible; box-shadow: none; background: transparent; }
+  .table-wrap-cards .data-table thead { display: none; }
+  .table-wrap-cards .data-table, .table-wrap-cards .data-table tbody,
+  .table-wrap-cards .data-table tr, .table-wrap-cards .data-table td { display: block; width: 100%; }
+  .table-wrap-cards .data-table tr {
+    margin-bottom: 12px; border: 1px solid var(--border); border-radius: 12px;
+    padding: 6px 14px; background: var(--surface); box-shadow: var(--shadow);
+  }
+  .table-wrap-cards .data-table tr:hover td { background: transparent; }
+  .table-wrap-cards .data-table td {
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+    padding: 9px 0; border-bottom: 1px solid #F3F4F6; text-align: right;
+  }
+  .table-wrap-cards .data-table td:last-child { border-bottom: none; }
+  .table-wrap-cards .data-table td[data-label]::before {
+    content: attr(data-label); font-weight: 600; color: var(--text-muted); font-size: 11px;
+    text-transform: uppercase; letter-spacing: .3px; text-align: left; flex-shrink: 0; padding-top: 1px;
+  }
+  /* Empty-state row (no data-label) shouldn't get card styling */
+  .table-wrap-cards .data-table tr:has(td[colspan]) {
+    border: none; box-shadow: none; background: transparent; padding: 0; margin-bottom: 0;
+  }
+  .table-wrap-cards .data-table td[colspan] { display: table-cell; }
+}
+
 /* ─── Status Badges ─── */
 .badge {
   display: inline-flex; align-items: center; gap: 4px;
@@ -1493,7 +1520,7 @@ body {
         <div class="search-bar-row">
           <input type="text" id="memberListSearch" placeholder="নাম বা ফোন দিয়ে খুঁজুন..." oninput="filterMemberList()" />
         </div>
-        <div class="table-wrap">
+        <div class="table-wrap table-wrap-cards">
           <table class="data-table" id="membersTable">
             <thead>
               <tr>
@@ -1540,7 +1567,7 @@ body {
             </select>
           </div>
         </div>
-        <div class="table-wrap">
+        <div class="table-wrap table-wrap-cards">
           <table class="data-table" id="collectionTable">
             <thead>
               <tr>
@@ -1551,6 +1578,7 @@ body {
                 <th>বছর / Year</th>
                 <th>প্রণামীর পরিমাণ</th>
                 <th>Payment Status</th>
+                <th>অনুমোদন</th>
                 <th>সংগ্রহকারী</th>
                 <th>তারিখ</th>
                 <th>Action</th>
@@ -1746,6 +1774,14 @@ body {
       <!-- Public Summary Settings (Admin only) -->
       <section id="page-public-settings" class="page hidden">
         <div class="card max-600">
+          <h3 class="card-title">💾 ডেটা ব্যাকআপ</h3>
+          <p class="info-text">সব সদস্য, প্রণামী, খরচ, নোটিশ ও সেটিংস একটা JSON ফাইলে ডাউনলোড করুন — নিরাপদে Google Drive বা ফোনে রেখে দিন। নিয়মিত (যেমন মাসে একবার) ডাউনলোড করে রাখা ভালো অভ্যাস।</p>
+          <div id="backupMsg" style="margin-bottom:10px"></div>
+          <button class="btn-primary" id="backupBtn" onclick="downloadDataBackup()">⬇️ এখনই ব্যাকআপ ডাউনলোড করুন</button>
+          <p style="font-size:11.5px;color:var(--text-muted);margin-top:12px">এটা এক-বারের ম্যানুয়াল ব্যাকআপ। সম্পূর্ণ <strong>স্বয়ংক্রিয়</strong> (automatic) ব্যাকআপের জন্য Firebase Console → Firestore Database → Backups ট্যাব থেকে দৈনিক/সাপ্তাহিক শিডিউল চালু করুন (কোনো কোডিং লাগে না)।</p>
+        </div>
+
+        <div class="card max-600" style="margin-top:20px">
           <h3 class="card-title">🌐 পাবলিক সারসংক্ষেপ চালু/বন্ধ</h3>
           <p class="info-text">বন্ধ করলে লগইন পেজ থেকে কেউ "আয়-ব্যয়ের সারসংক্ষেপ" আর দেখতে পারবে না — পিন সঠিক হলেও না।</p>
           <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:10px">
@@ -2316,6 +2352,13 @@ function pujaDonorDisplay(c, memberName) {
 
 // ─── Utility ───
 function $(id) { return document.getElementById(id); }
+// Officer passwords are hashed client-side before ever reaching Firestore (the "officers"
+// collection needs public read for login to work, so plaintext storage would expose every
+// officer's password to anyone who queries it directly).
+async function sha256Hex(text) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,"0")).join("");
+}
 function showToast(msg, type="success") {
   const t = $("toast");
   t.textContent = msg;
@@ -2414,7 +2457,12 @@ window.doLogin = async function() {
     if(snap.empty) { setErr("loginError","ভুল username বা password।"); return; }
     const oDoc = snap.docs[0];
     const o = oDoc.data();
-    if(o.password !== p) { setErr("loginError","ভুল password।"); return; }
+    const enteredHash = await sha256Hex(p);
+    const storedIsHashed = (o.password||"").length === 64; // legacy plaintext accounts are shorter
+    const matches = storedIsHashed ? (o.password === enteredHash) : (o.password === p);
+    if(!matches) { setErr("loginError","ভুল password।"); return; }
+    // Quietly upgrade any legacy plaintext password to a hash on successful login.
+    if(!storedIsHashed) { updateDoc(doc(db,"officers",oDoc.id), { password: enteredHash }).catch(()=>{}); }
     currentUser = { username: o.username, role: "officer", name: o.name, id: oDoc.id };
     enterApp();
   } catch(e) { setErr("loginError","সংযোগ ত্রুটি: "+e.message); }
@@ -2598,13 +2646,13 @@ function renderMembersTable(members) {
   const isAdmin = currentUser.role==="admin";
   $("membersTableBody").innerHTML = members.length ? members.map((m,i) => `
     <tr>
-      <td><span class="member-id-badge">${m.memberId||"—"}</span></td>
-      <td><strong>${m.name}</strong></td>
-      <td>${m.phone||"-"}</td>
-      <td>${m.email ? m.email : `<span style="color:var(--text-muted);font-size:12px">— যোগ করা হয়নি</span>`}</td>
-      <td>${m.address||"-"}</td>
-      <td>৳${(m.monthlyAmount||0).toLocaleString()}</td>
-      <td>
+      <td data-label="Member ID"><span class="member-id-badge">${m.memberId||"—"}</span></td>
+      <td data-label="নাম"><strong>${m.name}</strong></td>
+      <td data-label="ফোন">${m.phone||"-"}</td>
+      <td data-label="Email">${m.email ? m.email : `<span style="color:var(--text-muted);font-size:12px">— যোগ করা হয়নি</span>`}</td>
+      <td data-label="ঠিকানা">${m.address||"-"}</td>
+      <td data-label="মাসিক প্রণামী">৳${(m.monthlyAmount||0).toLocaleString()}</td>
+      <td data-label="Action">
         ${isAdmin ? `<button class="btn-sm btn-edit" onclick="openEditMemberModal('${m.id}')">✏️ Edit</button>
         <button class="btn-sm btn-delete" onclick="deleteMember('${m.id}')">🗑️ Delete</button>` : ""}
         <button class="btn-sm btn-view" onclick="viewMemberDetail('${m.id}')">👁️ View</button>
@@ -2775,24 +2823,24 @@ window.loadCollectionPage = async function() {
       // ── month col ──
       const monthCol = isPuja ? `<span style="color:var(--text-muted);font-size:12px">—</span>` : (MONTHS_BN[c.month]||c.month);
       return `<tr>
-        <td>${i+1}</td>
-        <td>${typeBadge}</td>
-        <td>${displayName}</td>
-        <td>${monthCol}</td>
-        <td>${c.year}</td>
-        <td>৳${(c.amount||0).toLocaleString()}</td>
-        <td><span class="badge ${badge}">${label}</span></td>
-        <td>${approvalBadge}</td>
-        <td>${c.collectedBy||"-"}</td>
-        <td>${c.entryDate || (c.createdAt?.toDate ? c.createdAt.toDate().toLocaleDateString("en-GB") : "-")}</td>
-        <td>
+        <td data-label="#">${i+1}</td>
+        <td data-label="ধরন">${typeBadge}</td>
+        <td data-label="সদস্য/দাতা">${displayName}</td>
+        <td data-label="মাস">${monthCol}</td>
+        <td data-label="বছর">${c.year}</td>
+        <td data-label="পরিমাণ">৳${(c.amount||0).toLocaleString()}</td>
+        <td data-label="Status"><span class="badge ${badge}">${label}</span></td>
+        <td data-label="অনুমোদন">${approvalBadge}</td>
+        <td data-label="সংগ্রহকারী">${c.collectedBy||"-"}</td>
+        <td data-label="তারিখ">${c.entryDate || (c.createdAt?.toDate ? c.createdAt.toDate().toLocaleDateString("en-GB") : "-")}</td>
+        <td data-label="Action">
           ${canEdit ? `<button class="btn-sm btn-edit" onclick="editChandaStatus('${c.id}','${c.status}')">✏️ Edit</button>` : `<span style="font-size:11px;color:var(--text-muted)">${c.approvalStatus==="approved"?"🔒":""}</span>`}
           ${isAdmin ? `<button class="btn-sm btn-delete" onclick="deleteChanda('${c.id}')">🗑️ Delete</button>` : ""}
           ${isAdmin && c.approvalStatus==="pending" ? `<button class="btn-sm" style="background:#D1FAE5;color:#065F46;border:none;padding:4px 8px;border-radius:6px;cursor:pointer;font-size:12px" onclick="approveEntry('chanda','${c.id}')">✅ Approve</button>` : ""}
           ${isAdmin && c.approvalStatus==="approved" ? `<button class="btn-sm" style="background:#FEF3C7;color:#92400E;border:none;padding:4px 8px;border-radius:6px;cursor:pointer;font-size:12px" onclick="unapproveEntry('chanda','${c.id}')">↩️ Unapprove</button>` : ""}
         </td>
       </tr>`;
-    }).join("") : `<tr><td colspan="10"><div class="empty-state"><div class="empty-state-icon">💰</div><div class="empty-state-text">কোনো এন্ট্রি নেই</div></div></td></tr>`;
+    }).join("") : `<tr><td colspan="11"><div class="empty-state"><div class="empty-state-icon">💰</div><div class="empty-state-text">কোনো এন্ট্রি নেই</div></div></td></tr>`;
   } catch(e) { console.error(e); }
 };
 
@@ -3022,7 +3070,8 @@ window.saveOfficer = async function() {
     const dup = query(collection(db,"officers"), where("username","==",username));
     const dupSnap = await getDocs(dup);
     if(!dupSnap.empty) { setErr("oError","এই username আগে থেকেই আছে।"); return; }
-    await addDoc(collection(db,"officers"), {name,username,password,phone,createdAt:serverTimestamp()});
+    const passwordHash = await sha256Hex(password);
+    await addDoc(collection(db,"officers"), {name,username,password:passwordHash,phone,createdAt:serverTimestamp()});
     showToast("নতুন অফিসার তৈরি হয়েছে।");
     closeModal("addOfficerModal");
     loadOfficers();
@@ -3102,9 +3151,10 @@ window.submitPasswordRequest = async function() {
   if(!newPwd) { setErr("pwdReqError","নতুন পাসওয়ার্ড দিন।"); return; }
   if(newPwd!==confirmPwd) { setErr("pwdReqError","পাসওয়ার্ড মিলছে না।"); return; }
   try {
+    const newPasswordHash = await sha256Hex(newPwd);
     await addDoc(collection(db,"passwordRequests"), {
       officerId: currentUser.id, officerName: currentUser.name,
-      username: currentUser.username, newPassword: newPwd,
+      username: currentUser.username, newPassword: newPasswordHash,
       status: "pending", createdAt: serverTimestamp()
     });
     showEl("pwdReqSuccess");
@@ -4180,6 +4230,48 @@ window.loadPublicSettingsPage = async function() {
       officers.map(o=>`<option value="${o.id}" data-name="${(o.name||"").replace(/"/g,"&quot;")}">${o.name}</option>`).join("");
   } catch(e) {}
   loadCashHolders();
+};
+
+// ── Full data backup (admin) — downloads every collection as one JSON file ──
+window.downloadDataBackup = async function() {
+  const btn = $("backupBtn");
+  const msgEl = $("backupMsg");
+  btn.disabled = true; btn.textContent = "⏳ প্রস্তুত হচ্ছে...";
+  msgEl.innerHTML = "";
+  try {
+    const collections = ["members","chanda","khoroc","cashHolders","notices","gallery","emailRequests"];
+    const backup = { exportedAt: new Date().toISOString(), exportedBy: currentUser.name };
+    for(const name of collections) {
+      const snap = await getDocs(collection(db,name));
+      backup[name] = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    }
+    // Officers: exclude password hashes from the downloaded file for safety.
+    const offSnap = await getDocs(collection(db,"officers"));
+    backup.officers = offSnap.docs.map(d => { const {password, ...rest} = d.data(); return { id: d.id, ...rest }; });
+    // Settings docs
+    backup.settings = {};
+    for(const key of ["pujaInfo","committee","publicPin"]) {
+      const s = await getDoc(doc(db,"settings",key));
+      if(s.exists()) {
+        const data = s.data();
+        if(key === "publicPin") delete data.pin; // don't put the PIN in a downloadable file
+        backup.settings[key] = data;
+      }
+    }
+    const json = JSON.stringify(backup, (k,v) => v?.toDate ? v.toDate().toISOString() : v, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `ekota-jubo-songho-backup-${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+    msgEl.innerHTML = `<span style="color:var(--green);font-size:12px">✅ ব্যাকআপ ডাউনলোড হয়েছে।</span>`;
+  } catch(e) {
+    msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">ত্রুটি: ${e.message}</span>`;
+  } finally {
+    btn.disabled = false; btn.textContent = "⬇️ এখনই ব্যাকআপ ডাউনলোড করুন";
+  }
 };
 
 window.togglePublicSummaryPublish = async function() {
