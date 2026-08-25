@@ -274,10 +274,13 @@ body {
 .sched-label{font-size:16px;font-weight:700;color:var(--h-brown);margin-bottom:3px}
 .sched-desc{font-size:13.5px;color:var(--h-brown-soft)}
 
-/* Section 7: Gallery */
-.gallery-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+/* Section 7: Gallery — continuous right-to-left marquee */
+.gallery-marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.gallery-track{display:flex;gap:18px;width:max-content;animation:galleryMarquee 28s linear infinite}
+.gallery-marquee:hover .gallery-track{animation-play-state:paused}
+@keyframes galleryMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .gallery-card{
-  position:relative; aspect-ratio:4/3; border-radius:16px; overflow:hidden;
+  position:relative; flex:0 0 auto; width:240px; aspect-ratio:4/3; border-radius:16px; overflow:hidden;
   background:linear-gradient(150deg,var(--h-gold-light),var(--h-coffee-1));
   display:flex; align-items:center; justify-content:center;
 }
@@ -287,6 +290,7 @@ body {
   background:linear-gradient(to top, rgba(28,17,8,.85), transparent);
   color:#fff; font-weight:700; font-size:14px;
 }
+@media (prefers-reduced-motion:reduce){ .gallery-track{animation:none;overflow-x:auto} }
 
 /* Section 8: Notices (dark section, cream card) */
 .notice-card-wrap{background:var(--h-cream-card);border-radius:18px;padding:22px 20px;box-shadow:0 20px 40px -16px rgba(0,0,0,.35);max-width:680px;margin:0 auto;overflow-x:auto}
@@ -1301,11 +1305,17 @@ body {
         <p class="home-eyebrow">🖼️ স্মৃতিচারণ</p>
         <h2 class="home-section-title">আমাদের পূজার কিছু স্মরণীয় মুহূর্ত</h2>
         <p class="home-section-desc">এই বছরের পূজার আসল ছবি শীঘ্রই এখানে যুক্ত করা হবে</p>
-        <div class="gallery-cards">
+      </div>
+      <div class="gallery-marquee">
+        <div class="gallery-track" id="galleryTrack">
           <div class="gallery-card"><span class="emoji">🪷</span><div class="cap">সরস্বতী পূজা</div></div>
           <div class="gallery-card"><span class="emoji">🙏</span><div class="cap">পুষ্পাঞ্জলি</div></div>
           <div class="gallery-card"><span class="emoji">🌼</span><div class="cap">প্রসাদ বিতরণ</div></div>
           <div class="gallery-card"><span class="emoji">🎵</span><div class="cap">সাংস্কৃতিক অনুষ্ঠান</div></div>
+          <div class="gallery-card" aria-hidden="true"><span class="emoji">🪷</span><div class="cap">সরস্বতী পূজা</div></div>
+          <div class="gallery-card" aria-hidden="true"><span class="emoji">🙏</span><div class="cap">পুষ্পাঞ্জলি</div></div>
+          <div class="gallery-card" aria-hidden="true"><span class="emoji">🌼</span><div class="cap">প্রসাদ বিতরণ</div></div>
+          <div class="gallery-card" aria-hidden="true"><span class="emoji">🎵</span><div class="cap">সাংস্কৃতিক অনুষ্ঠান</div></div>
         </div>
       </div>
     </section>
@@ -4699,18 +4709,27 @@ window.deleteGalleryPhoto = async function(id, storagePath) {
 
 // ── Public: show uploaded photos on the home page (falls back to the default cards if none yet) ──
 async function loadHomeGallery() {
-  const el = document.querySelector("#gallery .gallery-cards");
+  const el = $("galleryTrack");
   if(!el) return;
   try {
     const snap = await getDocs(query(collection(db,"gallery"), orderBy("createdAt","desc")));
     const photos = snap.docs.map(d=>({id:d.id,...d.data()}));
     if(!photos.length) return; // keep the default emoji placeholder cards already in the HTML
-    el.innerHTML = photos.map(p => `
+    const cardsHtml = photos.map(p => `
       <div class="gallery-card" style="background:none">
         <img src="${p.imageUrl}" alt="${p.caption||""}" style="width:100%;height:100%;object-fit:cover" />
         <div class="cap">${p.caption||""}</div>
       </div>
     `).join("");
+    // Render the set twice back-to-back so the marquee animation (translateX -50%) loops seamlessly.
+    const cardsHtmlHidden = photos.map(p => `
+      <div class="gallery-card" style="background:none" aria-hidden="true">
+        <img src="${p.imageUrl}" alt="" style="width:100%;height:100%;object-fit:cover" />
+        <div class="cap">${p.caption||""}</div>
+      </div>
+    `).join("");
+    el.innerHTML = cardsHtml + cardsHtmlHidden;
+    el.style.animationDuration = Math.max(photos.length * 5, 10) + "s";
   } catch(e) { console.error("Home gallery load failed:", e); }
 }
 
