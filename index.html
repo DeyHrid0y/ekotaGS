@@ -289,13 +289,18 @@ body {
 }
 
 /* Section 8: Notices (dark section, cream card) */
-.notice-card-wrap{background:var(--h-cream-card);border-radius:18px;padding:26px 24px;box-shadow:0 20px 40px -16px rgba(0,0,0,.35);max-width:600px;margin:0 auto}
+.notice-card-wrap{background:var(--h-cream-card);border-radius:18px;padding:22px 20px;box-shadow:0 20px 40px -16px rgba(0,0,0,.35);max-width:680px;margin:0 auto;overflow-x:auto}
 .notices-list{display:flex;flex-direction:column}
-.notice-item{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid rgba(59,42,29,.1)}
-.notice-item:last-child{border-bottom:none}
-.notice-bell{font-size:16px}
-.notice-text{font-size:14.5px;color:var(--h-brown);font-weight:600}
-.notice-date{font-size:11.5px;color:var(--h-brown-soft);margin-top:3px}
+.notice-table{width:100%;border-collapse:collapse;font-size:14px}
+.notice-table thead th{
+  text-align:left;font-size:11.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;
+  color:var(--h-gold-dark);padding:0 10px 12px;border-bottom:2px solid rgba(59,42,29,.12);white-space:nowrap;
+}
+.notice-table tbody td{padding:13px 10px;border-bottom:1px solid rgba(59,42,29,.08);color:var(--h-brown);vertical-align:middle}
+.notice-table tbody tr:last-child td{border-bottom:none}
+.notice-table td:first-child, .notice-table th:first-child{width:40px;color:var(--h-brown-soft)}
+.notice-table a{color:var(--h-gold-dark);text-decoration:none;font-weight:700;white-space:nowrap}
+.notice-table a:hover{text-decoration:underline}
 .home-loading{color:var(--h-brown-soft);font-size:13.5px;padding:8px 0;text-align:center}
 .home-section-dark .home-loading{color:var(--h-tan)}
 
@@ -4443,18 +4448,23 @@ async function loadHomeNotices() {
   if(!el) return;
   try {
     const snap = await getDocs(query(collection(db,"notices"), orderBy("createdAt","desc")));
-    const notices = snap.docs.map(d=>({id:d.id,...d.data()})).slice(0,5);
+    const notices = snap.docs.map(d=>({id:d.id,...d.data()})).slice(0,10);
     if(!notices.length) { el.innerHTML = `<div class="home-loading">এই মুহূর্তে কোনো নোটিশ নেই।</div>`; return; }
-    el.innerHTML = notices.map(n => `
-      <div class="notice-item">
-        <span class="notice-bell">🔔</span>
-        <div style="flex:1">
-          <div class="notice-text">${n.text||""}</div>
-          <div class="notice-date">${n.createdAt?.toDate ? n.createdAt.toDate().toLocaleDateString("bn-BD") : ""}</div>
-          ${n.imageUrl ? `<img src="${n.imageUrl}" alt="" style="max-width:100%;border-radius:8px;margin-top:8px;display:block" />` : ""}
-        </div>
-      </div>
-    `).join("");
+    el.innerHTML = `
+      <table class="notice-table">
+        <thead><tr><th>SN</th><th>Title</th><th>View</th><th>Download</th></tr></thead>
+        <tbody>
+          ${notices.map((n,i) => `
+            <tr>
+              <td data-label="SN">${i+1}</td>
+              <td data-label="Title">${n.text||""}</td>
+              <td data-label="View">${n.driveFileId ? `<a href="https://drive.google.com/file/d/${n.driveFileId}/view" target="_blank" rel="noopener">👁️ View</a>` : "—"}</td>
+              <td data-label="Download">${n.driveFileId ? `<a href="https://drive.google.com/uc?export=download&id=${n.driveFileId}" target="_blank" rel="noopener">⬇️ Download</a>` : "—"}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    `;
   } catch(e) { el.innerHTML = `<div class="home-loading">নোটিশ লোড করা যায়নি।</div>`; }
 }
 
@@ -4556,14 +4566,14 @@ window.addNotice = async function() {
   const imageLink = $("newNoticeImageLink").value.trim();
   const msgEl = $("noticeAddMsg");
   if(!text) { showToast("নোটিশের লেখা দিন।", "error"); return; }
-  let imageUrl = null;
+  let imageUrl = null, driveFileId = null;
   if(imageLink) {
-    const fileId = extractDriveFileId(imageLink);
-    if(!fileId) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">সঠিক Google Drive লিংক মনে হচ্ছে না।</span>`; return; }
-    imageUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+    driveFileId = extractDriveFileId(imageLink);
+    if(!driveFileId) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">সঠিক Google Drive লিংক মনে হচ্ছে না।</span>`; return; }
+    imageUrl = `https://drive.google.com/thumbnail?id=${driveFileId}&sz=w1000`;
   }
   try {
-    await addDoc(collection(db,"notices"), { text, imageUrl, createdAt: serverTimestamp() });
+    await addDoc(collection(db,"notices"), { text, imageUrl, driveFileId, createdAt: serverTimestamp() });
     $("newNoticeText").value = ""; $("newNoticeImageLink").value = ""; msgEl.innerHTML = "";
     showToast("✅ নোটিশ যোগ করা হয়েছে।");
     loadNoticesAdmin();
