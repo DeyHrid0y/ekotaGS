@@ -180,6 +180,11 @@ body {
   background-image:radial-gradient(rgba(255,255,255,.08) 1px, transparent 1px);
   background-size:24px 24px; opacity:.6; pointer-events:none;
 }
+.home-hero-watermark{
+  position:absolute; top:50%; right:-40px; transform:translateY(-50%);
+  height:115%; width:auto; max-width:60%; opacity:.16; pointer-events:none; z-index:1;
+}
+@media (max-width:640px){ .home-hero-watermark{ opacity:.1; right:-90px; max-width:85%; } }
 .home-hero-inner{position:relative;z-index:2;max-width:640px}
 .home-eyebrow-hero{
   display:inline-flex; align-items:center; gap:8px; font-size:13.5px; font-weight:700; color:var(--h-gold-light);
@@ -229,20 +234,36 @@ body {
 @media (max-width:760px){ .qi-stack{grid-template-columns:1fr} }
 
 /* Section 4: About */
-.home-about-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:40px;align-items:center}
+.home-about-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:40px;align-items:start}
 .about-deity-card{
-  aspect-ratio:1/.72;border-radius:20px;
+  height:460px;border-radius:20px;overflow:hidden;
   background:linear-gradient(150deg,var(--h-gold-light),var(--h-gold-dark));
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  display:flex;flex-direction:column;
   box-shadow:0 20px 40px -16px rgba(169,121,29,.5);
 }
-.about-deity-card .emoji{font-size:44px}
-.about-deity-card .label{font-size:17px;font-weight:800;color:#3B2A1D}
+.about-deity-card .deity-header{
+  flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  padding:22px 0 14px;
+}
+.about-deity-card .emoji{font-size:38px}
+.about-deity-card .label{font-size:16px;font-weight:800;color:#3B2A1D}
+.mantra-marquee{
+  flex:1;overflow:hidden;position:relative;
+  -webkit-mask-image:linear-gradient(to bottom,transparent,#000 6%,#000 94%,transparent);
+  mask-image:linear-gradient(to bottom,transparent,#000 6%,#000 94%,transparent);
+}
+.mantra-marquee:hover .mantra-track{animation-play-state:paused}
+.mantra-track{display:flex;flex-direction:column;animation:mantraScroll 55s linear infinite}
+@keyframes mantraScroll{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+.mantra-block{padding:6px 26px 26px;text-align:center}
+.mantra-block h4{font-size:13.5px;font-weight:800;color:#5C3D0E;margin-bottom:8px}
+.mantra-block p{font-size:12.5px;line-height:1.9;color:#3B2A1D;margin-bottom:14px}
+@media (prefers-reduced-motion:reduce){ .mantra-track{animation:none} .mantra-marquee{overflow-y:auto} }
 .about-text{text-align:left}
 .about-text .home-eyebrow{justify-content:flex-start}
 .about-text .home-section-title{text-align:left}
 .about-text .home-section-desc{text-align:left;margin:0 0 10px}
-@media (max-width:760px){ .home-about-grid{grid-template-columns:1fr} .about-text{text-align:center} .about-text .home-eyebrow{justify-content:center} .about-text .home-section-title,.about-text .home-section-desc{text-align:center;margin-left:auto;margin-right:auto} }
+@media (max-width:760px){ .home-about-grid{grid-template-columns:1fr} .about-deity-card{height:380px;max-width:420px;margin:0 auto} .about-text{text-align:center} .about-text .home-eyebrow{justify-content:center} .about-text .home-section-title,.about-text .home-section-desc{text-align:center;margin-left:auto;margin-right:auto} }
 
 /* Section 5: event cards */
 .event-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;margin-top:6px}
@@ -1209,6 +1230,28 @@ body {
 
   <!-- Section 1: Hero -->
   <section class="home-hero-wrap">
+    <svg class="home-hero-watermark" viewBox="0 0 520 560" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g fill="none" stroke="#F3E3B8">
+        <circle cx="330" cy="280" r="220" stroke-dasharray="2 10" stroke-width="1"/>
+        <circle cx="330" cy="280" r="170" stroke-dasharray="2 10" stroke-width="1"/>
+      </g>
+      <line x1="270" y1="60" x2="410" y2="470" stroke="#F3E3B8" stroke-width="9" stroke-linecap="round"/>
+      <line x1="266" y1="62" x2="406" y2="472" stroke="#F3E3B8" stroke-width="1" opacity=".6"/>
+      <line x1="274" y1="58" x2="414" y2="468" stroke="#F3E3B8" stroke-width="1" opacity=".6"/>
+      <ellipse cx="262" cy="44" rx="22" ry="29" transform="rotate(20 262 44)" fill="none" stroke="#F3E3B8" stroke-width="2.5"/>
+      <circle cx="248" cy="30" r="2.6" fill="#F3E3B8"/><circle cx="254" cy="22" r="2.6" fill="#F3E3B8"/><circle cx="264" cy="16" r="2.6" fill="#F3E3B8"/>
+      <ellipse cx="418" cy="490" rx="54" ry="70" transform="rotate(20 418 490)" fill="none" stroke="#F3E3B8" stroke-width="3"/>
+      <g transform="translate(418,538)" stroke="#F3E3B8" stroke-width="1.4" fill="none">
+        <path d="M0,0 C-15,-15 -15,-37 0,-51 C15,-37 15,-15 0,0 Z"/>
+        <path d="M0,0 C-15,-15 -15,-37 0,-51 C15,-37 15,-15 0,0 Z" transform="rotate(45)"/>
+        <path d="M0,0 C-15,-15 -15,-37 0,-51 C15,-37 15,-15 0,0 Z" transform="rotate(90)"/>
+        <path d="M0,0 C-15,-15 -15,-37 0,-51 C15,-37 15,-15 0,0 Z" transform="rotate(135)"/>
+        <path d="M0,0 C-15,-15 -15,-37 0,-51 C15,-37 15,-15 0,0 Z" transform="rotate(180)"/>
+        <path d="M0,0 C-15,-15 -15,-37 0,-51 C15,-37 15,-15 0,0 Z" transform="rotate(225)"/>
+        <path d="M0,0 C-15,-15 -15,-37 0,-51 C15,-37 15,-15 0,0 Z" transform="rotate(270)"/>
+        <path d="M0,0 C-15,-15 -15,-37 0,-51 C15,-37 15,-15 0,0 Z" transform="rotate(315)"/>
+      </g>
+    </svg>
     <div class="home-hero-inner">
       <p class="home-eyebrow-hero">🌺 একতা যুব সংঘের আয়োজনে</p>
       <h1>শ্রী শ্রী <span>সরস্বতী</span> পূজা</h1>
@@ -1256,8 +1299,70 @@ body {
     <section id="about" class="home-section">
       <div class="home-section-inner home-about-grid">
         <div class="about-deity-card">
-          <span class="emoji">🙏</span>
-          <span class="label">মা সরস্বতী</span>
+          <div class="deity-header">
+            <span class="emoji">🙏</span>
+            <span class="label">মা সরস্বতী</span>
+          </div>
+          <div class="mantra-marquee">
+            <div class="mantra-track" id="mantraTrack">
+              <div class="mantra-block">
+                <h4>পুষ্পাঞ্জলী মন্ত্র (৩ বার পাঠসহ)</h4>
+                <p>ওঁ জয় জয় দেবী চরাচর সারে,<br>
+                কুচযুগশোভিত মুক্তাহারে।<br>
+                বীনারঞ্জিত পুস্তক হস্তে,<br>
+                ভগবতী ভারতী দেবী নমহস্তুতে।।<br>
+                নমঃভদ্রকাল্যৈ নমো নিত্যং সরস্বত্যৈ নমো নমঃ।<br>
+                বেদ-বেদাঙ্গ-বেদান্ত-বিদ্যা-স্থানেভ্য এব চ।।<br>
+                এস স-চন্দন পুষ্পবিল্ব পত্রাঞ্জলি সরস্বতৈ নমঃ।।</p>
+
+                <h4>প্রনাম মন্ত্র</h4>
+                <p>নমো সরস্বতী মহাভাগে বিদ্যে কমললোচনে।<br>
+                বিশ্বরূপে বিশালাক্ষ্মী বিদ্যাংদেহি নমোহস্তুতে।।<br>
+                জয় জয় দেবী চরাচর সারে,<br>
+                কুচযুগশোভিত মুক্তাহারে।<br>
+                বীনারঞ্জিত পুস্তক হস্তে,<br>
+                ভগবতী ভারতী দেবী নমহস্তুতে।।</p>
+
+                <h4>সরস্বতীর স্তব</h4>
+                <p>শ্বেতপদ্মাসনা দেবী শ্বেত পুষ্পোপশোভিতা।<br>
+                শ্বেতাম্ভরধরা নিত্যা শ্বেতাগন্ধানুলেপনা।।<br>
+                শ্বেতাক্ষসূত্রহস্তা চ শ্বেতচন্দনচর্চ্চিতা।<br>
+                শ্বেতবীণাধরা শুভ্রা শ্বেতালঙ্কার বিভূষিতা<br>
+                বন্দিতা সিদ্ধগন্ধর্ব্বৈর্চ্চিতা দেবদানবৈঃ।<br>
+                পূঝিতা মুনিভি: সর্ব্বৈঋষিভিঃ স্তূয়তে সদা।।<br>
+                স্তোত্রেণানেন তাং দেবীং জগদ্ধাত্রীং সরস্বতীম্।<br>
+                যে স্মরতি ত্রিসন্ধ্যায়ং সর্ব্বাং বিদ্যাং লভন্তি তে।।</p>
+              </div>
+              <div class="mantra-block" aria-hidden="true">
+                <h4>পুষ্পাঞ্জলী মন্ত্র (৩ বার পাঠসহ)</h4>
+                <p>ওঁ জয় জয় দেবী চরাচর সারে,<br>
+                কুচযুগশোভিত মুক্তাহারে।<br>
+                বীনারঞ্জিত পুস্তক হস্তে,<br>
+                ভগবতী ভারতী দেবী নমহস্তুতে।।<br>
+                নমঃভদ্রকাল্যৈ নমো নিত্যং সরস্বত্যৈ নমো নমঃ।<br>
+                বেদ-বেদাঙ্গ-বেদান্ত-বিদ্যা-স্থানেভ্য এব চ।।<br>
+                এস স-চন্দন পুষ্পবিল্ব পত্রাঞ্জলি সরস্বতৈ নমঃ।।</p>
+
+                <h4>প্রনাম মন্ত্র</h4>
+                <p>নমো সরস্বতী মহাভাগে বিদ্যে কমললোচনে।<br>
+                বিশ্বরূপে বিশালাক্ষ্মী বিদ্যাংদেহি নমোহস্তুতে।।<br>
+                জয় জয় দেবী চরাচর সারে,<br>
+                কুচযুগশোভিত মুক্তাহারে।<br>
+                বীনারঞ্জিত পুস্তক হস্তে,<br>
+                ভগবতী ভারতী দেবী নমহস্তুতে।।</p>
+
+                <h4>সরস্বতীর স্তব</h4>
+                <p>শ্বেতপদ্মাসনা দেবী শ্বেত পুষ্পোপশোভিতা।<br>
+                শ্বেতাম্ভরধরা নিত্যা শ্বেতাগন্ধানুলেপনা।।<br>
+                শ্বেতাক্ষসূত্রহস্তা চ শ্বেতচন্দনচর্চ্চিতা।<br>
+                শ্বেতবীণাধরা শুভ্রা শ্বেতালঙ্কার বিভূষিতা<br>
+                বন্দিতা সিদ্ধগন্ধর্ব্বৈর্চ্চিতা দেবদানবৈঃ।<br>
+                পূঝিতা মুনিভি: সর্ব্বৈঋষিভিঃ স্তূয়তে সদা।।<br>
+                স্তোত্রেণানেন তাং দেবীং জগদ্ধাত্রীং সরস্বতীম্।<br>
+                যে স্মরতি ত্রিসন্ধ্যায়ং সর্ব্বাং বিদ্যাং লভন্তি তে।।</p>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="about-text">
           <p class="home-eyebrow">আমাদের সম্পর্কে</p>
@@ -1873,6 +1978,37 @@ body {
           </div>
           <div id="hcInfoMsg" style="margin-bottom:10px"></div>
           <button class="btn-primary" onclick="savePujaInfo()">💾 সংরক্ষণ করুন</button>
+        </div>
+
+        <div class="card max-600" style="margin-top:20px">
+          <h3 class="card-title">🖼️ Hero সেকশনের ব্যাকগ্রাউন্ড ছবি</h3>
+          <p class="info-text">হোমপেজের একদম উপরের (Hero) অংশে এই ছবিটা ব্যাকগ্রাউন্ডে দেখাবে, উপরে একটা অন্ধকার overlay থাকবে যাতে লেখা পড়া যায়।</p>
+          <div id="heroImagePreviewWrap" style="margin-bottom:14px"></div>
+          <div class="form-group">
+            <label>ছবি বেছে নিন</label>
+            <input type="file" id="heroImageFileInput" accept="image/*" />
+          </div>
+          <div id="heroImageUploadMsg" style="margin-bottom:10px"></div>
+          <button class="btn-primary" id="heroImageUploadBtn" onclick="uploadHeroImage()">⬆️ আপলোড করুন</button>
+
+          <div style="display:flex;align-items:center;gap:10px;margin:22px 0">
+            <div style="flex:1;height:1px;background:var(--border)"></div>
+            <span style="font-size:12px;color:var(--text-muted)">অথবা</span>
+            <div style="flex:1;height:1px;background:var(--border)"></div>
+          </div>
+
+          <h4 style="font-size:14px;margin-bottom:8px">🔗 Google Drive থেকে যোগ করুন</h4>
+          <p class="info-text">শেয়ার সেটিংস "Anyone with the link" করা থাকতে হবে।</p>
+          <div class="form-group">
+            <label>Google Drive লিংক</label>
+            <input type="text" id="heroImageDriveLink" placeholder="https://drive.google.com/file/d/..." />
+          </div>
+          <div id="heroImageDriveMsg" style="margin-bottom:10px"></div>
+          <button class="btn-primary" onclick="addDriveHeroImage()">+ Drive লিংক যোগ করুন</button>
+
+          <div style="margin-top:14px">
+            <button class="btn-secondary" onclick="removeHeroImage()">🗑️ ছবি সরিয়ে ডিফল্ট ডিজাইনে ফিরুন</button>
+          </div>
         </div>
 
         <div class="card max-600" style="margin-top:20px">
@@ -4439,6 +4575,17 @@ async function loadHomeQuickInfo() {
     if($("qiTime"))  $("qiTime").textContent  = d.time  || "শীঘ্রই জানানো হবে";
     if($("qiVenue")) $("qiVenue").textContent = d.venue || "শীঘ্রই জানানো হবে";
     if($("footVenue") && d.venue) $("footVenue").textContent = "📍 " + d.venue;
+    if(d.heroImageUrl) {
+      const heroWrap = document.querySelector(".home-hero-wrap");
+      if(heroWrap) {
+        heroWrap.style.backgroundImage =
+          `linear-gradient(155deg, rgba(46,27,14,.82) 0%, rgba(74,46,26,.8) 55%, rgba(107,68,35,.75) 100%), url('${d.heroImageUrl}')`;
+        heroWrap.style.backgroundSize = "cover";
+        heroWrap.style.backgroundPosition = "center";
+      }
+      const watermark = document.querySelector(".home-hero-watermark");
+      if(watermark) watermark.style.display = "none";
+    }
     // countdown
     if(d.date && $("qiCountdownNum")) {
       const target = new Date(d.date + "T00:00:00");
@@ -4530,6 +4677,7 @@ window.loadHomeContentAdminPage = async function() {
     $("hcDate").value  = d.date  || "";
     $("hcTime").value  = d.time  || "";
     $("hcVenue").value = d.venue || "";
+    renderHeroImagePreview(d.heroImageUrl);
   } catch(e) {}
   try {
     const snap = await getDoc(doc(db,"settings","committee"));
@@ -4541,6 +4689,14 @@ window.loadHomeContentAdminPage = async function() {
   loadNoticesAdmin();
   loadGalleryAdmin();
 };
+
+function renderHeroImagePreview(url) {
+  const el = $("heroImagePreviewWrap");
+  if(!el) return;
+  el.innerHTML = url
+    ? `<img src="${url}" style="width:100%;max-width:320px;border-radius:10px;display:block" alt="Hero background preview" />`
+    : `<p style="font-size:12.5px;color:var(--text-muted)">এখন কোনো ছবি নেই — ডিফল্ট ডিজাইন (watermark) দেখাচ্ছে।</p>`;
+}
 
 window.savePujaInfo = async function() {
   const data = {
@@ -4678,6 +4834,70 @@ window.addDriveGalleryPhoto = async function() {
     msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">ত্রুটি: ${e.message}</span>`;
   }
 };
+
+// ── Hero background image (Storage upload or Google Drive link) ──
+window.uploadHeroImage = async function() {
+  const fileInput = $("heroImageFileInput");
+  const msgEl = $("heroImageUploadMsg");
+  const btn = $("heroImageUploadBtn");
+  const file = fileInput.files[0];
+  if(!file) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">একটা ছবি বেছে নিন।</span>`; return; }
+  if(file.size > 8*1024*1024) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">ছবির সাইজ ৮MB-এর কম হতে হবে।</span>`; return; }
+  btn.disabled = true; btn.textContent = "⏳ আপলোড হচ্ছে...";
+  msgEl.innerHTML = "";
+  try {
+    const oldSnap = await getDoc(doc(db,"settings","pujaInfo"));
+    const oldPath = oldSnap.exists() ? oldSnap.data().heroImageStoragePath : null;
+    const path = `hero/${Date.now()}_${file.name}`;
+    const storageRef = ref(storage, path);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    await setDoc(doc(db,"settings","pujaInfo"), { heroImageUrl: url, heroImageStoragePath: path }, { merge: true });
+    if(oldPath) { try { await deleteObject(ref(storage, oldPath)); } catch(e) {} }
+    fileInput.value = "";
+    msgEl.innerHTML = `<span style="color:var(--green);font-size:12px">✅ আপলোড সম্পন্ন হয়েছে।</span>`;
+    showToast("✅ Hero ব্যাকগ্রাউন্ড ছবি আপডেট হয়েছে।");
+    renderHeroImagePreview(url);
+  } catch(e) {
+    msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">ত্রুটি: ${e.message}</span>`;
+  } finally {
+    btn.disabled = false; btn.textContent = "⬆️ আপলোড করুন";
+  }
+};
+
+window.addDriveHeroImage = async function() {
+  const link = $("heroImageDriveLink").value.trim();
+  const msgEl = $("heroImageDriveMsg");
+  if(!link) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">Google Drive লিংক পেস্ট করুন।</span>`; return; }
+  const fileId = extractDriveFileId(link);
+  if(!fileId) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">সঠিক Google Drive লিংক মনে হচ্ছে না।</span>`; return; }
+  const url = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1600`;
+  try {
+    const oldSnap = await getDoc(doc(db,"settings","pujaInfo"));
+    const oldPath = oldSnap.exists() ? oldSnap.data().heroImageStoragePath : null;
+    await setDoc(doc(db,"settings","pujaInfo"), { heroImageUrl: url, heroImageStoragePath: null }, { merge: true });
+    if(oldPath) { try { await deleteObject(ref(storage, oldPath)); } catch(e) {} }
+    $("heroImageDriveLink").value = "";
+    msgEl.innerHTML = `<span style="color:var(--green);font-size:12px">✅ যোগ করা হয়েছে। ছবিটা না দেখালে Drive-এ "Anyone with the link" শেয়ার সেটিংস চেক করুন।</span>`;
+    showToast("✅ Hero ব্যাকগ্রাউন্ড ছবি আপডেট হয়েছে।");
+    renderHeroImagePreview(url);
+  } catch(e) {
+    msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">ত্রুটি: ${e.message}</span>`;
+  }
+};
+
+window.removeHeroImage = async function() {
+  if(!confirm("Hero ব্যাকগ্রাউন্ড ছবি সরিয়ে ডিফল্ট ডিজাইনে ফিরে যাবেন?")) return;
+  try {
+    const oldSnap = await getDoc(doc(db,"settings","pujaInfo"));
+    const oldPath = oldSnap.exists() ? oldSnap.data().heroImageStoragePath : null;
+    await setDoc(doc(db,"settings","pujaInfo"), { heroImageUrl: null, heroImageStoragePath: null }, { merge: true });
+    if(oldPath) { try { await deleteObject(ref(storage, oldPath)); } catch(e) {} }
+    showToast("✅ ডিফল্ট ডিজাইনে ফিরে গেছে।");
+    renderHeroImagePreview(null);
+  } catch(e) { showToast("ত্রুটি: "+e.message, "error"); }
+};
+
 
 async function loadGalleryAdmin() {
   const el = $("galleryAdminList");
