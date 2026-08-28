@@ -236,7 +236,7 @@ body {
 /* Section 4: About */
 .home-about-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:40px;align-items:start}
 .about-deity-card{
-  height:460px;border-radius:20px;overflow:hidden;
+  height:560px;border-radius:20px;overflow:hidden;
   background:linear-gradient(150deg,var(--h-gold-light),var(--h-gold-dark));
   display:flex;flex-direction:column;
   box-shadow:0 20px 40px -16px rgba(169,121,29,.5);
@@ -263,7 +263,7 @@ body {
 .about-text .home-eyebrow{justify-content:flex-start}
 .about-text .home-section-title{text-align:left}
 .about-text .home-section-desc{text-align:left;margin:0 0 10px}
-@media (max-width:760px){ .home-about-grid{grid-template-columns:1fr} .about-deity-card{height:380px;max-width:420px;margin:0 auto} .about-text{text-align:center} .about-text .home-eyebrow{justify-content:center} .about-text .home-section-title,.about-text .home-section-desc{text-align:center;margin-left:auto;margin-right:auto} }
+@media (max-width:760px){ .home-about-grid{grid-template-columns:1fr} .about-deity-card{height:480px;max-width:420px;margin:0 auto} .about-text{text-align:center} .about-text .home-eyebrow{justify-content:center} .about-text .home-section-title,.about-text .home-section-desc{text-align:center;margin-left:auto;margin-right:auto} }
 
 /* Section 5: event cards */
 .event-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;margin-top:6px}
@@ -312,6 +312,21 @@ body {
   color:#fff; font-weight:700; font-size:14px;
 }
 @media (prefers-reduced-motion:reduce){ .gallery-track{animation:none;overflow-x:auto} }
+
+/* Member showcase — continuous marquee of photo + name cards */
+.member-marquee{margin-top:30px;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.member-track{display:flex;gap:28px;width:max-content;animation:memberMarquee 30s linear infinite}
+.member-marquee:hover .member-track{animation-play-state:paused}
+@keyframes memberMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.member-chip{flex:0 0 auto;width:110px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px}
+.member-chip img{width:88px;height:88px;border-radius:50%;object-fit:cover;box-shadow:0 8px 20px -8px rgba(59,42,29,.4);border:3px solid var(--h-cream-card)}
+.member-chip-fallback{
+  width:88px;height:88px;border-radius:50%;box-shadow:0 8px 20px -8px rgba(59,42,29,.4);border:3px solid var(--h-cream-card);
+  background:linear-gradient(135deg,var(--h-gold-light),var(--h-gold-dark));color:#3B2A1D;
+  display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:800;
+}
+.member-chip .name{font-size:12.5px;font-weight:700;color:var(--h-brown);line-height:1.3}
+@media (prefers-reduced-motion:reduce){ .member-track{animation:none;overflow-x:auto} }
 
 /* Section 8: Notices (dark section, cream card) */
 .notice-card-wrap{background:var(--h-cream-card);border-radius:18px;padding:22px 20px;box-shadow:0 20px 40px -16px rgba(0,0,0,.35);max-width:680px;margin:0 auto;overflow-x:auto}
@@ -1300,7 +1315,6 @@ body {
       <div class="home-section-inner home-about-grid">
         <div class="about-deity-card">
           <div class="deity-header">
-            <span class="emoji">🙏</span>
             <span class="label">মা সরস্বতী</span>
           </div>
           <div class="mantra-marquee">
@@ -1442,6 +1456,17 @@ body {
         <p class="home-eyebrow">👥 পরিচালনা</p>
         <h2 class="home-section-title">পরিচালনা কমিটি</h2>
         <div id="homeCommitteeList" class="committee-cards"><div class="home-loading">লোড হচ্ছে...</div></div>
+      </div>
+    </section>
+
+    <!-- Section: সদস্যবৃন্দ (member photo showcase marquee) -->
+    <section id="memberShowcase" class="home-section hidden">
+      <div class="home-section-inner">
+        <p class="home-eyebrow">🙏 আমাদের গর্ব</p>
+        <h2 class="home-section-title">সম্মানিত সদস্যবৃন্দ</h2>
+      </div>
+      <div class="member-marquee">
+        <div class="member-track" id="memberTrack"></div>
       </div>
     </section>
 
@@ -2339,6 +2364,23 @@ body {
       <label>মাসিক প্রণামীর পরিমাণ (৳)</label>
       <input type="number" id="mAmount" placeholder="যেমন: 100" />
     </div>
+
+    <div class="form-group">
+      <label>সদস্যের ছবি (ঐচ্ছিক) <span style="font-size:11px;color:var(--text-muted)">— হোমপেজে সদস্যবৃন্দ সেকশনে দেখাবে</span></label>
+      <div id="mPhotoPreviewWrap" style="margin-bottom:10px"></div>
+      <input type="hidden" id="mPhotoUrl" value="" />
+      <input type="file" id="mPhotoFileInput" accept="image/*" style="margin-bottom:8px" />
+      <button type="button" class="btn-sm btn-edit" id="mPhotoUploadBtn" onclick="uploadMemberPhoto()">⬆️ আপলোড করুন</button>
+      <div style="display:flex;align-items:center;gap:8px;margin:12px 0">
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+        <span style="font-size:11px;color:var(--text-muted)">অথবা Google Drive লিংক</span>
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+      </div>
+      <input type="text" id="mPhotoDriveLink" placeholder="https://drive.google.com/file/d/..." style="margin-bottom:8px" />
+      <button type="button" class="btn-sm btn-edit" onclick="addDriveMemberPhoto()">+ Drive লিংক যোগ করুন</button>
+      <div id="mPhotoMsg" style="margin-top:8px"></div>
+    </div>
+
     <div id="mError" class="error-msg hidden"></div>
     <div class="btn-row">
       <button class="btn-secondary" onclick="closeModal('addMemberModal')">Cancel</button>
@@ -2843,6 +2885,8 @@ window.openAddMemberModal = function() {
   editingMemberId = null;
   $("addMemberModalTitle").textContent = "নতুন সদস্য যোগ করুন";
   $("mMemberId").value=""; $("mName").value=""; $("mPhone").value=""; $("mEmail").value=""; $("mAddress").value=""; $("mAmount").value="";
+  $("mPhotoUrl").value=""; $("mPhotoFileInput").value=""; $("mPhotoDriveLink").value=""; $("mPhotoMsg").innerHTML="";
+  renderMemberPhotoPreview("");
   setErr("mError","");
   showEl("addMemberModal");
 };
@@ -2853,8 +2897,48 @@ window.openEditMemberModal = function(id) {
   editingMemberId = id;
   $("addMemberModalTitle").textContent = "Edit Member";
   $("mMemberId").value=m.memberId||""; $("mName").value=m.name||""; $("mPhone").value=m.phone||""; $("mEmail").value=m.email||""; $("mAddress").value=m.address||""; $("mAmount").value=m.monthlyAmount||"";
+  $("mPhotoUrl").value=m.photoUrl||""; $("mPhotoFileInput").value=""; $("mPhotoDriveLink").value=""; $("mPhotoMsg").innerHTML="";
+  renderMemberPhotoPreview(m.photoUrl||"");
   setErr("mError","");
   showEl("addMemberModal");
+};
+
+function renderMemberPhotoPreview(url) {
+  $("mPhotoPreviewWrap").innerHTML = url
+    ? `<img src="${url}" style="width:70px;height:70px;border-radius:50%;object-fit:cover;display:block" alt="" />`
+    : "";
+}
+
+window.uploadMemberPhoto = async function() {
+  const fileInput = $("mPhotoFileInput");
+  const msgEl = $("mPhotoMsg");
+  const file = fileInput.files[0];
+  if(!file) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">একটা ছবি বেছে নিন।</span>`; return; }
+  if(file.size > 5*1024*1024) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">ছবির সাইজ ৫MB-এর কম হতে হবে।</span>`; return; }
+  msgEl.innerHTML = `<span style="color:var(--text-muted);font-size:12px">⏳ আপলোড হচ্ছে...</span>`;
+  try {
+    const path = `members/${Date.now()}_${file.name}`;
+    const storageRef = ref(storage, path);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    $("mPhotoUrl").value = url;
+    renderMemberPhotoPreview(url);
+    fileInput.value = "";
+    msgEl.innerHTML = `<span style="color:var(--green);font-size:12px">✅ আপলোড সম্পন্ন — এখন "Save" চাপুন।</span>`;
+  } catch(e) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">ত্রুটি: ${e.message}</span>`; }
+};
+
+window.addDriveMemberPhoto = async function() {
+  const link = $("mPhotoDriveLink").value.trim();
+  const msgEl = $("mPhotoMsg");
+  if(!link) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">Google Drive লিংক পেস্ট করুন।</span>`; return; }
+  const fileId = extractDriveFileId(link);
+  if(!fileId) { msgEl.innerHTML = `<span style="color:var(--red);font-size:12px">সঠিক Google Drive লিংক মনে হচ্ছে না।</span>`; return; }
+  const url = `https://drive.google.com/thumbnail?id=${fileId}&sz=w500`;
+  $("mPhotoUrl").value = url;
+  renderMemberPhotoPreview(url);
+  $("mPhotoDriveLink").value = "";
+  msgEl.innerHTML = `<span style="color:var(--green);font-size:12px">✅ যোগ হয়েছে — এখন "Save" চাপুন। ছবি না দেখালে Drive শেয়ার সেটিংস চেক করুন।</span>`;
 };
 
 window.saveMember = async function() {
@@ -2865,6 +2949,7 @@ window.saveMember = async function() {
   const email = $("mEmail").value.trim();
   const address = $("mAddress").value.trim();
   const amount = parseFloat($("mAmount").value)||0;
+  const photoUrl = $("mPhotoUrl").value.trim() || null;
   if(!memberId) { setErr("mError","Member ID আবশ্যক।"); return; }
   if(!name) { setErr("mError","নাম আবশ্যক।"); return; }
   try {
@@ -2874,14 +2959,14 @@ window.saveMember = async function() {
       const dupSnap = await getDocs(dupQ);
       const dup = dupSnap.docs.find(d => d.id !== editingMemberId);
       if(dup) { setErr("mError","এই Member ID আগে থেকেই আছে।"); return; }
-      await updateDoc(doc(db,"members",editingMemberId), {memberId,name,phone,email,address,monthlyAmount:amount});
+      await updateDoc(doc(db,"members",editingMemberId), {memberId,name,phone,email,address,monthlyAmount:amount,photoUrl});
       showToast("Member updated successfully.");
     } else {
       // Check duplicate via Firestore (not stale allMembers)
       const dupQ = query(collection(db,"members"), where("memberId","==",memberId));
       const dupSnap = await getDocs(dupQ);
       if(!dupSnap.empty) { setErr("mError","এই Member ID আগে থেকেই আছে।"); return; }
-      await setDoc(doc(db,"members", memberId), {memberId,name,phone,email,address,monthlyAmount:amount, createdAt:serverTimestamp()});
+      await setDoc(doc(db,"members", memberId), {memberId,name,phone,email,address,monthlyAmount:amount,photoUrl, createdAt:serverTimestamp()});
       showToast("নতুন সদস্য সংরক্ষিত হয়েছে।");
     }
     closeModal("addMemberModal");
@@ -4563,7 +4648,31 @@ async function loadHomeContent() {
   loadHomeNotices();
   loadHomeCommittee();
   loadHomeGallery();
+  loadHomeMembersShowcase();
   const fy = $("footYear"); if(fy) fy.textContent = new Date().getFullYear();
+}
+
+async function loadHomeMembersShowcase() {
+  const section = $("memberShowcase");
+  const track = $("memberTrack");
+  if(!section || !track) return;
+  try {
+    const snap = await getDocs(collection(db,"members"));
+    const members = snap.docs.map(d=>({id:d.id,...d.data()}))
+      .sort((a,b) => (a.memberId||"").localeCompare(b.memberId||"", undefined, {numeric:true}));
+    if(!members.length) { section.classList.add("hidden"); return; }
+    const chip = m => `
+      <div class="member-chip">
+        ${m.photoUrl
+          ? `<img src="${m.photoUrl}" alt="${m.name||""}" />`
+          : `<div class="member-chip-fallback">${(m.name||"?").charAt(0)}</div>`}
+        <div class="name">${m.name||""}</div>
+      </div>
+    `;
+    track.innerHTML = members.map(chip).join("") + members.map(chip).join(""); // duplicated for a seamless loop
+    track.style.animationDuration = Math.max(members.length * 4, 12) + "s";
+    section.classList.remove("hidden");
+  } catch(e) { console.error("Member showcase load failed:", e); }
 }
 
 async function loadHomeQuickInfo() {
